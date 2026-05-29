@@ -5,6 +5,7 @@ import { CameraController } from "./CameraController.js";
 import { InputManager } from "./InputManager.js";
 import { SaveManager } from "./SaveManager.js";
 import { AssetManager } from "./AssetManager.js";
+import { ForestWorld } from "./worlds/ForestWorld.js";
 
 export class Game {
 
@@ -51,7 +52,9 @@ export class Game {
         this.createLights();
 
         this.createGround();
+        this.world = new ForestWorld(this.scene);
 
+this.world.init();
         this.bindEvents();
 
         console.log(
@@ -313,7 +316,9 @@ export class Game {
         this.cameraController.update(
             this.delta
         );
-
+        this.world?.update(
+            this.elapsedTime
+        );
         this.updateEnvironment();
 
         this.updateSaveData();
