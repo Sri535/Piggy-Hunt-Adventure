@@ -68,113 +68,102 @@ export class PiggyManager {
        PIGGY CREATOR
     ===================================================== */
 
-    createPiggy(typeName) {
+ createPiggy(typeName) {
 
-        console.log(
-            "capturePiggy received:",
-            piggy
+    const config =
+        this.types[typeName];
+
+    const piggy =
+        new THREE.Group();
+
+    /* Body */
+
+    const body =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                1,
+                16,
+                16
+            ),
+            new THREE.MeshStandardMaterial({
+
+                color: config.color,
+
+                metalness:
+                    typeName === "golden"
+                    ? 0.8
+                    : 0.1,
+
+                roughness: 0.3
+            })
         );
 
-        console.log(
-            "capturePiggy userdata:",
-            piggy?.userData
-        );
-        const config =
-            this.types[typeName];
+    piggy.add(body);
 
-        const piggy =
-            new THREE.Group();
+    /* Head */
 
-        /* Body */
+    const head =
+        new THREE.Mesh(
 
-        const body =
-            new THREE.Mesh(
+            new THREE.SphereGeometry(
+                0.6,
+                16,
+                16
+            ),
 
-                new THREE.SphereGeometry(
-                    1,
-                    16,
-                    16
-                ),
-
-                new THREE.MeshStandardMaterial({
-
-                    color: config.color,
-
-                    metalness: typeName ===
-                        "golden" ?
-                        0.8 : 0.1,
-
-                    roughness: 0.3
-                })
-            );
-
-        piggy.add(body);
-
-        /* Head */
-
-        const head =
-            new THREE.Mesh(
-
-                new THREE.SphereGeometry(
-                    0.6,
-                    16,
-                    16
-                ),
-
-                body.material
-            );
-
-        head.position.set(
-            0,
-            0.5,
-            1
+            body.material
         );
 
-        piggy.add(head);
+    head.position.set(
+        0,
+        0.5,
+        1
+    );
 
-        /* Nose */
+    piggy.add(head);
 
-        const nose =
-            new THREE.Mesh(
+    /* Nose */
 
-                new THREE.SphereGeometry(
-                    0.2,
-                    8,
-                    8
-                ),
+    const nose =
+        new THREE.Mesh(
 
-                new THREE.MeshStandardMaterial({
+            new THREE.SphereGeometry(
+                0.2,
+                8,
+                8
+            ),
 
-                    color: 0xff8888
-                })
-            );
-
-        nose.position.set(
-            0,
-            0.45,
-            1.55
+            new THREE.MeshStandardMaterial({
+                color: 0xff8888
+            })
         );
 
-        piggy.add(nose);
-        piggy.userData.isPiggy = true;
-        piggy.userData = {
+    nose.position.set(
+        0,
+        0.45,
+        1.55
+    );
 
-            isPiggy: true,
+    piggy.add(nose);
 
-            type: typeName,
+    piggy.userData = {
 
-            points: config.points,
+        isPiggy: true,
 
-            captured: false,
+        type: typeName,
 
-            bobOffset: Math.random() * 100
-        };
-        piggy.castShadow =
-            true;
+        points: config.points,
 
-        return piggy;
-    }
+        captured: false,
 
+        bobOffset:
+            Math.random() * 100
+    };
+
+    piggy.castShadow = true;
+
+    return piggy;
+}
     /* =====================================================
        SPAWNING
     ===================================================== */
