@@ -26,7 +26,7 @@ export class CaptureSystem {
             null;
 
         this.captureDistance =
-            25;
+            75;
 
         this.crosshair =
             document.getElementById(
@@ -225,10 +225,20 @@ export class CaptureSystem {
             this.targetPiggy?.userData
         );
 
-        const points =
-            this.piggyManager.capturePiggy(
-                this.targetPiggy
-            );
+const nearest =
+    this.piggyManager
+    .getNearestPiggy(
+        this.camera.position
+    );
+
+if(!nearest)
+    return;
+
+const points =
+    this.piggyManager
+    .capturePiggy(
+        nearest
+    );
 
         if (points <= 0)
             return;
