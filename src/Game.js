@@ -1,13 +1,29 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
-import { Renderer } from "./Renderer.js";
-import { CameraController } from "./CameraController.js";
-import { InputManager } from "./InputManager.js";
-import { SaveManager } from "./SaveManager.js";
-import { AssetManager } from "./AssetManager.js";
-import { ForestWorld } from "./worlds/ForestWorld.js";
-import { PiggyManager } from "./piggies/PiggyManager.js";
-import { CaptureSystem } from "./gameplay/CaptureSystem.js";
+import {
+    Renderer
+} from "./Renderer.js";
+import {
+    CameraController
+} from "./CameraController.js";
+import {
+    InputManager
+} from "./InputManager.js";
+import {
+    SaveManager
+} from "./SaveManager.js";
+import {
+    AssetManager
+} from "./AssetManager.js";
+import {
+    ForestWorld
+} from "./worlds/ForestWorld.js";
+import {
+    PiggyManager
+} from "./piggies/PiggyManager.js";
+import {
+    CaptureSystem
+} from "./gameplay/CaptureSystem.js";
 
 export class Game {
 
@@ -47,32 +63,42 @@ export class Game {
         this.createCamera();
 
         this.createManagers();
-            // SAVE TEST
+        // SAVE TEST
         this.save.addCoins(100);
         this.save.save();
 
         this.createLights();
 
         this.createGround();
-        this.world = new ForestWorld(this.scene);
-        this.piggyManager =
 
+        /* Forest World */
+
+        this.world =
+            new ForestWorld(
+                this.scene
+            );
 
         this.world.init();
-            new PiggyManager(this.scene,this.world);
+
+        /* Piggies */
+
+        this.piggyManager =
+            new PiggyManager(
+                this.scene,
+                this.world
+            );
 
         this.piggyManager.init();
+
+        /* Capture System */
+
         this.captureSystem =
-        new CaptureSystem(
-
-        this.camera,
-
-        this.scene,
-
-        this.piggyManager,
-
-        this.save
-        );
+            new CaptureSystem(
+                this.camera,
+                this.scene,
+                this.piggyManager,
+                this.save
+            );
 
         this.captureSystem.init();
         this.bindEvents();
@@ -230,11 +256,9 @@ export class Game {
         const material =
             new THREE.MeshStandardMaterial({
 
-                color:
-                    0x3fa34d,
+                color: 0x3fa34d,
 
-                roughness:
-                    1
+                roughness: 1
             });
 
         const ground =
@@ -244,8 +268,7 @@ export class Game {
                 material
             );
 
-        ground.rotation.x =
-            -Math.PI / 2;
+        ground.rotation.x = -Math.PI / 2;
 
         ground.receiveShadow =
             true;
@@ -272,7 +295,7 @@ export class Game {
                         "pauseMenu"
                     );
 
-                if(menu) {
+                if (menu) {
 
                     menu.classList.toggle(
                         "active"
@@ -300,7 +323,7 @@ export class Game {
 
     start() {
 
-        if(this.running)
+        if (this.running)
             return;
 
         this.running = true;
@@ -340,13 +363,13 @@ export class Game {
             this.elapsedTime
         );
         this.piggyManager?.update(
-        this.elapsedTime
+            this.elapsedTime
         );
         this.captureSystem?.update();
         this.updateEnvironment();
 
         this.updateSaveData();
-        
+
     }
 
     /* =====================================================
@@ -402,7 +425,7 @@ export class Game {
 
     animate() {
 
-        if(!this.running)
+        if (!this.running)
             return;
 
         requestAnimationFrame(
@@ -428,7 +451,7 @@ export class Game {
                 "loadingScreen"
             );
 
-        if(screen) {
+        if (screen) {
 
             screen.classList.add(
                 "active"
@@ -443,7 +466,7 @@ export class Game {
                 "loadingScreen"
             );
 
-        if(screen) {
+        if (screen) {
 
             screen.classList.remove(
                 "active"
@@ -462,7 +485,7 @@ export class Game {
                 "splashScreen"
             );
 
-        if(splash) {
+        if (splash) {
 
             splash.classList.remove(
                 "active"
@@ -481,7 +504,7 @@ export class Game {
                 "mainMenu"
             );
 
-        if(menu) {
+        if (menu) {
 
             menu.classList.add(
                 "active"
@@ -496,7 +519,7 @@ export class Game {
                 "mainMenu"
             );
 
-        if(menu) {
+        if (menu) {
 
             menu.classList.remove(
                 "active"
