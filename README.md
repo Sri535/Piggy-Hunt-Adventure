@@ -225,6 +225,11 @@ Stage 1 intentionally does NOT include:
 * Multiplayer
 
 These features are planned for future stages.
+---
+Your game will be available at:
+
+Play the production version instantly here: 
+👉 **Play game https://sri535.github.io/Piggy-Hunt-Adventure/**
 
 ---
 
