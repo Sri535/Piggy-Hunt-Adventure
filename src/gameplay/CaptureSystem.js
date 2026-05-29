@@ -146,11 +146,11 @@ export class CaptureSystem {
             hit.object;
 
         while (
-                root &&
-                !root.userData?.isPiggy
-                ) {
-                    root = root.parent;
-                }
+            root &&
+            !root.userData?.isPiggy
+        ) {
+            root = root.parent;
+        }
 
         this.targetPiggy =
             root;
@@ -194,157 +194,167 @@ export class CaptureSystem {
        CAPTURE
     ===================================================== */
 
-  capture() {
+    capture() {
 
-    console.log("CAPTURE BUTTON PRESSED");
+        console.log("CAPTURE BUTTON PRESSED");
 
-    if (!this.targetPiggy) {
+        if (!this.targetPiggy) {
 
-        console.log("NO TARGET");
+            console.log("NO TARGET");
 
-        return;
-    }
+            return;
+        }
 
-    console.log(
-        "TARGET FOUND",
-        this.targetPiggy
-    );
-
-    const points =
-        this.piggyManager.capturePiggy(
+        console.log(
+            "TARGET FOUND",
             this.targetPiggy
         );
 
-    if(points <= 0)
-        return;
-
-    console.log(
-        "POINTS:",
-        points
-    );
-
-    this.rewardPlayer(
-        points
-    );
-
-    this.spawnCaptureEffect(
-        this.targetPiggy.position
-    );
-
-    this.refreshHUD();
-
-    this.saveManager.save();
-
-    console.log(
-        "Captured:",
-        points
-    );
-}
-
-/* =====================================================
-   REWARDS
-===================================================== */
-
-rewardPlayer(points) {
-
-    const coins =
-        Math.floor(
-            points / 2
+        console.log(
+            "TARGET:",
+            this.targetPiggy
         );
 
-    const xp =
-        points;
+        console.log(
+            "USERDATA:",
+            this.targetPiggy?.userData
+        );
 
-    this.saveManager
-        .addCoins(coins);
+        const points =
+            this.piggyManager.capturePiggy(
+                this.targetPiggy
+            );
 
-    this.saveManager
-        .addXP(xp);
+        if (points <= 0)
+            return;
 
-    this.saveManager
-        .incrementCaptures();
-}
+        console.log(
+            "POINTS:",
+            points
+        );
 
-/* =====================================================
-   HUD
-===================================================== */
+        this.rewardPlayer(
+            points
+        );
 
-refreshHUD() {
+        this.spawnCaptureEffect(
+            this.targetPiggy.position
+        );
 
-    const player =
+        this.refreshHUD();
+
+        this.saveManager.save();
+
+        console.log(
+            "Captured:",
+            points
+        );
+    }
+
+    /* =====================================================
+       REWARDS
+    ===================================================== */
+
+    rewardPlayer(points) {
+
+        const coins =
+            Math.floor(
+                points / 2
+            );
+
+        const xp =
+            points;
+
         this.saveManager
-        .getPlayer();
+            .addCoins(coins);
 
-    if (
-        this.coinLabel
-    ) {
+        this.saveManager
+            .addXP(xp);
 
-        this.coinLabel
-            .innerText =
-            player.coins;
+        this.saveManager
+            .incrementCaptures();
     }
 
-    if (
-        this.xpLabel
-    ) {
+    /* =====================================================
+       HUD
+    ===================================================== */
 
-        this.xpLabel
-            .innerText =
-            player.xp;
+    refreshHUD() {
+
+        const player =
+            this.saveManager
+            .getPlayer();
+
+        if (
+            this.coinLabel
+        ) {
+
+            this.coinLabel
+                .innerText =
+                player.coins;
+        }
+
+        if (
+            this.xpLabel
+        ) {
+
+            this.xpLabel
+                .innerText =
+                player.xp;
+        }
     }
-}
 
-/* =====================================================
-   FX
-===================================================== */
+    /* =====================================================
+       FX
+    ===================================================== */
 
-spawnCaptureEffect(
-    position
-) {
-
-    const geometry =
-        new THREE.SphereGeometry(
-            0.4,
-            8,
-            8
-        );
-
-    const material =
-        new THREE.MeshBasicMaterial({
-
-            color: 0xffff00
-        });
-
-    const flash =
-        new THREE.Mesh(
-
-            geometry,
-            material
-        );
-
-    flash.position.copy(
+    spawnCaptureEffect(
         position
-    );
+    ) {
 
-    this.scene.add(
-        flash
-    );
+        const geometry =
+            new THREE.SphereGeometry(
+                0.4,
+                8,
+                8
+            );
 
-    setTimeout(() => {
+        const material =
+            new THREE.MeshBasicMaterial({
 
-        this.scene.remove(
+                color: 0xffff00
+            });
+
+        const flash =
+            new THREE.Mesh(
+
+                geometry,
+                material
+            );
+
+        flash.position.copy(
+            position
+        );
+
+        this.scene.add(
             flash
         );
 
-    }, 300);
-}
+        setTimeout(() => {
 
-/* =====================================================
-   HELPERS
-===================================================== */
+            this.scene.remove(
+                flash
+            );
 
-getCurrentTarget() {
+        }, 300);
+    }
 
-    return this.targetPiggy;
-}
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    getCurrentTarget() {
+
+        return this.targetPiggy;
+    }
 }
