@@ -19,7 +19,11 @@ async function init() {
 
         showLoadingScreen();
 
+        console.log("BEFORE INIT");
+
         await game.init();
+
+        console.log("AFTER INIT");
 
         hideLoadingScreen();
 
