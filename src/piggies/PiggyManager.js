@@ -70,6 +70,15 @@ export class PiggyManager {
 
     createPiggy(typeName) {
 
+        console.log(
+            "capturePiggy received:",
+            piggy
+        );
+
+        console.log(
+            "capturePiggy userdata:",
+            piggy?.userData
+        );
         const config =
             this.types[typeName];
 
