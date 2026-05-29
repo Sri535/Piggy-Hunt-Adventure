@@ -1,10 +1,16 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
-import {EffectComposer} from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/postprocessing/EffectComposer.js";
+import {
+    EffectComposer
+} from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/postprocessing/EffectComposer.js";
 
-import {RenderPass} from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/postprocessing/RenderPass.js";
+import {
+    RenderPass
+} from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/postprocessing/RenderPass.js";
 
-import {UnrealBloomPass} from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/postprocessing/UnrealBloomPass.js";
+import {
+    UnrealBloomPass
+} from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/postprocessing/UnrealBloomPass.js";
 
 /* =====================================================
    RENDERER
@@ -75,8 +81,7 @@ export class Renderer {
 
                 alpha: false,
 
-                powerPreference:
-                    "high-performance"
+                powerPreference: "high-performance"
             });
 
         this.renderer.setSize(
@@ -155,7 +160,7 @@ export class Renderer {
 
     getBloomStrength() {
 
-        if(this.isMobile)
+        if (this.isMobile)
             return 0.35;
 
         return 1.1;
@@ -163,7 +168,7 @@ export class Renderer {
 
     setBloom(enabled) {
 
-        if(!this.bloomPass)
+        if (!this.bloomPass)
             return;
 
         this.bloomPass.enabled =
@@ -172,7 +177,7 @@ export class Renderer {
 
     setBloomStrength(value) {
 
-        if(!this.bloomPass)
+        if (!this.bloomPass)
             return;
 
         this.bloomPass.strength =
@@ -196,7 +201,7 @@ export class Renderer {
 
     setQuality(level) {
 
-        switch(level) {
+        switch (level) {
 
             case "low":
 
@@ -247,7 +252,7 @@ export class Renderer {
 
     getPixelRatio() {
 
-        if(this.isMobile) {
+        if (this.isMobile) {
 
             return Math.min(
                 window.devicePixelRatio,
@@ -283,7 +288,7 @@ export class Renderer {
         const elapsed =
             performance.now();
 
-        if(
+        if (
             elapsed -
             this.lastFPSUpdate >
             1000
@@ -302,7 +307,7 @@ export class Renderer {
                     "fpsCounter"
                 );
 
-            if(fpsElement) {
+            if (fpsElement) {
 
                 fpsElement.textContent =
                     this.fps;
@@ -316,7 +321,7 @@ export class Renderer {
 
     adaptiveQuality() {
 
-        if(
+        if (
             this.fps > 0 &&
             this.fps < 25
         ) {
