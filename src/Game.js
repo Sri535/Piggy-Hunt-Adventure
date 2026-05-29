@@ -325,9 +325,13 @@ export class Game {
         this.world?.update(
             this.elapsedTime
         );
+        this.piggyManager?.update(
+        this.elapsedTime
+        );
         this.updateEnvironment();
 
         this.updateSaveData();
+        
     }
 
     /* =====================================================
