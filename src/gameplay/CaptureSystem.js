@@ -70,18 +70,18 @@ export class CaptureSystem {
 
     bindUI() {
 
-        if(
+        if (
             this.captureButton
         ) {
 
             this.captureButton
-            .addEventListener(
-                "click",
-                () => {
+                .addEventListener(
+                    "click",
+                    () => {
 
-                    this.capture();
-                }
-            );
+                        this.capture();
+                    }
+                );
         }
     }
 
@@ -108,9 +108,9 @@ export class CaptureSystem {
             new THREE.Vector3();
 
         this.camera
-        .getWorldDirection(
-            direction
-        );
+            .getWorldDirection(
+                direction
+            );
 
         this.raycaster.set(
             this.camera.position,
@@ -128,7 +128,7 @@ export class CaptureSystem {
                 true
             );
 
-        if(
+        if (
             intersects.length === 0
         )
             return;
@@ -136,7 +136,7 @@ export class CaptureSystem {
         const hit =
             intersects[0];
 
-        if(
+        if (
             hit.distance >
             this.captureDistance
         )
@@ -145,11 +145,11 @@ export class CaptureSystem {
         let root =
             hit.object;
 
-        while(
+        while (
             root.parent &&
             root.parent.type !==
             "Scene"
-        ){
+        ) {
 
             root =
                 root.parent;
@@ -165,31 +165,30 @@ export class CaptureSystem {
 
     updateCrosshair() {
 
-        if(
+        if (
             !this.crosshair
         )
             return;
 
-        if(
+        if (
             this.targetPiggy
-        ){
+        ) {
 
             this.crosshair
-            .style.borderColor =
+                .style.borderColor =
                 "#00ff00";
 
             this.crosshair
-            .style.boxShadow =
+                .style.boxShadow =
                 "0 0 20px #00ff00";
-        }
-        else{
+        } else {
 
             this.crosshair
-            .style.borderColor =
+                .style.borderColor =
                 "#ffffff";
 
             this.crosshair
-            .style.boxShadow =
+                .style.boxShadow =
                 "none";
         }
     }
@@ -200,144 +199,163 @@ export class CaptureSystem {
 
     capture() {
 
-        if(
-            !this.targetPiggy
-        )
+        console.log("CAPTURE BUTTON PRESSED");
+
+        if (!this.targetPiggy) {
+
+            console.log("NO TARGET");
+
             return;
+        }
+
+        console.log(
+            "TARGET FOUND",
+            this.targetPiggy
+        );
 
         const points =
-            this.piggyManager
-            .capturePiggy(
+            this.piggyManager.capturePiggy(
                 this.targetPiggy
             );
 
-        if(points <= 0)
-            return;
-
-        this.rewardPlayer(
-            points
-        );
-
-        this.spawnCaptureEffect(
-            this.targetPiggy
-            .position
-        );
-
-        this.refreshHUD();
-
-        this.saveManager.save();
-
         console.log(
-            "Captured:",
+            "POINTS:",
             points
         );
     }
 
-    /* =====================================================
-       REWARDS
-    ===================================================== */
+    const points =
+        this.piggyManager
+        .capturePiggy(
+            this.targetPiggy
+        );
 
-    rewardPlayer(points) {
+    if (points <= 0)
+        return;
 
-        const coins =
-            Math.floor(
-                points / 2
-            );
+    this.rewardPlayer(
+        points
+    );
 
-        const xp =
-            points;
+    this.spawnCaptureEffect(
+        this.targetPiggy
+        .position
+    );
 
-        this.saveManager
+    this.refreshHUD();
+
+    this.saveManager.save();
+
+    console.log(
+        "Captured:",
+        points
+    );
+}
+
+/* =====================================================
+   REWARDS
+===================================================== */
+
+rewardPlayer(points) {
+
+    const coins =
+        Math.floor(
+            points / 2
+        );
+
+    const xp =
+        points;
+
+    this.saveManager
         .addCoins(coins);
 
-        this.saveManager
+    this.saveManager
         .addXP(xp);
 
-        this.saveManager
+    this.saveManager
         .incrementCaptures();
-    }
+}
 
-    /* =====================================================
-       HUD
-    ===================================================== */
+/* =====================================================
+   HUD
+===================================================== */
 
-    refreshHUD() {
+refreshHUD() {
 
-        const player =
-            this.saveManager
-            .getPlayer();
+    const player =
+        this.saveManager
+        .getPlayer();
 
-        if(
-            this.coinLabel
-        ){
-
-            this.coinLabel
-            .innerText =
-                player.coins;
-        }
-
-        if(
-            this.xpLabel
-        ){
-
-            this.xpLabel
-            .innerText =
-                player.xp;
-        }
-    }
-
-    /* =====================================================
-       FX
-    ===================================================== */
-
-    spawnCaptureEffect(
-        position
+    if (
+        this.coinLabel
     ) {
 
-        const geometry =
-            new THREE.SphereGeometry(
-                0.4,
-                8,
-                8
-            );
+        this.coinLabel
+            .innerText =
+            player.coins;
+    }
 
-        const material =
-            new THREE.MeshBasicMaterial({
+    if (
+        this.xpLabel
+    ) {
 
-                color:
-                    0xffff00
-            });
+        this.xpLabel
+            .innerText =
+            player.xp;
+    }
+}
 
-        const flash =
-            new THREE.Mesh(
+/* =====================================================
+   FX
+===================================================== */
 
-                geometry,
-                material
-            );
+spawnCaptureEffect(
+    position
+) {
 
-        flash.position.copy(
-            position
+    const geometry =
+        new THREE.SphereGeometry(
+            0.4,
+            8,
+            8
         );
 
-        this.scene.add(
+    const material =
+        new THREE.MeshBasicMaterial({
+
+            color: 0xffff00
+        });
+
+    const flash =
+        new THREE.Mesh(
+
+            geometry,
+            material
+        );
+
+    flash.position.copy(
+        position
+    );
+
+    this.scene.add(
+        flash
+    );
+
+    setTimeout(() => {
+
+        this.scene.remove(
             flash
         );
 
-        setTimeout(() => {
+    }, 300);
+}
 
-            this.scene.remove(
-                flash
-            );
+/* =====================================================
+   HELPERS
+===================================================== */
 
-        }, 300);
-    }
+getCurrentTarget() {
 
-    /* =====================================================
-       HELPERS
-    ===================================================== */
-
-    getCurrentTarget() {
-
-        return this.targetPiggy;
-    }
+    return this.targetPiggy;
+}
 }
