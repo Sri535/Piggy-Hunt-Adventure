@@ -1,4 +1,4 @@
-```javascript
+
 export class InputManager {
 
     constructor() {
@@ -542,4 +542,4 @@ export class InputManager {
         this.updateGamepad();
     }
 }
-```
+
