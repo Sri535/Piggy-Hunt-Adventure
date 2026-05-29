@@ -1,4 +1,3 @@
-```javascript
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
 import {
@@ -110,8 +109,6 @@ export class Renderer {
         this.renderer.toneMappingExposure =
             1.2;
 
-        this.renderer.physicallyCorrectLights =
-            true;
 
         this.renderer.info.autoReset =
             true;
@@ -382,4 +379,3 @@ export class Renderer {
         this.renderer?.dispose();
     }
 }
-```
