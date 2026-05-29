@@ -44,6 +44,9 @@ export class Game {
         this.createCamera();
 
         this.createManagers();
+            // SAVE TEST
+        this.save.addCoins(100);
+        this.save.save();
 
         this.createLights();
 
