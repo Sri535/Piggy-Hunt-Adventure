@@ -147,8 +147,10 @@ export class PiggyManager {
         );
 
         piggy.add(nose);
-
+        piggy.userData.isPiggy = true;
         piggy.userData = {
+
+            isPiggy: true,
 
             type: typeName,
 
@@ -158,7 +160,6 @@ export class PiggyManager {
 
             bobOffset: Math.random() * 100
         };
-
         piggy.castShadow =
             true;
 
