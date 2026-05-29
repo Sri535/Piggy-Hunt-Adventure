@@ -1,134 +1,43 @@
-import { Game } from "./Game.js";
 
-/* =====================================================
-   GLOBAL GAME INSTANCE
-===================================================== */
+import { Game } from "./Game.js";
 
 let game = null;
 
 /* =====================================================
-   DOM READY
+   STARTUP
 ===================================================== */
 
-window.addEventListener(
-    "DOMContentLoaded",
-    async () => {
+window.addEventListener("DOMContentLoaded", init);
 
-        try {
+async function init() {
 
-            await bootGame();
-
-        }
-        catch(error) {
-
-            console.error(
-                "Boot Failed",
-                error
-            );
-
-            alert(
-                "Game failed to start. Check browser console."
-            );
-        }
-    }
-);
-
-/* =====================================================
-   BOOT
-===================================================== */
-
-async function bootGame() {
-
-    game =
-        new Game();
-
-    game.showLoading();
-
-    await game.init();
-
-    await loadAssets();
-
-    game.hideLoading();
-
-    game.hideSplash();
-
-    game.showMainMenu();
-
-    connectUI();
-
-    console.log(
-        "Piggy Hunt Adventure Ready"
-    );
-}
-
-/* =====================================================
-   LOAD ASSETS
-===================================================== */
-
-async function loadAssets() {
-
-    if(
-        !game.assets
-    )
-        return;
+    console.log("MAIN.JS STARTED");
 
     try {
 
-        // Uncomment when files exist
+        game = new Game();
 
-        
-        await game.assets.loadDefaultAssets();
-        
+        showLoadingScreen();
 
-       /* 
-       fakeLoading();
-       */
-    }
-    catch(error) {
+        await game.init();
 
-        console.warn(
-            "Assets skipped",
-            error
+        hideLoadingScreen();
+
+        hideSplash();
+
+        showMainMenu();
+
+        wireUI();
+
+        console.log("GAME READY");
+
+    } catch (error) {
+
+        console.error("BOOT ERROR:", error);
+
+        alert(
+            "Game startup failed.\n\nOpen F12 → Console and send the error."
         );
-    }
-}
-
-/* =====================================================
-   DEMO LOADER
-===================================================== */
-
-async function fakeLoading() {
-
-    const bar =
-        document.getElementById(
-            "loadingFill"
-        );
-
-    const label =
-        document.getElementById(
-            "loadingPercent"
-        );
-
-    const status =
-        document.getElementById(
-            "loadingStatus"
-        );
-
-    for(let i=0;i<=100;i+=5){
-
-        await delay(40);
-
-        if(bar)
-            bar.style.width =
-                `${i}%`;
-
-        if(label)
-            label.textContent =
-                `${i}%`;
-
-        if(status)
-            status.textContent =
-                `Loading ${i}%`;
     }
 }
 
@@ -136,89 +45,31 @@ async function fakeLoading() {
    UI
 ===================================================== */
 
-function connectUI() {
+function wireUI() {
 
-    connectPlayButton();
+    const playBtn =
+        document.getElementById("playBtn");
 
-    connectContinueButton();
+    if (playBtn) {
 
-    connectSettings();
-
-    connectFullscreen();
-
-    connectPauseButtons();
-
-    connectCaptureButton();
-}
-
-/* =====================================================
-   PLAY
-===================================================== */
-
-function connectPlayButton() {
-
-    const button =
-        document.getElementById(
-            "playBtn"
+        playBtn.addEventListener(
+            "click",
+            startGame
         );
+    }
 
-    if(!button)
-        return;
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            startGameplay();
-        }
-    );
-}
-
-/* =====================================================
-   CONTINUE
-===================================================== */
-
-function connectContinueButton() {
-
-    const button =
+    const continueBtn =
         document.getElementById(
             "continueBtn"
         );
 
-    if(!button)
-        return;
+    if (continueBtn) {
 
-    button.addEventListener(
-        "click",
-        () => {
-
-            startGameplay();
-        }
-    );
-}
-
-/* =====================================================
-   START GAME
-===================================================== */
-
-function startGameplay() {
-
-    game.hideMainMenu();
-
-    requestMotionPermission();
-
-    game.start();
-
-    console.log(
-        "Game Started"
-    );
-}
-
-/* =====================================================
-   SETTINGS
-===================================================== */
-
-function connectSettings() {
+        continueBtn.addEventListener(
+            "click",
+            startGame
+        );
+    }
 
     const settingsBtn =
         document.getElementById(
@@ -230,290 +81,262 @@ function connectSettings() {
             "settingsMenu"
         );
 
-    const backBtn =
+    const settingsBackBtn =
         document.getElementById(
             "settingsBackBtn"
         );
 
-    if(settingsBtn){
+    settingsBtn?.addEventListener(
+        "click",
+        () => {
 
-        settingsBtn.addEventListener(
-            "click",
-            () => {
-
-                settingsMenu
-                ?.classList.add(
-                    "active"
-                );
-            }
-        );
-    }
-
-    if(backBtn){
-
-        backBtn.addEventListener(
-            "click",
-            () => {
-
-                settingsMenu
-                ?.classList.remove(
-                    "active"
-                );
-            }
-        );
-    }
-
-    const bloomToggle =
-        document.getElementById(
-            "bloomToggle"
-        );
-
-    bloomToggle?.addEventListener(
-        "change",
-        e => {
-
-            game.renderer
-            ?.setBloom(
-                e.target.checked
-            );
-
-            game.save
-            ?.setSetting(
-                "bloom",
-                e.target.checked
+            settingsMenu?.classList.add(
+                "active"
             );
         }
     );
 
-    const qualitySelect =
-        document.getElementById(
-            "qualitySelect"
-        );
+    settingsBackBtn?.addEventListener(
+        "click",
+        () => {
 
-    qualitySelect?.addEventListener(
-        "change",
-        e => {
-
-            game.renderer
-            ?.setQuality(
-                e.target.value
-            );
-
-            game.save
-            ?.setSetting(
-                "quality",
-                e.target.value
+            settingsMenu?.classList.remove(
+                "active"
             );
         }
     );
+
+    const fullscreenBtn =
+        document.getElementById(
+            "fullscreenBtn"
+        );
+
+    fullscreenBtn?.addEventListener(
+        "click",
+        toggleFullscreen
+    );
+
+    document
+        .getElementById("resumeBtn")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .getElementById(
+                        "pauseMenu"
+                    )
+                    ?.classList.remove(
+                        "active"
+                    );
+            }
+        );
+
+    document
+        .getElementById("saveBtn")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                game?.save?.save();
+            }
+        );
+
+    document
+        .getElementById("quitBtn")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                game?.stop();
+
+                showMainMenu();
+
+                document
+                    .getElementById(
+                        "pauseMenu"
+                    )
+                    ?.classList.remove(
+                        "active"
+                    );
+            }
+        );
+
+    document
+        .getElementById("captureBtn")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                console.log(
+                    "Capture Clicked"
+                );
+            }
+        );
+}
+
+/* =====================================================
+   PLAY
+===================================================== */
+
+function startGame() {
+
+    hideMainMenu();
+
+    requestGyroscopePermission();
+
+    game?.start();
+
+    console.log(
+        "GAME STARTED"
+    );
+}
+
+/* =====================================================
+   SCREENS
+===================================================== */
+
+function hideSplash() {
+
+    document
+        .getElementById(
+            "splashScreen"
+        )
+        ?.classList.remove(
+            "active"
+        );
+}
+
+function showMainMenu() {
+
+    document
+        .getElementById(
+            "mainMenu"
+        )
+        ?.classList.add(
+            "active"
+        );
+}
+
+function hideMainMenu() {
+
+    document
+        .getElementById(
+            "mainMenu"
+        )
+        ?.classList.remove(
+            "active"
+        );
+}
+
+function showLoadingScreen() {
+
+    document
+        .getElementById(
+            "loadingScreen"
+        )
+        ?.classList.add(
+            "active"
+        );
+}
+
+function hideLoadingScreen() {
+
+    document
+        .getElementById(
+            "loadingScreen"
+        )
+        ?.classList.remove(
+            "active"
+        );
 }
 
 /* =====================================================
    FULLSCREEN
 ===================================================== */
 
-function connectFullscreen() {
+async function toggleFullscreen() {
 
-    const button =
-        document.getElementById(
-            "fullscreenBtn"
-        );
+    try {
 
-    if(!button)
-        return;
+        if (
+            !document.fullscreenElement
+        ) {
 
-    button.addEventListener(
-        "click",
-        async () => {
-
-            if(
-                !document
-                .fullscreenElement
-            ){
-
-                await document
+            await document
                 .documentElement
                 .requestFullscreen();
-            }
-            else{
 
-                document
+        } else {
+
+            await document
                 .exitFullscreen();
-            }
         }
-    );
-}
 
-/* =====================================================
-   PAUSE MENU
-===================================================== */
+    } catch (error) {
 
-function connectPauseButtons() {
-
-    const resume =
-        document.getElementById(
-            "resumeBtn"
-        );
-
-    const save =
-        document.getElementById(
-            "saveBtn"
-        );
-
-    const quit =
-        document.getElementById(
-            "quitBtn"
-        );
-
-    resume?.addEventListener(
-        "click",
-        () => {
-
-            document
-            .getElementById(
-                "pauseMenu"
-            )
-            ?.classList.remove(
-                "active"
-            );
-        }
-    );
-
-    save?.addEventListener(
-        "click",
-        () => {
-
-            game.save.save();
-        }
-    );
-
-    quit?.addEventListener(
-        "click",
-        () => {
-
-            game.stop();
-
-            game.showMainMenu();
-
-            document
-            .getElementById(
-                "pauseMenu"
-            )
-            ?.classList.remove(
-                "active"
-            );
-        }
-    );
-}
-
-/* =====================================================
-   CAPTURE BUTTON
-===================================================== */
-
-function connectCaptureButton() {
-
-    const capture =
-        document.getElementById(
-            "captureBtn"
-        );
-
-    if(!capture)
-        return;
-
-    capture.addEventListener(
-        "click",
-        () => {
-
-            console.log(
-                "Capture Pressed"
-            );
-        }
-    );
-}
-
-/* =====================================================
-   IOS MOTION
-===================================================== */
-
-async function requestMotionPermission() {
-
-    const gyroPrompt =
-        document.getElementById(
-            "gyroPrompt"
-        );
-
-    const enableBtn =
-        document.getElementById(
-            "enableMotionBtn"
-        );
-
-    if(
-        typeof
-        DeviceOrientationEvent ===
-        "undefined"
-    ) {
-
-        return;
+        console.warn(error);
     }
+}
 
-    if(
-        typeof
-        DeviceOrientationEvent
-        .requestPermission ===
-        "function"
-    ){
+/* =====================================================
+   IOS GYROSCOPE
+===================================================== */
 
-        gyroPrompt.style.display =
-            "flex";
+async function requestGyroscopePermission() {
 
-        enableBtn.onclick =
-        async () => {
+    try {
 
-            try {
+        if (
+            typeof DeviceOrientationEvent !==
+            "undefined" &&
+            typeof DeviceOrientationEvent
+                .requestPermission ===
+                "function"
+        ) {
 
-                const result =
-
-                    await
-                    DeviceOrientationEvent
-                    .requestPermission();
-
-                if(
-                    result ===
-                    "granted"
-                ){
-
-                    gyroPrompt.style.display =
-                        "none";
-                }
-            }
-            catch(error){
-
-                console.error(
-                    error
+            const prompt =
+                document.getElementById(
+                    "gyroPrompt"
                 );
-            }
-        };
+
+            prompt.style.display =
+                "flex";
+
+            const button =
+                document.getElementById(
+                    "enableMotionBtn"
+                );
+
+            button.onclick =
+                async () => {
+
+                    const result =
+                        await DeviceOrientationEvent
+                            .requestPermission();
+
+                    if (
+                        result ===
+                        "granted"
+                    ) {
+
+                        prompt.style.display =
+                            "none";
+                    }
+                };
+        }
+
+    } catch (error) {
+
+        console.warn(error);
     }
 }
 
 /* =====================================================
-   UTIL
+   DEBUG HELPERS
 ===================================================== */
 
-function delay(ms){
+window.showMenu = showMainMenu;
+window.hideMenu = hideMainMenu;
+window.getGame = () => game;
 
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                ms
-            )
-    );
-}
-
-/* =====================================================
-   DEBUG
-===================================================== */
-
-window.GameInstance =
-() => game;
