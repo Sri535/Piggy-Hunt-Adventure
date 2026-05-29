@@ -146,14 +146,11 @@ export class CaptureSystem {
             hit.object;
 
         while (
-            root.parent &&
-            root.parent.type !==
-            "Scene"
-        ) {
-
-            root =
-                root.parent;
-        }
+                root &&
+                !root.userData?.isPiggy
+                ) {
+                    root = root.parent;
+                }
 
         this.targetPiggy =
             root;
