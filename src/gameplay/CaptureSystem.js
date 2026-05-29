@@ -142,8 +142,9 @@ export class CaptureSystem {
         )
             return;
 
-        let root =
-            hit.object;
+
+
+        let root = hit.object;
 
         while (
             root &&
@@ -152,8 +153,12 @@ export class CaptureSystem {
             root = root.parent;
         }
 
-        this.targetPiggy =
-            root;
+        this.targetPiggy = root;
+        console.log(
+            "TARGET USERDATA:",
+            root?.userData
+        );
+
     }
 
     /* =====================================================
