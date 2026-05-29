@@ -7,6 +7,7 @@ import { SaveManager } from "./SaveManager.js";
 import { AssetManager } from "./AssetManager.js";
 import { ForestWorld } from "./worlds/ForestWorld.js";
 import { PiggyManager } from "./piggies/PiggyManager.js";
+import { CaptureSystem } from "./gameplay/CaptureSystem.js";
 
 export class Game {
 
@@ -61,6 +62,19 @@ export class Game {
             new PiggyManager(this.scene,this.world);
 
         this.piggyManager.init();
+        this.captureSystem =
+        new CaptureSystem(
+
+        this.camera,
+
+        this.scene,
+
+        this.piggyManager,
+
+        this.save
+        );
+
+        this.captureSystem.init();
         this.bindEvents();
 
         console.log(
@@ -328,6 +342,7 @@ export class Game {
         this.piggyManager?.update(
         this.elapsedTime
         );
+        this.captureSystem?.update();
         this.updateEnvironment();
 
         this.updateSaveData();
