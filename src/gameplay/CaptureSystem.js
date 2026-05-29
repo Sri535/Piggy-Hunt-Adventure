@@ -197,49 +197,41 @@ export class CaptureSystem {
        CAPTURE
     ===================================================== */
 
-    capture() {
+  capture() {
 
-        console.log("CAPTURE BUTTON PRESSED");
+    console.log("CAPTURE BUTTON PRESSED");
 
-        if (!this.targetPiggy) {
+    if (!this.targetPiggy) {
 
-            console.log("NO TARGET");
+        console.log("NO TARGET");
 
-            return;
-        }
-
-        console.log(
-            "TARGET FOUND",
-            this.targetPiggy
-        );
-
-        const points =
-            this.piggyManager.capturePiggy(
-                this.targetPiggy
-            );
-
-        console.log(
-            "POINTS:",
-            points
-        );
+        return;
     }
 
+    console.log(
+        "TARGET FOUND",
+        this.targetPiggy
+    );
+
     const points =
-        this.piggyManager
-        .capturePiggy(
+        this.piggyManager.capturePiggy(
             this.targetPiggy
         );
 
-    if (points <= 0)
+    if(points <= 0)
         return;
+
+    console.log(
+        "POINTS:",
+        points
+    );
 
     this.rewardPlayer(
         points
     );
 
     this.spawnCaptureEffect(
-        this.targetPiggy
-        .position
+        this.targetPiggy.position
     );
 
     this.refreshHUD();
