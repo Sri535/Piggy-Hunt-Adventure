@@ -157,18 +157,18 @@ export class PiggyManager {
 
         piggy.add(nose);
         piggy.userData.isPiggy = true;
-        piggy.userData = {
+   piggy.userData = {
 
-            isPiggy: true,
+    isPiggy: true,
 
-            type: typeName,
+    type: typeName,
 
-            points: config.points,
+    points: config.points,
 
-            captured: false,
+    captured: false,
 
-            bobOffset: Math.random() * 100
-        };
+    bobOffset: Math.random() * 100
+};
         piggy.castShadow =
             true;
 
