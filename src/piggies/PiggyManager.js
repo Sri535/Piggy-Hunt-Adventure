@@ -89,17 +89,13 @@ export class PiggyManager {
 
                 new THREE.MeshStandardMaterial({
 
-                    color:
-                        config.color,
+                    color: config.color,
 
-                    metalness:
-                        typeName ===
-                        "golden"
-                        ? 0.8
-                        : 0.1,
+                    metalness: typeName ===
+                        "golden" ?
+                        0.8 : 0.1,
 
-                    roughness:
-                        0.3
+                    roughness: 0.3
                 })
             );
 
@@ -140,8 +136,7 @@ export class PiggyManager {
 
                 new THREE.MeshStandardMaterial({
 
-                    color:
-                        0xff8888
+                    color: 0xff8888
                 })
             );
 
@@ -155,17 +150,13 @@ export class PiggyManager {
 
         piggy.userData = {
 
-            type:
-                typeName,
+            type: typeName,
 
-            points:
-                config.points,
+            points: config.points,
 
-            captured:
-                false,
+            captured: false,
 
-            bobOffset:
-                Math.random()*100
+            bobOffset: Math.random() * 100
         };
 
         piggy.castShadow =
@@ -183,20 +174,20 @@ export class PiggyManager {
         const config =
             this.types[typeName];
 
-        for(
-            let i = 0;
-            i < config.count;
-            i++
-        ){
+        for (
+            let i = 0; i < config.count; i++
+        ) {
 
             const piggy =
                 this.createPiggy(
                     typeName
                 );
+            const spawn = {
 
-            const spawn =
-                this.world
-                .getRandomSpawnPoint();
+                x: (Math.random() - 0.5) * 40,
+
+                z: (Math.random() - 0.5) * 40
+            };
 
             piggy.position.set(
 
@@ -255,7 +246,7 @@ export class PiggyManager {
 
         ghost.traverse(obj => {
 
-            if(obj.material){
+            if (obj.material) {
 
                 obj.material.transparent =
                     true;
@@ -283,12 +274,12 @@ export class PiggyManager {
 
     animatePiggies(time) {
 
-        for(
+        for (
             const piggy of
-            this.piggies
-        ){
+                this.piggies
+        ) {
 
-            if(
+            if (
                 piggy.userData.captured
             )
                 continue;
@@ -309,28 +300,28 @@ export class PiggyManager {
             piggy.rotation.y +=
                 0.003;
 
-            if(
+            if (
                 piggy.userData.type ===
                 "rainbow"
-            ){
+            ) {
 
                 piggy.traverse(obj => {
 
-                    if(
+                    if (
                         obj.material
-                    ){
+                    ) {
 
                         obj.material.color
-                        .setHSL(
+                            .setHSL(
 
-                            (
-                                time * 0.2
-                            ) % 1,
+                                (
+                                    time * 0.2
+                                ) % 1,
 
-                            1,
+                                1,
 
-                            0.6
-                        );
+                                0.6
+                            );
                     }
                 });
             }
@@ -343,7 +334,7 @@ export class PiggyManager {
 
     capturePiggy(piggy) {
 
-        if(
+        if (
             piggy.userData.captured
         )
             return 0;
@@ -369,12 +360,12 @@ export class PiggyManager {
         let distance =
             Infinity;
 
-        for(
+        for (
             const piggy of
-            this.piggies
-        ){
+                this.piggies
+        ) {
 
-            if(
+            if (
                 piggy.userData.captured
             )
                 continue;
@@ -385,9 +376,9 @@ export class PiggyManager {
                     position
                 );
 
-            if(
+            if (
                 d < distance
-            ){
+            ) {
 
                 distance = d;
 
