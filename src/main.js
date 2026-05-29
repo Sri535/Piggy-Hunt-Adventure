@@ -76,11 +76,13 @@ async function loadAssets() {
 
         // Uncomment when files exist
 
-        /*
+        
         await game.assets.loadDefaultAssets();
-        */
+        
 
-        fakeLoading();
+       /* 
+       fakeLoading();
+       */
     }
     catch(error) {
 
