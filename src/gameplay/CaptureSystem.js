@@ -3,410 +3,455 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.m
 
 export class CaptureSystem {
 
-   constructor(
-      camera,
-      scene,
-      piggyManager,
-      saveManager
-   ) {
+    constructor(
+        camera,
+        scene,
+        piggyManager,
+        saveManager
+    ) {
 
-      this.camera = camera;
+        this.camera = camera;
 
-      this.scene = scene;
+        this.scene = scene;
 
-      this.piggyManager =
-         piggyManager;
+        this.piggyManager =
+            piggyManager;
 
-      this.saveManager =
-         saveManager;
+        this.saveManager =
+            saveManager;
 
-      this.raycaster =
-         new THREE.Raycaster();
+        this.raycaster =
+            new THREE.Raycaster();
 
-      this.targetPiggy =
-         null;
+        this.targetPiggy =
+            null;
 
-      this.captureDistance =
-         40;
+        this.captureDistance =
+            40;
 
-      this.crosshair =
-         document.getElementById(
-            "crosshair"
-         );
-
-      this.captureButton =
-         document.getElementById(
-            "captureBtn"
-         );
-
-      this.coinLabel =
-         document.getElementById(
-            "coinCount"
-         );
-
-      this.xpLabel =
-         document.getElementById(
-            "xpCount"
-         );
-   }
-
-   /* =====================================================
-      INIT
-   ===================================================== */
-
-   init() {
-
-
-      this.bindUI();
-
-      this.refreshHUD();
-
-      console.log(
-         "Capture System Ready"
-      );
-   }
-
-   /* =====================================================
-      UI
-   ===================================================== */
-
-   bindUI() {
-
-      if (
-         this.captureButton
-      ) {
-
-         this.captureButton
-            .addEventListener(
-               "click",
-               () => {
-
-                  this.capture();
-               }
+        this.crosshair =
+            document.getElementById(
+                "crosshair"
             );
-      }
-   }
 
-   /* =====================================================
-      UPDATE
-   ===================================================== */
+        this.captureButton =
+            document.getElementById(
+                "captureBtn"
+            );
 
-   update() {
+        /* OLD HUD */
 
-      this.findTarget();
+        this.coinLabel =
+            document.getElementById(
+                "coinCount"
+            );
 
-      this.updateCrosshair();
-   }
+        this.xpLabel =
+            document.getElementById(
+                "xpCount"
+            );
 
-   /* =====================================================
-      RAYCAST
-   ===================================================== */
+        /* TOP BAR */
 
-   findTarget() {
+        this.coinValue =
+            document.getElementById(
+                "coinValue"
+            );
 
-      this.targetPiggy = null;
+        this.gemValue =
+            document.getElementById(
+                "gemValue"
+            );
 
-      const direction =
-         new THREE.Vector3();
+        this.levelValue =
+            document.getElementById(
+                "levelValue"
+            );
+    }
 
-      this.camera
-         .getWorldDirection(
+    /* =====================================================
+       INIT
+    ===================================================== */
+
+    init() {
+
+
+        this.bindUI();
+
+        this.refreshHUD();
+
+        console.log(
+            "Capture System Ready"
+        );
+    }
+
+    /* =====================================================
+       UI
+    ===================================================== */
+
+    bindUI() {
+
+        if (
+            this.captureButton
+        ) {
+
+            this.captureButton
+                .addEventListener(
+                    "click",
+                    () => {
+
+                        this.capture();
+                    }
+                );
+        }
+    }
+
+    /* =====================================================
+       UPDATE
+    ===================================================== */
+
+    update() {
+
+        this.findTarget();
+
+        this.updateCrosshair();
+    }
+
+    /* =====================================================
+       RAYCAST
+    ===================================================== */
+
+    findTarget() {
+
+        this.targetPiggy = null;
+
+        const direction =
+            new THREE.Vector3();
+
+        this.camera
+            .getWorldDirection(
+                direction
+            );
+
+        this.raycaster.set(
+            this.camera.position,
             direction
-         );
+        );
 
-      this.raycaster.set(
-         this.camera.position,
-         direction
-      );
+        const intersects =
+            this.raycaster.intersectObjects(
+                this.piggyManager.getPiggies(),
+                true
+            );
 
-      const intersects =
-         this.raycaster.intersectObjects(
-            this.piggyManager.getPiggies(),
-            true
-         );
+        for (const hit of intersects) {
 
-      for (const hit of intersects) {
+            if (
+                hit.distance >
+                this.captureDistance
+            ) {
+                continue;
+            }
 
-         if (
-            hit.distance >
-            this.captureDistance
-         ) {
-            continue;
-         }
+            let root =
+                hit.object;
 
-         let root =
-            hit.object;
+            while (
+                root &&
+                !root.userData?.isPiggy
+            ) {
 
-         while (
-            root &&
-            !root.userData?.isPiggy
-         ) {
+                root =
+                    root.parent;
+            }
 
-            root =
-               root.parent;
-         }
+            if (
+                !root
+            ) {
+                continue;
+            }
 
-         if (
-            !root
-         ) {
-            continue;
-         }
+            if (
+                root.userData.captured
+            ) {
+                continue;
+            }
 
-         if (
-            root.userData.captured
-         ) {
-            continue;
-         }
+            this.targetPiggy =
+                root;
 
-         this.targetPiggy =
-            root;
+            return;
+        }
+    }
 
-         return;
-      }
-   }
+    /* =====================================================
+       CROSSHAIR
+    ===================================================== */
 
-   /* =====================================================
-      CROSSHAIR
-   ===================================================== */
+    updateCrosshair() {
 
-   updateCrosshair() {
+        if (
+            !this.crosshair
+        ) {
+            return;
+        }
 
-      if (
-         !this.crosshair
-      ) {
-         return;
-      }
-
-      if (
-         this.targetPiggy
-      ) {
-
-         this.crosshair
-            .style.borderColor =
-            "#00ff00";
-
-         this.crosshair
-            .style.boxShadow =
-            "0 0 20px #00ff00";
-
-      } else {
-
-         this.crosshair
-            .style.borderColor =
-            "#ffffff";
-
-         this.crosshair
-            .style.boxShadow =
-            "none";
-      }
-   }
-
-   /* =====================================================
-      CAPTURE
-   ===================================================== */
-
-   capture() {
-
-      if (!this.targetPiggy) {
-
-         console.log("NO TARGET");
-
-         return;
-      }
-
-      if (
-         this.targetPiggy.userData.captured
-      ) {
-
-         console.log(
-            "Already Captured"
-         );
-
-         return;
-      }
-
-      const distance =
-         this.camera.position.distanceTo(
-            this.targetPiggy.position
-         );
-
-      if (
-         distance >
-         this.captureDistance
-      ) {
-
-         console.log(
-            "TOO FAR:",
-            distance
-         );
-
-         return;
-      }
-
-      const effectPosition =
-         this.targetPiggy.position.clone();
-
-      const points =
-         this.piggyManager.capturePiggy(
+        if (
             this.targetPiggy
-         );
+        ) {
 
-      if (
-         points <= 0
-      ) {
+            this.crosshair
+                .style.borderColor =
+                "#00ff00";
 
-         console.log(
-            "Invalid Capture"
-         );
+            this.crosshair
+                .style.boxShadow =
+                "0 0 20px #00ff00";
 
-         return;
-      }
+        } else {
 
-      /* Rewards */
+            this.crosshair
+                .style.borderColor =
+                "#ffffff";
 
-      this.rewardPlayer(
-         points
-      );
+            this.crosshair
+                .style.boxShadow =
+                "none";
+        }
+    }
 
-      /* FX */
+    /* =====================================================
+       CAPTURE
+    ===================================================== */
 
-      this.spawnCaptureEffect(
-         effectPosition
-      );
+    capture() {
 
-      /* Clear Target */
+        if (!this.targetPiggy) {
 
-      this.targetPiggy =
-         null;
+            console.log("NO TARGET");
 
-      /* HUD */
+            return;
+        }
 
-      this.refreshHUD();
+        if (
+            this.targetPiggy.userData.captured
+        ) {
 
-      /* Save */
+            console.log(
+                "Already Captured"
+            );
 
-      this.saveManager.save();
+            return;
+        }
 
-      console.log(
-         "Captured",
-         points
-      );
-   }
-   /* =====================================================
-      REWARDS
-   ===================================================== */
+        const distance =
+            this.camera.position.distanceTo(
+                this.targetPiggy.position
+            );
 
-   rewardPlayer(points) {
+        if (
+            distance >
+            this.captureDistance
+        ) {
 
-      const coins =
-         Math.floor(
-            points / 2
-         );
+            console.log(
+                "TOO FAR:",
+                distance
+            );
 
-      const xp =
-         points;
+            return;
+        }
 
-      this.saveManager
-         .addCoins(
+        const effectPosition =
+            this.targetPiggy.position.clone();
+
+        const points =
+            this.piggyManager.capturePiggy(
+                this.targetPiggy
+            );
+
+        if (
+            points <= 0
+        ) {
+
+            console.log(
+                "Invalid Capture"
+            );
+
+            return;
+        }
+
+        /* Rewards */
+
+        this.rewardPlayer(
+            points
+        );
+
+        /* FX */
+
+        this.spawnCaptureEffect(
+            effectPosition
+        );
+
+        /* Clear Target */
+
+        this.targetPiggy =
+            null;
+
+        /* HUD */
+
+        this.refreshHUD();
+
+        /* Save */
+
+        this.saveManager.save();
+
+        console.log(
+            "Captured",
+            points
+        );
+    }
+    /* =====================================================
+       REWARDS
+    ===================================================== */
+
+    rewardPlayer(points) {
+
+        const coins =
+            Math.floor(
+                points / 2
+            );
+
+        const xp =
+            points;
+
+        this.saveManager
+            .addCoins(
+                coins
+            );
+
+        this.saveManager
+            .addXP(
+                xp
+            );
+
+        this.saveManager
+            .incrementCaptures();
+
+        console.log(
+            "XP +",
+            xp,
+            "Coins +",
             coins
-         );
+        );
+    }
 
-      this.saveManager
-         .addXP(
-            xp
-         );
+    /* =====================================================
+       HUD
+    ===================================================== */
 
-      this.saveManager
-         .incrementCaptures();
+    refreshHUD() {
 
-      console.log(
-         "XP +",
-         xp,
-         "Coins +",
-         coins
-      );
-   }
+        const player =
+            this.saveManager
+            .getPlayer();
 
-   /* =====================================================
-      HUD
-   ===================================================== */
+        /* TOP BAR */
 
-   refreshHUD() {
+        if (
+            this.coinValue
+        ) {
 
-      const player =
-         this.saveManager
-         .getPlayer();
+            this.coinValue.innerText =
+                player.coins;
+        }
 
-      if (
-         this.coinLabel
-      ) {
+        if (
+            this.gemValue
+        ) {
 
-         this.coinLabel
-            .innerText =
-            player.coins;
-      }
+            this.gemValue.innerText =
+                player.gems;
+        }
 
-      if (
-         this.xpLabel
-      ) {
+        if (
+            this.levelValue
+        ) {
 
-         this.xpLabel
-            .innerText =
-            player.xp;
-      }
-   }
+            this.levelValue.innerText =
+                player.level;
+        }
 
-   /* =====================================================
-      FX
-   ===================================================== */
+        /* LEGACY PANEL */
 
-   spawnCaptureEffect(
-      position
-   ) {
+        if (
+            this.coinLabel
+        ) {
 
-      const geometry =
-         new THREE.SphereGeometry(
-            0.4,
-            8,
-            8
-         );
+            this.coinLabel.innerText =
+                player.coins;
+        }
 
-      const material =
-         new THREE.MeshBasicMaterial({
+        if (
+            this.xpLabel
+        ) {
 
-            color: 0xffff00
-         });
+            this.xpLabel.innerText =
+                player.xp;
+        }
+    }
 
-      const flash =
-         new THREE.Mesh(
+    /* =====================================================
+       FX
+    ===================================================== */
 
-            geometry,
-            material
-         );
+    spawnCaptureEffect(
+        position
+    ) {
 
-      flash.position.copy(
-         position
-      );
+        const geometry =
+            new THREE.SphereGeometry(
+                0.4,
+                8,
+                8
+            );
 
-      this.scene.add(
-         flash
-      );
+        const material =
+            new THREE.MeshBasicMaterial({
 
-      setTimeout(() => {
+                color: 0xffff00
+            });
 
-         this.scene.remove(
+        const flash =
+            new THREE.Mesh(
+
+                geometry,
+                material
+            );
+
+        flash.position.copy(
+            position
+        );
+
+        this.scene.add(
             flash
-         );
+        );
 
-      }, 300);
-   }
+        setTimeout(() => {
 
-   /* =====================================================
-      HELPERS
-   ===================================================== */
+            this.scene.remove(
+                flash
+            );
 
-   getCurrentTarget() {
+        }, 300);
+    }
 
-      return this.targetPiggy;
-   }
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    getCurrentTarget() {
+
+        return this.targetPiggy;
+    }
 }
