@@ -86,7 +86,7 @@ export class RadarSystem {
       --
    </div>
 `;
-   playerStats.appendChild(
+   document.body.appendChild(
       radar
    );
 
