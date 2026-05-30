@@ -73,7 +73,7 @@ export class RadarSystem {
    <div id="radarArrowContainer">
 
       <div id="radarArrow">
-         ▲
+         🧭
       </div>
 
    </div>
@@ -220,15 +220,11 @@ export class RadarSystem {
          ghost: "👻"
       };
 
-      this.typeLabel.textContent =
+this.typeLabel.textContent =
+   `${icons[type] || "🐷"} ${type.toUpperCase()}`;
 
-         `${icons[type] || "🐷"} ${type}`;
-
-      this.distanceLabel.textContent =
-
-         `${Math.floor(
-                this.distance
-            )}m`;
+this.distanceLabel.textContent =
+   `📏 ${Math.floor(this.distance)}m`;
 
       this.updateArrow();
    }
