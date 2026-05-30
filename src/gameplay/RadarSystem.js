@@ -1,62 +1,61 @@
-import * as THREE from
-"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
 export class RadarSystem {
 
-    constructor(
-        camera,
-        piggyManager
-    ) {
+   constructor(
+      camera,
+      piggyManager
+   ) {
 
-        this.camera =
-            camera;
+      this.camera =
+         camera;
 
-        this.piggyManager =
-            piggyManager;
+      this.piggyManager =
+         piggyManager;
 
-        this.nearestPiggy =
-            null;
+      this.nearestPiggy =
+         null;
 
-        this.distance = 0;
+      this.distance = 0;
 
-        this.radarArrow =
-            null;
+      this.radarArrow =
+         null;
 
-        this.distanceLabel =
-            null;
+      this.distanceLabel =
+         null;
 
-        this.typeLabel =
-            null;
-    }
+      this.typeLabel =
+         null;
+   }
 
-    /* ==========================
-       INIT
-    ========================== */
+   /* ==========================
+      INIT
+   ========================== */
 
-    init() {
+   init() {
 
-        this.createUI();
+      this.createUI();
 
-        return this;
-    }
+      return this;
+   }
 
-    /* ==========================
-       UI
-    ========================== */
+   /* ==========================
+      UI
+   ========================== */
 
-    createUI() {
+   createUI() {
 
-        const radar =
-            document.createElement(
-                "div"
-            );
+      const radar =
+         document.createElement(
+            "div"
+         );
 
-        radar.id =
-            "radarContainer";
+      radar.id =
+         "radarContainer";
 
-        radar.innerHTML =
+      radar.innerHTML =
 
-        `
+         `
         <div id="radarCompass">
 
             <div id="radarArrow">
@@ -74,171 +73,205 @@ export class RadarSystem {
         </div>
         `;
 
-        document.body.appendChild(
-            radar
-        );
+      document.body.appendChild(
+         radar
+      );
 
-        this.radarArrow =
-            document.getElementById(
-                "radarArrow"
+      this.radarArrow =
+         document.getElementById(
+            "radarArrow"
+         );
+
+      this.distanceLabel =
+         document.getElementById(
+            "piggyDistance"
+         );
+
+      this.typeLabel =
+         document.getElementById(
+            "piggyType"
+         );
+   }
+
+   /* ==========================
+      UPDATE
+   ========================== */
+
+   update() {
+
+      this.findNearestPiggy();
+
+      console.log(
+         "Nearest Piggy:",
+         this.nearestPiggy
+      );
+
+      console.log(
+         "Distance:",
+         this.distance
+      );
+
+      this.updateUI();
+   }
+
+   /* ==========================
+      FIND NEAREST
+   ========================== */
+
+   findNearestPiggy() {
+
+      let nearest =
+         null;
+
+      let nearestDistance =
+         Infinity;
+
+      const piggies =
+         this.piggyManager
+         .getPiggies();
+
+      for (
+         const piggy of piggies
+      ) {
+
+         if (
+            piggy.userData.captured
+         ) {
+            continue;
+         }
+
+         const piggyPos =
+            new THREE.Vector3();
+
+         piggy.getWorldPosition(
+            piggyPos
+         );
+
+         const distance =
+            piggyPos.distanceTo(
+               this.camera.position
             );
 
-        this.distanceLabel =
-            document.getElementById(
-                "piggyDistance"
-            );
+         if (
+            distance <
+            nearestDistance
+         ) {
 
-        this.typeLabel =
-            document.getElementById(
-                "piggyType"
-            );
-    }
+            nearestDistance =
+               distance;
 
-    /* ==========================
-       UPDATE
-    ========================== */
+            nearest =
+               piggy;
+         }
+      }
 
-    update() {
+      this.nearestPiggy =
+         nearest;
 
-        this.findNearestPiggy();
+      this.distance =
+         nearestDistance;
+   }
 
-        this.updateUI();
-        console.log(
-    "Piggies:",
-    this.piggyManager.getPiggies().length
-);
-    }
+   /* ==========================
+      UPDATE HUD
+   ========================== */
 
-    /* ==========================
-       FIND NEAREST
-    ========================== */
+   updateUI() {
 
-    findNearestPiggy() {
+      if (
+         !this.nearestPiggy
+      ) {
 
-        let nearest =
-            null;
+         this.typeLabel.textContent =
+            "All Piggies Captured";
 
-        let nearestDistance =
-            Infinity;
+         this.distanceLabel.textContent =
+            "--";
 
-        const piggies =
-            this.piggyManager
-            .getPiggies();
+         return;
+      }
 
-        for(
-            const piggy
-            of piggies
-        ){
+      const type =
+         this.nearestPiggy
+         .userData?.type ||
+         "Piggy";
 
-            if(
-                piggy.userData.captured
-            ){
-                continue;
-            }
+      const icons = {
 
-            const distance =
-                piggy.position.distanceTo(
-                    this.camera.position
-                );
+         common: "🐷",
 
-            if(
-                distance <
-                nearestDistance
-            ){
+         golden: "👑",
 
-                nearestDistance =
-                    distance;
+         rainbow: "🌈",
 
-                nearest =
-                    piggy;
-            }
-        }
+         ghost: "👻"
+      };
 
-        this.nearestPiggy =
-            nearest;
+      this.typeLabel.textContent =
 
-        this.distance =
-            nearestDistance;
-    }
+         `${icons[type] || "🐷"} ${type}`;
 
-    /* ==========================
-       UPDATE HUD
-    ========================== */
+      this.distanceLabel.textContent =
 
-    updateUI() {
-
-        if(
-            !this.nearestPiggy
-        ){
-
-            this.typeLabel.textContent =
-                "All Piggies Captured";
-
-            this.distanceLabel.textContent =
-                "--";
-
-            return;
-        }
-
-        this.typeLabel.textContent =
-
-            this.nearestPiggy
-            .userData.type;
-
-        this.distanceLabel.textContent =
-
-            `${Math.floor(
+         `${Math.floor(
                 this.distance
             )}m`;
 
-        this.updateArrow();
-    }
+      this.updateArrow();
+   }
 
-    /* ==========================
-       DIRECTION ARROW
-    ========================== */
+   /* ==========================
+      DIRECTION ARROW
+   ========================== */
 
-    updateArrow() {
+   updateArrow() {
 
-        if(
-            !this.nearestPiggy
-        ){
-            return;
-        }
+      if (
+         !this.nearestPiggy
+      ) {
+         return;
+      }
 
-        const cameraForward =
-            new THREE.Vector3();
+      const cameraForward =
+         new THREE.Vector3();
 
-        this.camera
-            .getWorldDirection(
-                cameraForward
-            );
+      this.camera
+         .getWorldDirection(
+            cameraForward
+         );
 
-        const toPiggy =
-            this.nearestPiggy.position
-            .clone()
-            .sub(
-                this.camera.position
-            )
-            .normalize();
+      const piggyPos =
+         new THREE.Vector3();
 
-        const angle =
+      this.nearestPiggy.getWorldPosition(
+         piggyPos
+      );
 
-            Math.atan2(
-                toPiggy.x,
-                toPiggy.z
-            ) -
+      const toPiggy =
+         piggyPos
+         .clone()
+         .sub(
+            this.camera.position
+         )
+         .normalize();
 
-            Math.atan2(
-                cameraForward.x,
-                cameraForward.z
-            );
+      const angle =
 
-        this.radarArrow.style.transform =
+         Math.atan2(
+            toPiggy.x,
+            toPiggy.z
+         ) -
 
-            `rotate(${
+         Math.atan2(
+            cameraForward.x,
+            cameraForward.z
+         );
+
+      this.radarArrow.style.transform =
+
+         `rotate(${
                 angle * 180 /
                 Math.PI
             }deg)`;
-    }
+   }
 }
