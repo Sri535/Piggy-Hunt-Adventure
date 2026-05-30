@@ -232,3 +232,4 @@ export class AchievementSystem {
             .getAchievements()
             .includes(id);
     }
+}
