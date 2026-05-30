@@ -260,7 +260,8 @@ export class CameraController {
          console.log(
             "CAMERA KEY:",
             e.code
-         ); e => {
+         ); 
+      e => {
 
             this.keys[e.code] = true;
 
