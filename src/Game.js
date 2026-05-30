@@ -370,6 +370,7 @@ export class Game {
             this.elapsedTime
         );
         this.captureSystem?.update();
+        this.radarSystem?.update();
         this.updateEnvironment();
 
         this.updateSaveData();
