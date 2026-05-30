@@ -255,34 +255,33 @@ export class CameraController {
 
    registerKeyboard() {
 
-      window.addEventListener(
-         "keydown",
-        
-      e => {
-          console.log(
-            "CAMERA KEY:",
-            e.code
-         ); 
+    window.addEventListener(
+        "keydown",
+        e => {
+
+            console.log(
+                "CAMERA KEY:",
+                e.code
+            );
 
             this.keys[e.code] = true;
 
             if (
-               e.code === "Space"
+                e.code === "Space"
             ) {
-
-               this.jump();
+                this.jump();
             }
-         }
-      );
+        }
+    );
 
-      window.addEventListener(
-         "keyup",
-         e => {
+    window.addEventListener(
+        "keyup",
+        e => {
 
             this.keys[e.code] = false;
-         }
-      );
-   }
+        }
+    );
+}
 
    /* =====================================================
       POINTER LOCK
