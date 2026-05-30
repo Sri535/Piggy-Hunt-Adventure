@@ -300,18 +300,9 @@ export class CaptureSystem {
         this.rewardPlayer(
             points
         );
-        if (
-   window.game?.achievementSystem
-) {
-
- this.achievementSystem?
-      .checkCapture(
-
-         this.targetPiggy
-             .userData
-             .type
-      );
-}
+        this.achievementSystem?.checkCapture(
+   this.targetPiggy.userData.type
+);
 
 
 
