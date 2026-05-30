@@ -26,7 +26,7 @@ export class CaptureSystem {
          null;
 
       this.captureDistance =
-         40;
+         50;
 
       this.crosshair =
          document.getElementById(
