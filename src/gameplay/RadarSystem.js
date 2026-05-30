@@ -67,22 +67,25 @@ export class RadarSystem {
    radar.id =
       "radarContainer";
 
-   radar.innerHTML =
+ radar.innerHTML =
 
-   `
-      <div id="piggyType">
-         No Piggy
-      </div>
-
-      <div id="piggyDistance">
-         --
-      </div>
+`
+   <div id="radarArrowContainer">
 
       <div id="radarArrow">
          ▲
       </div>
-   `;
 
+   </div>
+
+   <div id="piggyType">
+      No Piggy
+   </div>
+
+   <div id="piggyDistance">
+      --
+   </div>
+`;
    playerStats.appendChild(
       radar
    );
