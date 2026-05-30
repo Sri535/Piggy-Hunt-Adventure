@@ -244,55 +244,51 @@ export class PiggyManager {
    EYES
 ================================== */
 
-      const eyeColor =
+      if (
+         typeName !== "common"
+      ) {
 
-         typeName === "golden" ?
-         0xffdd44
+         const eyeColor =
+            typeName === "golden" ?
+            0xffdd44 :
+            typeName === "ghost" ?
+            0x88ccff :
+            0xff00ff;
 
-         :
-         typeName === "ghost" ?
-         0x88ccff
+         const leftEye =
+            new THREE.PointLight(
+               eyeColor,
+               0.8,
+               4
+            );
 
-         :
-         typeName === "rainbow" ?
-         0xff00ff
-
-         :
-         0xffffff;
-
-      const leftEye =
-         new THREE.PointLight(
-            eyeColor,
-            0.8,
-            4
+         leftEye.position.set(
+            -0.25,
+            1.7,
+            1.1
          );
 
-      leftEye.position.set(
-         -0.25,
-         1.7,
-         1.1
-      );
-
-      piggy.add(
-         leftEye
-      );
-
-      const rightEye =
-         new THREE.PointLight(
-            eyeColor,
-            0.8,
-            4
+         piggy.add(
+            leftEye
          );
 
-      rightEye.position.set(
-         0.25,
-         1.7,
-         1.1
-      );
+         const rightEye =
+            new THREE.PointLight(
+               eyeColor,
+               0.8,
+               4
+            );
 
-      piggy.add(
-         rightEye
-      );
+         rightEye.position.set(
+            0.25,
+            1.7,
+            1.1
+         );
+
+         piggy.add(
+            rightEye
+         );
+      }
 
       return piggy;
    }
