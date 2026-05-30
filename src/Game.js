@@ -24,6 +24,10 @@ import {
 import {
     CaptureSystem
 } from "./gameplay/CaptureSystem.js";
+import {
+    RadarSystem
+}
+from "./gameplay/RadarSystem.js";
 
 export class Game {
 
