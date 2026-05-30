@@ -111,6 +111,45 @@ export class CameraController {
       this.camera.getWorldDirection(
          forward
       );
+      /* MOBILE JOYSTICK */
+
+if (
+   Math.abs(
+      this.joystickY
+   ) > 0.05
+) {
+
+   this.camera.position.add(
+
+      forward.clone()
+      .multiplyScalar(
+
+         -this.joystickY *
+         speed *
+         delta
+
+      )
+   );
+}
+
+if (
+   Math.abs(
+      this.joystickX
+   ) > 0.05
+) {
+
+   this.camera.position.add(
+
+      right.clone()
+      .multiplyScalar(
+
+         this.joystickX *
+         speed *
+         delta
+
+      )
+   );
+}
 
       forward.y = 0;
       forward.normalize();
