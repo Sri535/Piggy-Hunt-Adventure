@@ -389,7 +389,7 @@ body {
     top: 20px;
     right: 20px;
 
-    min-width: 240px;
+    min-width: 220px;
 
     padding: 15px;
 
@@ -401,14 +401,9 @@ body {
     backdrop-filter:
         blur(12px);
 
-    border:
-        1px solid rgba(255,255,255,.1);
-
     color: white;
 
     z-index: 9999;
-
-    line-height: 1.8;
 }
 /* =====================================================
    RADAR commented once fixed will re-moved
@@ -773,39 +768,16 @@ body {
             .15
         );
 
-    width: 100%;
-
-    background: none;
-
-    backdrop-filter: none;
-
-    position: static;
-}
-
-#radarCompass {
-
-    width: 100px;
-    height: 100px;
-
-    margin: auto;
-
-    border-radius: 50%;
-
-    border: 2px solid #00d4ff;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    position: relative;
+    text-align: center;
 }
 
 #radarArrow {
 
-    font-size: 40px;
+    font-size: 32px;
 
     color: gold;
+
+    margin-top: 5px;
 
     transition:
         transform .15s linear;
@@ -813,20 +785,18 @@ body {
 
 #piggyType {
 
-    margin-top: 12px;
+    font-weight: bold;
 
     font-size: 16px;
-
-    font-weight: bold;
 
     color: white;
 }
 
 #piggyDistance {
 
-    margin-top: 6px;
+    color: #00ff99;
+
+    margin-top: 4px;
 
     font-size: 14px;
-
-    color: #00ff99;
 }
