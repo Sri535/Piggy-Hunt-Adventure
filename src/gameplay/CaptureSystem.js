@@ -117,55 +117,49 @@ export class CaptureSystem {
          direction
       );
 
-      const piggies =
-         this.piggyManager
-         .getPiggies();
-
       const intersects =
-         this.raycaster
-         .intersectObjects(
-            piggies,
+         this.raycaster.intersectObjects(
+            this.piggyManager.getPiggies(),
             true
          );
 
-      if (
-         intersects.length === 0
-      )
+      for (const hit of intersects) {
+
+         if (
+            hit.distance >
+            this.captureDistance
+         ) {
+            continue;
+         }
+
+         let root =
+            hit.object;
+
+         while (
+            root &&
+            !root.userData?.isPiggy
+         ) {
+            root =
+               root.parent;
+         }
+
+         if (
+            !root
+         ) {
+            continue;
+         }
+
+         if (
+            root.userData.captured
+         ) {
+            continue;
+         }
+
+         this.targetPiggy =
+            root;
+
          return;
-
-      const hit =
-         intersects[0];
-
-      if (
-         hit.distance >
-         this.captureDistance
-      )
-         return;
-
-
-      let root = hit.object;
-
-      while (
-         root &&
-         !root.userData?.isPiggy
-      ) {
-         root = root.parent;
       }
-
-      this.targetPiggy = root;
-      if (
-         root?.userData?.captured
-      ) {
-
-         this.targetPiggy = null;
-
-         return;
-      }
-      console.log(
-         "TARGET USERDATA:",
-         root?.userData
-      );
-
    }
 
    /* =====================================================
@@ -254,7 +248,7 @@ export class CaptureSystem {
          .capturePiggy(
             this.targetPiggy
          );
-
+      this.targetPiggy = null;
       if (points <= 0)
          return;
 
