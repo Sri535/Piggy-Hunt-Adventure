@@ -3,12 +3,14 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.m
 
 export class CaptureSystem {
 
-    constructor(
-        camera,
-        scene,
-        piggyManager,
-        saveManager
-    ) {
+ constructor(
+   camera,
+   scene,
+   piggyManager,
+   saveManager,
+   achievementSystem
+) 
+    {
 
         this.camera = camera;
 
@@ -19,6 +21,8 @@ export class CaptureSystem {
 
         this.saveManager =
             saveManager;
+        this.achievementSystem =
+   achievementSystem;
 
         this.raycaster =
             new THREE.Raycaster();
@@ -296,17 +300,20 @@ export class CaptureSystem {
         this.rewardPlayer(
             points
         );
+        if (
+   window.game?.achievementSystem
+) {
 
-        /*Acheivementssystem*/
-        this.game
-            ?.achievementSystem
-            ?.checkCapture(
+ this.achievementSystem?
+      .checkCapture(
 
-                this.targetPiggy
-                .userData
-                .type
+         this.targetPiggy
+             .userData
+             .type
+      );
+}
 
-            );
+
 
         /* FX */
 
