@@ -148,12 +148,18 @@ export class PiggyManager {
             if (
                typeName === "golden"
             ) {
-
                obj.material.metalness =
                   1.0;
 
                obj.material.roughness =
-                  0.2;
+                  0.1;
+
+               obj.material.emissive.set(
+                  0x443300
+               );
+
+               obj.material.emissiveIntensity =
+                  0.5;
             }
 
             /* Ghost */
@@ -166,7 +172,14 @@ export class PiggyManager {
                   true;
 
                obj.material.opacity =
-                  0.4;
+                  0.25;
+
+               obj.material.emissive.set(
+                  0x88ccff
+               );
+
+               obj.material.emissiveIntensity =
+                  1;
             }
 
             /* Rainbow */
@@ -180,7 +193,7 @@ export class PiggyManager {
                );
 
                obj.material.emissiveIntensity =
-                  0.5;
+                  1.5;
             }
          }
       });
@@ -197,6 +210,36 @@ export class PiggyManager {
 
          bobOffset: Math.random() * 100
       };
+      if (
+         typeName !== "common"
+      ) {
+
+         const ring =
+            new THREE.Mesh(
+
+               new THREE.TorusGeometry(
+                  1.5,
+                  0.05,
+                  8,
+                  32
+               ),
+
+               new THREE.MeshBasicMaterial({
+
+                  color: config.color
+               })
+            );
+
+         ring.rotation.x =
+            Math.PI / 2;
+
+         ring.position.y =
+            3;
+
+         piggy.add(
+            ring
+         );
+      }
 
       return piggy;
    }
@@ -319,18 +362,39 @@ export class PiggyManager {
          )
             continue;
 
+         const amplitude =
+
+            piggy.userData.type ===
+            "ghost"
+
+            ?
+            0.5
+
+            :
+            0.2;
+
+         const speed =
+
+            piggy.userData.type ===
+            "ghost"
+
+            ?
+            4
+
+            :
+            2;
+
          piggy.position.y =
 
             1 +
 
             Math.sin(
 
-               time * 2 +
+               time * speed +
 
-               piggy.userData
-               .bobOffset
+               piggy.userData.bobOffset
 
-            ) * 0.2;
+            ) * amplitude;
 
          piggy.rotation.y +=
             0.003;
@@ -355,7 +419,7 @@ export class PiggyManager {
 
                         1,
 
-                        0.6
+                        0.5
                      );
                }
             });
