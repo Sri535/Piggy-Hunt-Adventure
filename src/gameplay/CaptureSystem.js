@@ -356,6 +356,19 @@ export class CaptureSystem {
     ===================================================== */
 
     refreshHUD() {
+        /*XPTEXT*/
+        this.xpText =
+   document.getElementById(
+      "xpText"
+   );
+        if (
+   this.xpText
+) {
+
+   this.xpText.textContent =
+
+      `${player.xp} / ${xpRequired} XP`;
+}
         /* XP BAR */
 
         if (
