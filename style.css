@@ -487,12 +487,37 @@ body {
 
     height: 100%;
 
+    transition:
+        width .4s ease;
+
     background:
     linear-gradient(
         90deg,
         var(--accent),
         var(--primary)
     );
+}
+#xpText {
+
+    position: absolute;
+
+    width: 100%;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    color: white;
+
+    top: 0;
+
+    left: 0;
+
+    line-height: 18px;
+
+    pointer-events: none;
 }
 
 /* =====================================================
