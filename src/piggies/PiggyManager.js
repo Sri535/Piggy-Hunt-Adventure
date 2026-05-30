@@ -166,9 +166,9 @@ this.piggyTemplate =
             );
          const spawn = {
 
-            x: (Math.random() - 0.5) * 120,
+            x: (Math.random() - 0.5) * 50,
 
-            z: (Math.random() - 0.5) * 120
+            z: (Math.random() - 0.5) * 50
          };
 
          piggy.position.set(
