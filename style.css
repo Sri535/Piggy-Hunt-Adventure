@@ -772,12 +772,13 @@ body {
 }
 
 #radarArrow {
+  display: inline-block;
 
-    font-size: 32px;
+    font-size: 28px;
 
     color: gold;
 
-    margin-top: 5px;
+    transform-origin: center center;
 
     transition:
         transform .15s linear;
@@ -800,3 +801,17 @@ body {
 
     font-size: 14px;
 }
+#radarArrowContainer {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    height: 40px;
+
+    overflow: hidden;
+}
+
+
