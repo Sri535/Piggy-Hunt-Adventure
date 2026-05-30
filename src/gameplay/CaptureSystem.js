@@ -67,6 +67,11 @@ export class CaptureSystem {
             document.getElementById(
                 "levelValue"
             );
+        /*XPFill */
+        this.xpFill =
+            document.getElementById(
+                "xpFill"
+            );
     }
 
     /* =====================================================
@@ -351,6 +356,36 @@ export class CaptureSystem {
     ===================================================== */
 
     refreshHUD() {
+        /* XP BAR */
+
+        if (
+            this.xpFill
+        ) {
+
+            const player =
+                this.saveManager
+                .getPlayer();
+
+            const xpRequired =
+                this.saveManager
+                .getXPRequired(
+                    player.level
+                );
+
+            const percent =
+
+                (
+                    player.xp /
+                    xpRequired
+                ) * 100;
+
+            this.xpFill.style.width =
+
+                `${Math.min(
+         percent,
+         100
+      )}%`;
+        }
 
         const player =
             this.saveManager
