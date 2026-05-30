@@ -43,55 +43,65 @@ export class RadarSystem {
       UI
    ========================== */
 
-   createUI() {
+  createUI() {
 
-      const radar =
-         document.createElement(
-            "div"
-         );
-
-      radar.id =
-         "radarContainer";
-
-      radar.innerHTML =
-
-         `
-        <div id="radarCompass">
-
-            <div id="radarArrow">
-                ▲
-            </div>
-
-        </div>
-
-        <div id="piggyType">
-            No Piggy
-        </div>
-
-        <div id="piggyDistance">
-            --
-        </div>
-        `;
-
-      document.body.appendChild(
-         radar
+   const playerStats =
+      document.getElementById(
+         "playerStats"
       );
 
-      this.radarArrow =
-         document.getElementById(
-            "radarArrow"
-         );
+   if (!playerStats) {
 
-      this.distanceLabel =
-         document.getElementById(
-            "piggyDistance"
-         );
+      console.warn(
+         "playerStats not found"
+      );
 
-      this.typeLabel =
-         document.getElementById(
-            "piggyType"
-         );
+      return;
    }
+
+   const radar =
+      document.createElement(
+         "div"
+      );
+
+   radar.id =
+      "radarContainer";
+
+   radar.innerHTML =
+
+   `
+      <div id="piggyType">
+         No Piggy
+      </div>
+
+      <div id="piggyDistance">
+         --
+      </div>
+
+      <div id="radarArrow">
+         ▲
+      </div>
+   `;
+
+   playerStats.appendChild(
+      radar
+   );
+
+   this.radarArrow =
+      document.getElementById(
+         "radarArrow"
+      );
+
+   this.distanceLabel =
+      document.getElementById(
+         "piggyDistance"
+      );
+
+   this.typeLabel =
+      document.getElementById(
+         "piggyType"
+      );
+}
 
    /* ==========================
       UPDATE
