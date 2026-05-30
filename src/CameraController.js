@@ -257,11 +257,12 @@ export class CameraController {
 
       window.addEventListener(
          "keydown",
-         console.log(
+        
+      e => {
+          console.log(
             "CAMERA KEY:",
             e.code
          ); 
-      e => {
 
             this.keys[e.code] = true;
 
