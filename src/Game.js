@@ -95,7 +95,11 @@ export class Game {
          );
 
       await this.piggyManager.init();
-
+            /*AchievementSystem*/
+      this.achievementSystem =
+    new AchievementSystem(
+        this.save
+    ).init();
       /* Capture System */
 
 this.captureSystem =
@@ -108,11 +112,7 @@ this.captureSystem =
    );
 
       this.captureSystem.init();
-            /*AchievementSystem*/
-      this.achievementSystem =
-    new AchievementSystem(
-        this.save
-    ).init();
+
       /* Radar System */
       this.radarSystem =
          new RadarSystem(
