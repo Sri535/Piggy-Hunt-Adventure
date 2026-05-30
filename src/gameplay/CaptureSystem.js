@@ -54,6 +54,15 @@ export class CaptureSystem {
    ===================================================== */
 
    init() {
+      this.radarSystem =
+         new RadarSystem(
+
+            this.camera,
+
+            this.piggyManager
+         );
+
+      this.radarSystem.init();
 
       this.bindUI();
 
@@ -102,228 +111,228 @@ export class CaptureSystem {
 
    findTarget() {
 
-    this.targetPiggy = null;
+      this.targetPiggy = null;
 
-    const direction =
-        new THREE.Vector3();
+      const direction =
+         new THREE.Vector3();
 
-    this.camera
-        .getWorldDirection(
+      this.camera
+         .getWorldDirection(
             direction
-        );
+         );
 
-    this.raycaster.set(
-        this.camera.position,
-        direction
-    );
+      this.raycaster.set(
+         this.camera.position,
+         direction
+      );
 
-    const intersects =
-        this.raycaster.intersectObjects(
+      const intersects =
+         this.raycaster.intersectObjects(
             this.piggyManager.getPiggies(),
             true
-        );
+         );
 
-    for (const hit of intersects) {
+      for (const hit of intersects) {
 
-        if (
+         if (
             hit.distance >
             this.captureDistance
-        ) {
+         ) {
             continue;
-        }
+         }
 
-        let root =
+         let root =
             hit.object;
 
-        while (
+         while (
             root &&
             !root.userData?.isPiggy
-        ) {
+         ) {
 
             root =
-                root.parent;
-        }
+               root.parent;
+         }
 
-        if (
+         if (
             !root
-        ) {
+         ) {
             continue;
-        }
+         }
 
-        if (
+         if (
             root.userData.captured
-        ) {
+         ) {
             continue;
-        }
+         }
 
-        this.targetPiggy =
+         this.targetPiggy =
             root;
 
-        return;
-    }
-}
+         return;
+      }
+   }
 
    /* =====================================================
       CROSSHAIR
    ===================================================== */
 
-  updateCrosshair() {
+   updateCrosshair() {
 
-    if (
-        !this.crosshair
-    ) {
-        return;
-    }
+      if (
+         !this.crosshair
+      ) {
+         return;
+      }
 
-    if (
-        this.targetPiggy
-    ) {
+      if (
+         this.targetPiggy
+      ) {
 
-        this.crosshair
+         this.crosshair
             .style.borderColor =
             "#00ff00";
 
-        this.crosshair
+         this.crosshair
             .style.boxShadow =
             "0 0 20px #00ff00";
 
-    } else {
+      } else {
 
-        this.crosshair
+         this.crosshair
             .style.borderColor =
             "#ffffff";
 
-        this.crosshair
+         this.crosshair
             .style.boxShadow =
             "none";
-    }
-}
+      }
+   }
 
    /* =====================================================
       CAPTURE
    ===================================================== */
 
- capture() {
+   capture() {
 
-    if (!this.targetPiggy) {
+      if (!this.targetPiggy) {
 
-        console.log("NO TARGET");
+         console.log("NO TARGET");
 
-        return;
-    }
+         return;
+      }
 
-    if (
-        this.targetPiggy.userData.captured
-    ) {
+      if (
+         this.targetPiggy.userData.captured
+      ) {
 
-        console.log(
+         console.log(
             "Already Captured"
-        );
+         );
 
-        return;
-    }
+         return;
+      }
 
-    const distance =
-        this.camera.position.distanceTo(
+      const distance =
+         this.camera.position.distanceTo(
             this.targetPiggy.position
-        );
+         );
 
-    if (
-        distance >
-        this.captureDistance
-    ) {
+      if (
+         distance >
+         this.captureDistance
+      ) {
 
-        console.log(
+         console.log(
             "TOO FAR:",
             distance
-        );
+         );
 
-        return;
-    }
+         return;
+      }
 
-    const effectPosition =
-        this.targetPiggy.position.clone();
+      const effectPosition =
+         this.targetPiggy.position.clone();
 
-    const points =
-        this.piggyManager.capturePiggy(
+      const points =
+         this.piggyManager.capturePiggy(
             this.targetPiggy
-        );
+         );
 
-    if (
-        points <= 0
-    ) {
+      if (
+         points <= 0
+      ) {
 
-        console.log(
+         console.log(
             "Invalid Capture"
-        );
+         );
 
-        return;
-    }
+         return;
+      }
 
-    /* Rewards */
+      /* Rewards */
 
-    this.rewardPlayer(
-        points
-    );
+      this.rewardPlayer(
+         points
+      );
 
-    /* FX */
+      /* FX */
 
-    this.spawnCaptureEffect(
-        effectPosition
-    );
+      this.spawnCaptureEffect(
+         effectPosition
+      );
 
-    /* Clear Target */
+      /* Clear Target */
 
-    this.targetPiggy =
-        null;
+      this.targetPiggy =
+         null;
 
-    /* HUD */
+      /* HUD */
 
-    this.refreshHUD();
+      this.refreshHUD();
 
-    /* Save */
+      /* Save */
 
-    this.saveManager.save();
+      this.saveManager.save();
 
-    console.log(
-        "Captured",
-        points
-    );
-}
+      console.log(
+         "Captured",
+         points
+      );
+   }
    /* =====================================================
       REWARDS
    ===================================================== */
 
-  rewardPlayer(points) {
+   rewardPlayer(points) {
 
-    const coins =
-        Math.floor(
+      const coins =
+         Math.floor(
             points / 2
-        );
+         );
 
-    const xp =
-        points;
+      const xp =
+         points;
 
-    this.saveManager
-        .addCoins(
+      this.saveManager
+         .addCoins(
             coins
-        );
+         );
 
-    this.saveManager
-        .addXP(
+      this.saveManager
+         .addXP(
             xp
-        );
+         );
 
-    this.saveManager
-        .incrementCaptures();
+      this.saveManager
+         .incrementCaptures();
 
-    console.log(
-        "XP +",
-        xp,
-        "Coins +",
-        coins
-    );
-}
+      console.log(
+         "XP +",
+         xp,
+         "Coins +",
+         coins
+      );
+   }
 
    /* =====================================================
       HUD
