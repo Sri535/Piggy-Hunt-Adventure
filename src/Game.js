@@ -28,6 +28,8 @@ import {
    RadarSystem
 }
 from "./gameplay/RadarSystem.js";
+import { AchievementSystem }
+from "./player/AchievementSystem.js";
 
 export class Game {
 
@@ -120,6 +122,12 @@ export class Game {
       console.log(
          "Game Initialized"
       );
+
+      /*AchievementSystem*/
+      this.achievementSystem =
+    new AchievementSystem(
+        this.save
+    ).init();
 
       return this;
    }
