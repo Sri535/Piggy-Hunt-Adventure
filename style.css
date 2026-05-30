@@ -856,4 +856,63 @@ body {
     overflow: hidden;
 }
 
+/* ==========================
+   ACHIEVEMENT POPUP
+========================== */
+
+.achievementPopup {
+
+    position: fixed;
+
+    top: 140px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        rgba(0,0,0,.85);
+
+    border:
+        2px solid gold;
+
+    border-radius: 20px;
+
+    padding: 18px 25px;
+
+    text-align: center;
+
+    color: white;
+
+    font-weight: bold;
+
+    z-index: 99999;
+
+    animation:
+        achievementPop
+        .4s ease;
+}
+
+@keyframes achievementPop {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateX(-50%)
+            scale(.8);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateX(-50%)
+            scale(1);
+    }
+}
+
 
