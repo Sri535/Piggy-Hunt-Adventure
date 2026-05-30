@@ -88,7 +88,7 @@ export class Game {
                 this.world
             );
 
-        this.piggyManager.init();
+        await this.piggyManager.init();
 
         /* Capture System */
 
