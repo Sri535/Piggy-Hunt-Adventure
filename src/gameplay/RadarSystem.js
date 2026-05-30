@@ -103,6 +103,10 @@ export class RadarSystem {
         this.findNearestPiggy();
 
         this.updateUI();
+        console.log(
+    "Piggies:",
+    this.piggyManager.getPiggies().length
+);
     }
 
     /* ==========================
