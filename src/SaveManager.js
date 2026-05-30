@@ -1,4 +1,3 @@
-
 /* =====================================================
    SAVE MANAGER
    Piggy Hunt Adventure
@@ -28,8 +27,7 @@ export class SaveManager {
 
         return {
 
-            version:
-                SaveManager.SAVE_VERSION,
+            version: SaveManager.SAVE_VERSION,
 
             player: {
 
@@ -83,8 +81,7 @@ export class SaveManager {
                 sessionsPlayed: 0
             },
 
-            lastPlayed:
-                Date.now()
+            lastPlayed: Date.now()
         };
     }
 
@@ -114,7 +111,7 @@ export class SaveManager {
                     SaveManager.SAVE_KEY
                 );
 
-            if(!raw) {
+            if (!raw) {
 
                 this.save();
 
@@ -124,7 +121,7 @@ export class SaveManager {
             const parsed =
                 JSON.parse(raw);
 
-            if(
+            if (
                 !parsed.version
             ) {
 
@@ -141,8 +138,7 @@ export class SaveManager {
                 "Save Loaded"
             );
 
-        }
-        catch(error) {
+        } catch (error) {
 
             console.warn(
                 "Save Corrupted",
@@ -182,8 +178,7 @@ export class SaveManager {
                 "Game Saved"
             );
 
-        }
-        catch(error) {
+        } catch (error) {
 
             console.error(
                 "Save Failed",
@@ -201,7 +196,7 @@ export class SaveManager {
         const current =
             SaveManager.SAVE_VERSION;
 
-        if(
+        if (
             this.data.version ===
             current
         )
@@ -237,6 +232,33 @@ export class SaveManager {
 
         return this.data.player;
     }
+    getLevelProgress() {
+
+        const player =
+            this.data.player;
+
+        return {
+
+            level: player.level,
+
+            xp: player.xp,
+
+            xpRequired: this.getXPRequired(
+                player.level
+            ),
+
+            percent:
+
+                (
+                    player.xp /
+
+                    this.getXPRequired(
+                        player.level
+                    )
+
+                ) * 100
+        };
+    }
 
     addCoins(amount) {
 
@@ -249,8 +271,8 @@ export class SaveManager {
         this.data.player.coins =
             Math.max(
                 0,
-                this.data.player.coins
-                - amount
+                this.data.player.coins -
+                amount
             );
     }
 
@@ -267,7 +289,7 @@ export class SaveManager {
 
         player.xp += amount;
 
-        while(
+        while (
 
             player.xp >=
             this.getXPRequired(
@@ -282,12 +304,30 @@ export class SaveManager {
                 );
 
             player.level++;
+
+            console.log(
+                "LEVEL UP!",
+                player.level
+            );
+
+            this.showLevelUp(
+                player.level
+            );
         }
     }
 
     getXPRequired(level) {
 
-        return level * 100;
+        return Math.floor(
+
+            100 *
+
+            Math.pow(
+                level,
+                1.5
+            )
+
+        );
     }
 
     /* =====================================================
@@ -299,7 +339,7 @@ export class SaveManager {
         return this.data.settings;
     }
 
-    setSetting(key,value) {
+    setSetting(key, value) {
 
         this.data.settings[key] =
             value;
@@ -327,7 +367,7 @@ export class SaveManager {
 
     addCollection(type) {
 
-        if(
+        if (
             !this.data.collection[type]
         ) {
 
@@ -348,7 +388,7 @@ export class SaveManager {
 
     unlockAchievement(name) {
 
-        if(
+        if (
             this.data.achievements
             .includes(name)
         )
@@ -415,7 +455,7 @@ export class SaveManager {
             const save =
                 JSON.parse(json);
 
-            if(
+            if (
                 !save.version
             ) {
 
@@ -430,8 +470,7 @@ export class SaveManager {
 
             return true;
 
-        }
-        catch(error) {
+        } catch (error) {
 
             console.error(
                 error
@@ -447,7 +486,7 @@ export class SaveManager {
 
     startAutoSave() {
 
-        if(
+        if (
             this.autoSaveTimer
         ) {
 
@@ -485,7 +524,7 @@ export class SaveManager {
                 "saveIndicator"
             );
 
-        if(!indicator)
+        if (!indicator)
             return;
 
         indicator.style.opacity =
@@ -505,6 +544,53 @@ export class SaveManager {
                 },
                 1500
             );
+    }
+    /* =====================================================
+       showLevelUp
+    ===================================================== */
+    showLevelUp(level) {
+
+        const notification =
+            document.createElement(
+                "div"
+            );
+
+        notification.innerHTML =
+
+            `⭐ LEVEL ${level}`;
+
+        notification.style.cssText =
+
+            `
+        position:fixed;
+        top:120px;
+        left:50%;
+        transform:translateX(-50%);
+
+        padding:20px 30px;
+
+        background:
+        rgba(255,215,0,.9);
+
+        color:black;
+
+        font-size:24px;
+        font-weight:bold;
+
+        border-radius:20px;
+
+        z-index:99999;
+        `;
+
+        document.body.appendChild(
+            notification
+        );
+
+        setTimeout(() => {
+
+            notification.remove();
+
+        }, 2500);
     }
 
     /* =====================================================
