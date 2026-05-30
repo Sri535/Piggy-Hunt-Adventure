@@ -41,6 +41,8 @@ export class CameraController {
       ========================= */
 
       this.keys = {};
+      this.joystickX = 0;
+      this.joystickY = 0;
 
       /* =========================
          TOUCH
