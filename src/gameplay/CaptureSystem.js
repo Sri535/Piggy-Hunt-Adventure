@@ -72,11 +72,11 @@ export class CaptureSystem {
             document.getElementById(
                 "xpFill"
             );
-                /*XPTEXT*/
+        /*XPTEXT*/
         this.xpText =
-       document.getElementById(
-          "xpText"
-       );
+            document.getElementById(
+                "xpText"
+            );
     }
 
     /* =====================================================
@@ -297,6 +297,17 @@ export class CaptureSystem {
             points
         );
 
+        /*Acheivementssystem*/
+        this.game
+            ?.achievementSystem
+            ?.checkCapture(
+
+                this.targetPiggy
+                .userData
+                .type
+
+            );
+
         /* FX */
 
         this.spawnCaptureEffect(
@@ -360,99 +371,99 @@ export class CaptureSystem {
        HUD
     ===================================================== */
 
- refreshHUD() {
+    refreshHUD() {
 
-   const player =
-      this.saveManager
-      .getPlayer();
+        const player =
+            this.saveManager
+            .getPlayer();
 
-   const xpRequired =
-      this.saveManager
-      .getXPRequired(
-         player.level
-      );
+        const xpRequired =
+            this.saveManager
+            .getXPRequired(
+                player.level
+            );
 
-   /* XP TEXT */
+        /* XP TEXT */
 
-   this.xpText =
-      document.getElementById(
-         "xpText"
-      );
+        this.xpText =
+            document.getElementById(
+                "xpText"
+            );
 
-   if (
-      this.xpText
-   ) {
+        if (
+            this.xpText
+        ) {
 
-      this.xpText.textContent =
+            this.xpText.textContent =
 
-         `${player.xp} / ${xpRequired} XP`;
-   }
+                `${player.xp} / ${xpRequired} XP`;
+        }
 
-   /* XP BAR */
+        /* XP BAR */
 
-   if (
-      this.xpFill
-   ) {
+        if (
+            this.xpFill
+        ) {
 
-      const percent =
+            const percent =
 
-         (
-            player.xp /
-            xpRequired
-         ) * 100;
+                (
+                    player.xp /
+                    xpRequired
+                ) * 100;
 
-      this.xpFill.style.width =
+            this.xpFill.style.width =
 
-         `${Math.min(
+                `${Math.min(
             percent,
             100
          )}%`;
-   }
+        }
 
-   /* TOP BAR */
+        /* TOP BAR */
 
-   if (
-      this.coinValue
-   ) {
+        if (
+            this.coinValue
+        ) {
 
-      this.coinValue.innerText =
-         player.coins;
-   }
+            this.coinValue.innerText =
+                player.coins;
+        }
 
-   if (
-      this.gemValue
-   ) {
+        if (
+            this.gemValue
+        ) {
 
-      this.gemValue.innerText =
-         player.gems || 0;
-   }
+            this.gemValue.innerText =
+                player.gems || 0;
+        }
 
-   if (
-      this.levelValue
-   ) {
+        if (
+            this.levelValue
+        ) {
 
-      this.levelValue.innerText =
-         player.level;
-   }
+            this.levelValue.innerText =
+                player.level;
+        }
 
-   /* LEGACY HUD */
+        /* LEGACY HUD */
 
-   if (
-      this.coinLabel
-   ) {
+        if (
+            this.coinLabel
+        ) {
 
-      this.coinLabel.innerText =
-         player.coins;
-   }
+            this.coinLabel.innerText =
+                player.coins;
+        }
 
-   if (
-      this.xpLabel
-   ) {
+        if (
+            this.xpLabel
+        ) {
 
-      this.xpLabel.innerText =
-         player.xp;
-   }
-}
+            this.xpLabel.innerText =
+                player.xp;
+        }
+    }
 
     /* =====================================================
        FX
