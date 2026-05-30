@@ -1,9 +1,17 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
+import { GLTFLoader }
+from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
+
 export class PiggyManager {
 
    constructor(scene, world) {
 
+      this.loader =
+    new GLTFLoader();
+
+this.piggyTemplate =
+    null;
       this.scene = scene;
       this.world = world;
 
@@ -39,13 +47,44 @@ export class PiggyManager {
          }
       };
    }
+   /* =====================================================
+     LoadModel
+   ===================================================== */
+   async loadModel() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            this.loader.load(
+
+                "./assets/models/piggy.glb",
+
+                (gltf) => {
+
+                    this.piggyTemplate =
+                        gltf.scene;
+
+                    console.log(
+                        "Piggy Model Loaded"
+                    );
+
+                    resolve();
+                },
+
+                undefined,
+
+                reject
+            );
+        }
+    );
+}
 
    /* =====================================================
-      INIT
+      AsyncINIT
    ===================================================== */
 
-   init() {
-
+   async init() {
+      await this.loadModel();
       this.spawnCommonPiggies();
 
       this.spawnGoldenPiggies();
@@ -68,100 +107,46 @@ export class PiggyManager {
       PIGGY CREATOR
    ===================================================== */
 
-   createPiggy(typeName) {
+  createPiggy(typeName) {
 
-      const config =
-         this.types[typeName];
+    const config =
+        this.types[typeName];
 
-      const piggy =
-         new THREE.Group();
+    const piggy =
+        this.piggyTemplate.clone(true);
 
-      /* Body */
+    piggy.scale.set(
+        2,
+        2,
+        2
+    );
 
-      const body =
-         new THREE.Mesh(
-            new THREE.SphereGeometry(
-               2,
-               16,
-               16
-            ),
-            new THREE.MeshStandardMaterial({
+    piggy.traverse(obj => {
 
-               color: config.color,
+        if (obj.isMesh) {
 
-               metalness: typeName === "golden" ?
-                  0.8 :
-                  0.1,
+            obj.castShadow = true;
 
-               roughness: 0.3
-            })
-         );
+            obj.receiveShadow = true;
+        }
+    });
 
-      piggy.add(body);
+    piggy.userData = {
 
-      /* Head */
+        isPiggy: true,
 
-      const head =
-         new THREE.Mesh(
+        type: typeName,
 
-            new THREE.SphereGeometry(
-               1.2,
-               16,
-               16
-            ),
+        points: config.points,
 
-            body.material
-         );
+        captured: false,
 
-      head.position.set(
-         0,
-         0.5,
-         1
-      );
+        bobOffset:
+            Math.random() * 100
+    };
 
-      piggy.add(head);
-
-      /* Nose */
-
-      const nose =
-         new THREE.Mesh(
-
-            new THREE.SphereGeometry(
-               0.4,
-               8,
-               8
-            ),
-
-            new THREE.MeshStandardMaterial({
-               color: 0xff8888
-            })
-         );
-
-      nose.position.set(
-         0,
-         0.45,
-         1.55
-      );
-
-      piggy.add(nose);
-
-      piggy.userData = {
-
-         isPiggy: true,
-
-         type: typeName,
-
-         points: config.points,
-
-         captured: false,
-
-         bobOffset: Math.random() * 100
-      };
-
-      piggy.castShadow = true;
-
-      return piggy;
-   }
+    return piggy;
+}
    /* =====================================================
       SPAWNING
    ===================================================== */
