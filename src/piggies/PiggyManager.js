@@ -329,26 +329,39 @@ export class PiggyManager {
       CAPTURE
    ===================================================== */
 
-   capturePiggy(piggy) {
+  capturePiggy(piggy) {
 
-      if (
-         piggy.userData.captured
-      )
-         return 0;
+    if (
+        !piggy
+    ) {
+        return 0;
+    }
 
-      piggy.visible = false;
-      piggy.userData.captured = true;
+    if (
+        piggy.userData.captured
+    ) {
+        return 0;
+    }
 
-      /* Remove from raycasting */
+    piggy.userData.captured =
+        true;
 
-      piggy.traverse(obj => {
+    piggy.visible =
+        false;
 
-         obj.layers.disable(0);
+    piggy.traverse(
+        child => {
 
-      });
+            child.layers.disable(
+                0
+            );
+        }
+    );
 
-      return piggy.userData.points;
-   }
+    return (
+        piggy.userData.points || 0
+    );
+}
 
    /* =====================================================
       DETECTION
