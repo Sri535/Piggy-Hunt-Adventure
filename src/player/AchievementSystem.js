@@ -53,15 +53,7 @@ export class AchievementSystem {
 
     init() {
 
-        const data =
-            this.saveManager.data;
 
-        if (
-            !data.achievements
-        ) {
-
-            data.achievements = {};
-        }
 
         return this;
     }
@@ -142,48 +134,51 @@ export class AchievementSystem {
     /* ==========================
        UNLOCK
     ========================== */
+unlock(id) {
 
-    unlock(id) {
-
-        const save =
-            this.saveManager.data;
-
-        if (
-            save.achievements[id]
-        ) {
-
-            return;
-        }
-
-        save.achievements[id] =
-            true;
-
-        const achievement =
-            this.achievements[id];
-
-        if (
-            !achievement
-        ) {
-
-            return;
-        }
+    if (
 
         this.saveManager
-            .addCoins(
-                achievement.reward
-            );
+            .getAchievements()
+            .includes(id)
 
-        this.showPopup(
-            achievement
-        );
+    ) {
 
-        this.saveManager.save();
-
-        console.log(
-            "Achievement:",
-            achievement.name
-        );
+        return;
     }
+
+    const achievement =
+        this.achievements[id];
+
+    if (
+        !achievement
+    ) {
+
+        return;
+    }
+
+    this.saveManager
+        .unlockAchievement(
+            id
+        );
+
+    this.saveManager
+        .addCoins(
+            achievement.reward
+        );
+
+    this.showPopup(
+        achievement
+    );
+
+    this.saveManager
+        .save();
+
+    console.log(
+        "Achievement:",
+        achievement.name
+    );
+}
 
     /* ==========================
        POPUP
@@ -236,11 +231,10 @@ export class AchievementSystem {
        HELPER
     ========================== */
 
-    isUnlocked(id) {
+isUnlocked(id) {
 
-        return !!this
-            .saveManager
-            .data
-            .achievements[id];
-    }
+    return this
+        .saveManager
+        .getAchievements()
+        .includes(id);
 }
