@@ -72,6 +72,11 @@ export class CaptureSystem {
             document.getElementById(
                 "xpFill"
             );
+                /*XPTEXT*/
+        this.xpText =
+       document.getElementById(
+          "xpText"
+       );
     }
 
     /* =====================================================
@@ -355,99 +360,99 @@ export class CaptureSystem {
        HUD
     ===================================================== */
 
-    refreshHUD() {
-        /*XPTEXT*/
-        this.xpText =
-   document.getElementById(
-      "xpText"
-   );
-        if (
-   this.xpText
-) {
+ refreshHUD() {
 
-   this.xpText.textContent =
+   const player =
+      this.saveManager
+      .getPlayer();
 
-      `${player.xp} / ${xpRequired} XP`;
+   const xpRequired =
+      this.saveManager
+      .getXPRequired(
+         player.level
+      );
+
+   /* XP TEXT */
+
+   this.xpText =
+      document.getElementById(
+         "xpText"
+      );
+
+   if (
+      this.xpText
+   ) {
+
+      this.xpText.textContent =
+
+         `${player.xp} / ${xpRequired} XP`;
+   }
+
+   /* XP BAR */
+
+   if (
+      this.xpFill
+   ) {
+
+      const percent =
+
+         (
+            player.xp /
+            xpRequired
+         ) * 100;
+
+      this.xpFill.style.width =
+
+         `${Math.min(
+            percent,
+            100
+         )}%`;
+   }
+
+   /* TOP BAR */
+
+   if (
+      this.coinValue
+   ) {
+
+      this.coinValue.innerText =
+         player.coins;
+   }
+
+   if (
+      this.gemValue
+   ) {
+
+      this.gemValue.innerText =
+         player.gems || 0;
+   }
+
+   if (
+      this.levelValue
+   ) {
+
+      this.levelValue.innerText =
+         player.level;
+   }
+
+   /* LEGACY HUD */
+
+   if (
+      this.coinLabel
+   ) {
+
+      this.coinLabel.innerText =
+         player.coins;
+   }
+
+   if (
+      this.xpLabel
+   ) {
+
+      this.xpLabel.innerText =
+         player.xp;
+   }
 }
-        /* XP BAR */
-
-        if (
-            this.xpFill
-        ) {
-
-            const player =
-                this.saveManager
-                .getPlayer();
-
-            const xpRequired =
-                this.saveManager
-                .getXPRequired(
-                    player.level
-                );
-
-            const percent =
-
-                (
-                    player.xp /
-                    xpRequired
-                ) * 100;
-
-            this.xpFill.style.width =
-
-                `${Math.min(
-         percent,
-         100
-      )}%`;
-        }
-
-        const player =
-            this.saveManager
-            .getPlayer();
-
-        /* TOP BAR */
-
-        if (
-            this.coinValue
-        ) {
-
-            this.coinValue.innerText =
-                player.coins;
-        }
-
-        if (
-            this.gemValue
-        ) {
-
-            this.gemValue.innerText =
-                player.gems;
-        }
-
-        if (
-            this.levelValue
-        ) {
-
-            this.levelValue.innerText =
-                player.level;
-        }
-
-        /* LEGACY PANEL */
-
-        if (
-            this.coinLabel
-        ) {
-
-            this.coinLabel.innerText =
-                player.coins;
-        }
-
-        if (
-            this.xpLabel
-        ) {
-
-            this.xpLabel.innerText =
-                player.xp;
-        }
-    }
 
     /* =====================================================
        FX
