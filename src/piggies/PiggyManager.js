@@ -1,6 +1,8 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
-import { GLTFLoader }
+import {
+   GLTFLoader
+}
 from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
 
 export class PiggyManager {
@@ -8,10 +10,10 @@ export class PiggyManager {
    constructor(scene, world) {
 
       this.loader =
-    new GLTFLoader();
+         new GLTFLoader();
 
-this.piggyTemplate =
-    null;
+      this.piggyTemplate =
+         null;
       this.scene = scene;
       this.world = world;
 
@@ -52,32 +54,32 @@ this.piggyTemplate =
    ===================================================== */
    async loadModel() {
 
-    return new Promise(
-        (resolve, reject) => {
+      return new Promise(
+         (resolve, reject) => {
 
             this.loader.load(
 
-                "./assets/models/piggy.glb",
+               "./assets/models/piggy.glb",
 
-                (gltf) => {
+               (gltf) => {
 
-                    this.piggyTemplate =
-                        gltf.scene;
+                  this.piggyTemplate =
+                     gltf.scene;
 
-                    console.log(
-                        "Piggy Model Loaded"
-                    );
+                  console.log(
+                     "Piggy Model Loaded"
+                  );
 
-                    resolve();
-                },
+                  resolve();
+               },
 
-                undefined,
+               undefined,
 
-                reject
+               reject
             );
-        }
-    );
-}
+         }
+      );
+   }
 
    /* =====================================================
       AsyncINIT
@@ -107,46 +109,97 @@ this.piggyTemplate =
       PIGGY CREATOR
    ===================================================== */
 
-  createPiggy(typeName) {
+   createPiggy(typeName) {
 
-    const config =
-        this.types[typeName];
+      const config =
+         this.types[typeName];
 
-    const piggy =
-        this.piggyTemplate.clone(true);
+      const piggy =
+         this.piggyTemplate.clone(true);
 
-    piggy.scale.set(
-        2,
-        2,
-        2
-    );
+      piggy.scale.set(
+         2,
+         2,
+         2
+      );
 
-    piggy.traverse(obj => {
+      piggy.traverse(obj => {
 
-        if (obj.isMesh) {
+         if (!obj.isMesh)
+            return;
 
-            obj.castShadow = true;
+         obj.castShadow = true;
 
-            obj.receiveShadow = true;
-        }
-    });
+         obj.receiveShadow = true;
 
-    piggy.userData = {
+         if (obj.material) {
 
-        isPiggy: true,
+            obj.material =
+               obj.material.clone();
 
-        type: typeName,
+            /* Base Color */
 
-        points: config.points,
+            obj.material.color.set(
+               config.color
+            );
 
-        captured: false,
+            /* Golden */
 
-        bobOffset:
-            Math.random() * 100
-    };
+            if (
+               typeName === "golden"
+            ) {
 
-    return piggy;
-}
+               obj.material.metalness =
+                  1.0;
+
+               obj.material.roughness =
+                  0.2;
+            }
+
+            /* Ghost */
+
+            if (
+               typeName === "ghost"
+            ) {
+
+               obj.material.transparent =
+                  true;
+
+               obj.material.opacity =
+                  0.4;
+            }
+
+            /* Rainbow */
+
+            if (
+               typeName === "rainbow"
+            ) {
+
+               obj.material.emissive.set(
+                  0x00ffff
+               );
+
+               obj.material.emissiveIntensity =
+                  0.5;
+            }
+         }
+      });
+
+      piggy.userData = {
+
+         isPiggy: true,
+
+         type: typeName,
+
+         points: config.points,
+
+         captured: false,
+
+         bobOffset: Math.random() * 100
+      };
+
+      return piggy;
+   }
    /* =====================================================
       SPAWNING
    ===================================================== */
@@ -166,9 +219,9 @@ this.piggyTemplate =
             );
          const spawn = {
 
-            x: (Math.random() - 0.5) *40,
+            x: (Math.random() - 0.5) * 40,
 
-            z: (Math.random() - 0.5) *40
+            z: (Math.random() - 0.5) * 40
          };
 
          piggy.position.set(
@@ -314,39 +367,39 @@ this.piggyTemplate =
       CAPTURE
    ===================================================== */
 
-  capturePiggy(piggy) {
+   capturePiggy(piggy) {
 
-    if (
-        !piggy
-    ) {
-        return 0;
-    }
+      if (
+         !piggy
+      ) {
+         return 0;
+      }
 
-    if (
-        piggy.userData.captured
-    ) {
-        return 0;
-    }
+      if (
+         piggy.userData.captured
+      ) {
+         return 0;
+      }
 
-    piggy.userData.captured =
-        true;
+      piggy.userData.captured =
+         true;
 
-    piggy.visible =
-        false;
+      piggy.visible =
+         false;
 
-    piggy.traverse(
-        child => {
+      piggy.traverse(
+         child => {
 
             child.layers.disable(
-                0
+               0
             );
-        }
-    );
+         }
+      );
 
-    return (
-        piggy.userData.points || 0
-    );
-}
+      return (
+         piggy.userData.points || 0
+      );
+   }
 
    /* =====================================================
       DETECTION
