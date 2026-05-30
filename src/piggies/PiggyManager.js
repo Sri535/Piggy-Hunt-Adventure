@@ -81,7 +81,7 @@ export class PiggyManager {
       const body =
          new THREE.Mesh(
             new THREE.SphereGeometry(
-               1,
+               2,
                16,
                16
             ),
@@ -105,7 +105,7 @@ export class PiggyManager {
          new THREE.Mesh(
 
             new THREE.SphereGeometry(
-               0.6,
+               1.2,
                16,
                16
             ),
@@ -127,7 +127,7 @@ export class PiggyManager {
          new THREE.Mesh(
 
             new THREE.SphereGeometry(
-               0.2,
+               0.4,
                8,
                8
             ),
