@@ -1,4 +1,8 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
+import {
+    RadarSystem
+}
+from "./gameplay/RadarSystem.js";
 
 export class CaptureSystem {
 
