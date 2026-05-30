@@ -98,15 +98,21 @@ export class Game {
 
       /* Capture System */
 
-      this.captureSystem =
-         new CaptureSystem(
-            this.camera,
-            this.scene,
-            this.piggyManager,
-            this.save
-         );
+this.captureSystem =
+   new CaptureSystem(
+      this.camera,
+      this.scene,
+      this.piggyManager,
+      this.save,
+      this.achievementSystem
+   );
 
       this.captureSystem.init();
+            /*AchievementSystem*/
+      this.achievementSystem =
+    new AchievementSystem(
+        this.save
+    ).init();
       /* Radar System */
       this.radarSystem =
          new RadarSystem(
@@ -123,11 +129,7 @@ export class Game {
          "Game Initialized"
       );
 
-      /*AchievementSystem*/
-      this.achievementSystem =
-    new AchievementSystem(
-        this.save
-    ).init();
+
 
       return this;
    }
