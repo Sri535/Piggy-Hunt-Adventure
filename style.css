@@ -756,19 +756,35 @@ body {
 
 #radarContainer {
 
-    margin-top: 10px;
+    position: fixed;
 
-    padding-top: 10px;
+    left: 25px;
 
-    border-top:
+    bottom: 140px;
+
+    width: 120px;
+
+    text-align: center;
+
+    padding: 10px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    backdrop-filter:
+        blur(10px);
+
+    border:
         1px solid rgba(
             255,
             255,
             255,
-            .15
+            .10
         );
 
-    text-align: center;
+    z-index: 9999;
 }
 
 #radarArrow {
