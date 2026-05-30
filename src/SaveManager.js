@@ -39,7 +39,7 @@ export class SaveManager {
 
                 gems: 0,
 
-                totalCaptures: 0
+                total: 0
             },
 
             settings: {
@@ -418,6 +418,9 @@ export class SaveManager {
 
         this.data.stats
             .piggiesCaptured++;
+
+        this.data.player
+            .totalCaptures++;
     }
 
     incrementSessions() {
