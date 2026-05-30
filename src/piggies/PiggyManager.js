@@ -311,9 +311,9 @@ export class PiggyManager {
             );
          const spawn = {
 
-            x: (Math.random() - 0.5) * 40,
+            x: (Math.random() - 0.5) * 120,
 
-            z: (Math.random() - 0.5) * 40
+            z: (Math.random() - 0.5) * 120
          };
 
          piggy.position.set(
