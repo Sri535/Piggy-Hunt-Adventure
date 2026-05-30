@@ -2,467 +2,470 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.m
 
 export class CameraController {
 
-    constructor(camera, canvas) {
+   constructor(camera, canvas) {
 
-        this.camera = camera;
-        this.canvas = canvas;
+      this.camera = camera;
+      this.canvas = canvas;
 
-        this.isMobile =
-            /Android|iPhone|iPad|iPod/i.test(
-                navigator.userAgent
-            );
+      this.isMobile =
+         /Android|iPhone|iPad|iPod/i.test(
+            navigator.userAgent
+         );
 
-        /* =========================
-           MOVEMENT
-        ========================= */
+      /* =========================
+         MOVEMENT
+      ========================= */
 
-        this.moveSpeed = 8;
-        this.sprintMultiplier = 2;
-        this.jumpForce = 8;
-        this.gravity = 20;
+      this.moveSpeed = 8;
+      this.sprintMultiplier = 2;
+      this.jumpForce = 8;
+      this.gravity = 20;
 
-        this.velocityY = 0;
-        this.isGrounded = true;
+      this.velocityY = 0;
+      this.isGrounded = true;
 
-        /* =========================
-           ROTATION
-        ========================= */
+      /* =========================
+         ROTATION
+      ========================= */
 
-        this.pitch = 0;
-        this.yaw = 0;
+      this.pitch = 0;
+      this.yaw = 0;
 
-        this.sensitivity = 0.002;
+      this.sensitivity = 0.002;
 
-        this.targetPitch = 0;
-        this.targetYaw = 0;
+      this.targetPitch = 0;
+      this.targetYaw = 0;
 
-        /* =========================
-           INPUT
-        ========================= */
+      /* =========================
+         INPUT
+      ========================= */
 
-        this.keys = {};
+      this.keys = {};
 
-        /* =========================
-           TOUCH
-        ========================= */
+      /* =========================
+         TOUCH
+      ========================= */
 
-        this.touchActive = false;
+      this.touchActive = false;
 
-        this.lastTouchX = 0;
-        this.lastTouchY = 0;
+      this.lastTouchX = 0;
+      this.lastTouchY = 0;
 
-        /* =========================
-           GYRO
-        ========================= */
+      /* =========================
+         GYRO
+      ========================= */
 
-        this.gyroEnabled = true;
+      this.gyroEnabled = true;
 
-        this.gyroPitch = 0;
-        this.gyroYaw = 0;
-    }
+      this.gyroPitch = 0;
+      this.gyroYaw = 0;
+   }
 
-    /* =====================================================
-       INIT
-    ===================================================== */
+   /* =====================================================
+      INIT
+   ===================================================== */
 
-    init() {
+   init() {
 
-        this.registerKeyboard();
+      this.registerKeyboard();
 
-        this.registerMouse();
+      this.registerMouse();
 
-        this.registerTouch();
+      this.registerTouch();
 
-        this.registerGyroscope();
+      this.registerGyroscope();
 
-        return this;
-    }
+      return this;
+   }
 
-    /* =====================================================
-       UPDATE
-    ===================================================== */
+   /* =====================================================
+      UPDATE
+   ===================================================== */
 
-    update(delta) {
+   update(delta) {
 
-        this.updateMovement(delta);
+      this.updateMovement(delta);
 
-        this.updateRotation(delta);
+      this.updateRotation(delta);
 
-        this.updateGravity(delta);
-    }
+      this.updateGravity(delta);
+   }
 
-    /* =====================================================
-       MOVEMENT
-    ===================================================== */
+   /* =====================================================
+      MOVEMENT
+   ===================================================== */
 
-    updateMovement(delta) {
+   updateMovement(delta) {
 
-        const speed =
-            this.keys["ShiftLeft"]
-                ? this.moveSpeed *
-                  this.sprintMultiplier
-                : this.moveSpeed;
+      const speed =
+         this.keys["ShiftLeft"] ?
+         this.moveSpeed *
+         this.sprintMultiplier :
+         this.moveSpeed;
 
-        const forward =
-            new THREE.Vector3();
+      const forward =
+         new THREE.Vector3();
 
-        this.camera.getWorldDirection(
-            forward
-        );
+      this.camera.getWorldDirection(
+         forward
+      );
 
-        forward.y = 0;
-        forward.normalize();
+      forward.y = 0;
+      forward.normalize();
 
-        const right =
-            new THREE.Vector3();
+      const right =
+         new THREE.Vector3();
 
-        right.crossVectors(
-            forward,
-            new THREE.Vector3(0,1,0)
-        );
+      right.crossVectors(
+         forward,
+         new THREE.Vector3(0, 1, 0)
+      );
 
-        if(this.keys["KeyW"]) {
+      if (this.keys["KeyW"]) {
 
-            this.camera.position.add(
-                forward.clone()
-                .multiplyScalar(
-                    speed * delta
-                )
-            );
-        }
+         this.camera.position.add(
+            forward.clone()
+            .multiplyScalar(
+               speed * delta
+            )
+         );
+      }
 
-        if(this.keys["KeyS"]) {
+      if (this.keys["KeyS"]) {
 
-            this.camera.position.add(
-                forward.clone()
-                .multiplyScalar(
-                    -speed * delta
-                )
-            );
-        }
+         this.camera.position.add(
+            forward.clone()
+            .multiplyScalar(
+               -speed * delta
+            )
+         );
+      }
 
-        if(this.keys["KeyA"]) {
+      if (this.keys["KeyA"]) {
 
-            this.camera.position.add(
-                right.clone()
-                .multiplyScalar(
-                    speed * delta
-                )
-            );
-        }
+         this.camera.position.add(
+            right.clone()
+            .multiplyScalar(
+               speed * delta
+            )
+         );
+      }
 
-        if(this.keys["KeyD"]) {
+      if (this.keys["KeyD"]) {
 
-            this.camera.position.add(
-                right.clone()
-                .multiplyScalar(
-                    -speed * delta
-                )
-            );
-        }
-    }
+         this.camera.position.add(
+            right.clone()
+            .multiplyScalar(
+               -speed * delta
+            )
+         );
+      }
+   }
 
-    /* =====================================================
-       GRAVITY
-    ===================================================== */
+   /* =====================================================
+      GRAVITY
+   ===================================================== */
 
-    updateGravity(delta) {
+   updateGravity(delta) {
 
-        this.velocityY -=
-            this.gravity * delta;
+      this.velocityY -=
+         this.gravity * delta;
 
-        this.camera.position.y +=
-            this.velocityY * delta;
+      this.camera.position.y +=
+         this.velocityY * delta;
 
-        if(
-            this.camera.position.y <= 2
-        ) {
+      if (
+         this.camera.position.y <= 2
+      ) {
 
-            this.camera.position.y = 2;
+         this.camera.position.y = 2;
 
-            this.velocityY = 0;
+         this.velocityY = 0;
 
-            this.isGrounded = true;
-        }
-    }
+         this.isGrounded = true;
+      }
+   }
 
-    jump() {
+   jump() {
 
-        if(!this.isGrounded)
-            return;
+      if (!this.isGrounded)
+         return;
 
-        this.isGrounded = false;
+      this.isGrounded = false;
 
-        this.velocityY =
-            this.jumpForce;
-    }
+      this.velocityY =
+         this.jumpForce;
+   }
 
-    /* =====================================================
-       ROTATION
-    ===================================================== */
+   /* =====================================================
+      ROTATION
+   ===================================================== */
 
-    updateRotation(delta) {
+   updateRotation(delta) {
 
-        if(this.isMobile) {
+      if (this.isMobile) {
 
-            this.targetPitch =
-                this.gyroPitch;
+         this.targetPitch =
+            this.gyroPitch;
 
-            this.targetYaw =
-                this.gyroYaw;
-        }
+         this.targetYaw =
+            this.gyroYaw;
+      }
 
-        const smooth = 8;
+      const smooth = 8;
 
-        this.pitch +=
-            (
-                this.targetPitch -
-                this.pitch
-            ) *
-            smooth *
-            delta;
+      this.pitch +=
+         (
+            this.targetPitch -
+            this.pitch
+         ) *
+         smooth *
+         delta;
 
-        this.yaw +=
-            (
-                this.targetYaw -
-                this.yaw
-            ) *
-            smooth *
-            delta;
+      this.yaw +=
+         (
+            this.targetYaw -
+            this.yaw
+         ) *
+         smooth *
+         delta;
 
-        this.pitch =
-            Math.max(
-                -Math.PI / 2,
-                Math.min(
-                    Math.PI / 2,
-                    this.pitch
-                )
-            );
+      this.pitch =
+         Math.max(
+            -Math.PI / 2,
+            Math.min(
+               Math.PI / 2,
+               this.pitch
+            )
+         );
 
-        this.camera.rotation.order =
-            "YXZ";
+      this.camera.rotation.order =
+         "YXZ";
 
-        this.camera.rotation.y =
-            this.yaw;
+      this.camera.rotation.y =
+         this.yaw;
 
-        this.camera.rotation.x =
-            this.pitch;
-    }
+      this.camera.rotation.x =
+         this.pitch;
+   }
 
-    /* =====================================================
-       KEYBOARD
-    ===================================================== */
+   /* =====================================================
+      KEYBOARD
+   ===================================================== */
 
-    registerKeyboard() {
+   registerKeyboard() {
 
-        window.addEventListener(
-            "keydown",
-            e => {
+      window.addEventListener(
+         "keydown",
+         console.log(
+            "CAMERA KEY:",
+            e.code
+         ); e => {
 
-                this.keys[e.code] = true;
+            this.keys[e.code] = true;
 
-                if(
-                    e.code === "Space"
-                ) {
+            if (
+               e.code === "Space"
+            ) {
 
-                    this.jump();
-                }
+               this.jump();
             }
-        );
+         }
+      );
 
-        window.addEventListener(
-            "keyup",
-            e => {
+      window.addEventListener(
+         "keyup",
+         e => {
 
-                this.keys[e.code] = false;
+            this.keys[e.code] = false;
+         }
+      );
+   }
+
+   /* =====================================================
+      POINTER LOCK
+   ===================================================== */
+
+   registerMouse() {
+
+      if (this.isMobile)
+         return;
+
+      this.canvas.addEventListener(
+         "click",
+         () => {
+
+            if (
+               document.pointerLockElement !==
+               this.canvas
+            ) {
+
+               this.canvas.requestPointerLock();
             }
-        );
-    }
+         }
+      );
 
-    /* =====================================================
-       POINTER LOCK
-    ===================================================== */
+      document.addEventListener(
+         "mousemove",
+         e => {
 
-    registerMouse() {
+            if (
+               document.pointerLockElement !==
+               this.canvas
+            )
+               return;
 
-        if(this.isMobile)
-            return;
+            this.targetYaw -=
+               e.movementX *
+               this.sensitivity;
 
-        this.canvas.addEventListener(
-            "click",
-            () => {
+            this.targetPitch -=
+               e.movementY *
+               this.sensitivity;
+         }
+      );
+   }
 
-                if(
-                    document.pointerLockElement !==
-                    this.canvas
-                ) {
+   /* =====================================================
+      TOUCH LOOK
+   ===================================================== */
 
-                    this.canvas.requestPointerLock();
-                }
-            }
-        );
+   registerTouch() {
 
-        document.addEventListener(
-            "mousemove",
-            e => {
+      if (!this.isMobile)
+         return;
 
-                if(
-                    document.pointerLockElement !==
-                    this.canvas
-                )
-                    return;
+      window.addEventListener(
+         "touchstart",
+         e => {
 
-                this.targetYaw -=
-                    e.movementX *
-                    this.sensitivity;
+            this.touchActive = true;
 
-                this.targetPitch -=
-                    e.movementY *
-                    this.sensitivity;
-            }
-        );
-    }
+            this.lastTouchX =
+               e.touches[0].clientX;
 
-    /* =====================================================
-       TOUCH LOOK
-    ===================================================== */
+            this.lastTouchY =
+               e.touches[0].clientY;
+         }
+      );
 
-    registerTouch() {
+      window.addEventListener(
+         "touchmove",
+         e => {
 
-        if(!this.isMobile)
-            return;
+            if (!this.touchActive)
+               return;
 
-        window.addEventListener(
-            "touchstart",
-            e => {
+            const x =
+               e.touches[0].clientX;
 
-                this.touchActive = true;
+            const y =
+               e.touches[0].clientY;
 
-                this.lastTouchX =
-                    e.touches[0].clientX;
+            const dx =
+               x - this.lastTouchX;
 
-                this.lastTouchY =
-                    e.touches[0].clientY;
-            }
-        );
+            const dy =
+               y - this.lastTouchY;
 
-        window.addEventListener(
-            "touchmove",
-            e => {
+            this.targetYaw -=
+               dx * 0.003;
 
-                if(!this.touchActive)
-                    return;
+            this.targetPitch -=
+               dy * 0.003;
 
-                const x =
-                    e.touches[0].clientX;
+            this.lastTouchX = x;
+            this.lastTouchY = y;
+         }
+      );
 
-                const y =
-                    e.touches[0].clientY;
+      window.addEventListener(
+         "touchend",
+         () => {
 
-                const dx =
-                    x - this.lastTouchX;
+            this.touchActive = false;
+         }
+      );
+   }
 
-                const dy =
-                    y - this.lastTouchY;
+   /* =====================================================
+      GYROSCOPE
+   ===================================================== */
 
-                this.targetYaw -=
-                    dx * 0.003;
+   registerGyroscope() {
 
-                this.targetPitch -=
-                    dy * 0.003;
+      if (!this.isMobile)
+         return;
 
-                this.lastTouchX = x;
-                this.lastTouchY = y;
-            }
-        );
+      window.addEventListener(
+         "deviceorientation",
+         event => {
 
-        window.addEventListener(
-            "touchend",
-            () => {
+            if (
+               !this.gyroEnabled
+            )
+               return;
 
-                this.touchActive = false;
-            }
-        );
-    }
+            const beta =
+               event.beta || 0;
 
-    /* =====================================================
-       GYROSCOPE
-    ===================================================== */
+            const gamma =
+               event.gamma || 0;
 
-    registerGyroscope() {
+            this.gyroPitch =
+               THREE.MathUtils.degToRad(
+                  beta * 0.5
+               );
 
-        if(!this.isMobile)
-            return;
+            this.gyroYaw =
+               THREE.MathUtils.degToRad(
+                  gamma * 0.5
+               );
+         }
+      );
+   }
 
-        window.addEventListener(
-            "deviceorientation",
-            event => {
+   /* =====================================================
+      POSITION HELPERS
+   ===================================================== */
 
-                if(
-                    !this.gyroEnabled
-                )
-                    return;
+   setPosition(x, y, z) {
 
-                const beta =
-                    event.beta || 0;
+      this.camera.position.set(
+         x, y, z
+      );
+   }
 
-                const gamma =
-                    event.gamma || 0;
+   getPosition() {
 
-                this.gyroPitch =
-                    THREE.MathUtils.degToRad(
-                        beta * 0.5
-                    );
+      return this.camera.position;
+   }
 
-                this.gyroYaw =
-                    THREE.MathUtils.degToRad(
-                        gamma * 0.5
-                    );
-            }
-        );
-    }
+   getForwardVector() {
 
-    /* =====================================================
-       POSITION HELPERS
-    ===================================================== */
+      const dir =
+         new THREE.Vector3();
 
-    setPosition(x,y,z) {
+      this.camera.getWorldDirection(
+         dir
+      );
 
-        this.camera.position.set(
-            x,y,z
-        );
-    }
+      return dir;
+   }
 
-    getPosition() {
+   /* =====================================================
+      SETTINGS
+   ===================================================== */
 
-        return this.camera.position;
-    }
+   setGyroEnabled(enabled) {
 
-    getForwardVector() {
+      this.gyroEnabled =
+         enabled;
+   }
 
-        const dir =
-            new THREE.Vector3();
+   setSensitivity(value) {
 
-        this.camera.getWorldDirection(
-            dir
-        );
-
-        return dir;
-    }
-
-    /* =====================================================
-       SETTINGS
-    ===================================================== */
-
-    setGyroEnabled(enabled) {
-
-        this.gyroEnabled =
-            enabled;
-    }
-
-    setSensitivity(value) {
-
-        this.sensitivity =
-            value;
-    }
+      this.sensitivity =
+         value;
+   }
 }
