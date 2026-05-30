@@ -9,43 +9,37 @@ export class AchievementSystem {
 
             firstCapture: {
                 name: "First Capture",
-                description:
-                    "Capture your first piggy",
+                description: "Capture your first piggy",
                 reward: 25
             },
 
             piggyHunter: {
                 name: "Piggy Hunter",
-                description:
-                    "Capture 10 piggies",
+                description: "Capture 10 piggies",
                 reward: 50
             },
 
             goldenHunter: {
                 name: "Golden Hunter",
-                description:
-                    "Capture a Golden Piggy",
+                description: "Capture a Golden Piggy",
                 reward: 100
             },
 
             rainbowFinder: {
                 name: "Rainbow Finder",
-                description:
-                    "Capture a Rainbow Piggy",
+                description: "Capture a Rainbow Piggy",
                 reward: 150
             },
 
             ghostbuster: {
                 name: "Ghostbuster",
-                description:
-                    "Capture a Ghost Piggy",
+                description: "Capture a Ghost Piggy",
                 reward: 200
             },
 
             piggyMaster: {
                 name: "Piggy Master",
-                description:
-                    "Capture 100 piggies",
+                description: "Capture 100 piggies",
                 reward: 500
             }
         };
@@ -134,51 +128,51 @@ export class AchievementSystem {
     /* ==========================
        UNLOCK
     ========================== */
-unlock(id) {
+    unlock(id) {
 
-    if (
+        if (
 
-        this.saveManager
+            this.saveManager
             .getAchievements()
             .includes(id)
 
-    ) {
+        ) {
 
-        return;
-    }
+            return;
+        }
 
-    const achievement =
-        this.achievements[id];
+        const achievement =
+            this.achievements[id];
 
-    if (
-        !achievement
-    ) {
+        if (
+            !achievement
+        ) {
 
-        return;
-    }
+            return;
+        }
 
-    this.saveManager
-        .unlockAchievement(
-            id
+        this.saveManager
+            .unlockAchievement(
+                id
+            );
+
+        this.saveManager
+            .addCoins(
+                achievement.reward
+            );
+
+        this.showPopup(
+            achievement
         );
 
-    this.saveManager
-        .addCoins(
-            achievement.reward
+        this.saveManager
+            .save();
+
+        console.log(
+            "Achievement:",
+            achievement.name
         );
-
-    this.showPopup(
-        achievement
-    );
-
-    this.saveManager
-        .save();
-
-    console.log(
-        "Achievement:",
-        achievement.name
-    );
-}
+    }
 
     /* ==========================
        POPUP
@@ -198,7 +192,7 @@ unlock(id) {
 
         popup.innerHTML =
 
-        `
+            `
         <div>
             🏆 ACHIEVEMENT
         </div>
@@ -231,10 +225,10 @@ unlock(id) {
        HELPER
     ========================== */
 
-isUnlocked(id) {
+    isUnlocked(id) {
 
-    return this
-        .saveManager
-        .getAchievements()
-        .includes(id);
-}
+        return this
+            .saveManager
+            .getAchievements()
+            .includes(id);
+    }
