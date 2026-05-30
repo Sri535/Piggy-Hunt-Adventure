@@ -390,12 +390,6 @@ export class CaptureSystem {
                 player.level
             );
 
-        /* XP TEXT */
-
-        this.xpText =
-            document.getElementById(
-                "xpText"
-            );
 
         if (
             this.xpText
