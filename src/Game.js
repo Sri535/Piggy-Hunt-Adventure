@@ -199,6 +199,37 @@ export class Game {
       this.input =
          new InputManager()
          .init();
+      /* =========================
+   MOBILE JOYSTICK
+========================= */
+
+this.input.on(
+   "joystickMove",
+   data => {
+
+      this.cameraController.joystickX =
+         data.x;
+
+      this.cameraController.joystickY =
+         data.y;
+
+      console.log(
+         "JOYSTICK:",
+         data.x,
+         data.y
+      );
+   }
+);
+
+this.input.on(
+   "touchend",
+   () => {
+
+      this.cameraController.joystickX = 0;
+
+      this.cameraController.joystickY = 0;
+   }
+);
 
       this.save =
          new SaveManager()
