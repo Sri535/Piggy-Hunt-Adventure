@@ -1,574 +1,661 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
 import {
-   GLTFLoader
+    GLTFLoader
 }
 from "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js";
 
 export class PiggyManager {
 
-   constructor(scene, world) {
+    constructor(scene, world) {
 
-      this.loader =
-         new GLTFLoader();
+        this.loader =
+            new GLTFLoader();
 
-      this.piggyTemplate =
-         null;
-      this.scene = scene;
-      this.world = world;
+        this.piggyTemplate =
+            null;
+        this.scene = scene;
+        this.world = world;
 
-      this.piggies = [];
+        this.piggies = [];
+        this.maxPiggies = 28;
+        this.group =
+            new THREE.Group();
 
-      this.group =
-         new THREE.Group();
+        this.types = {
 
-      this.types = {
+            common: {
+                color: 0xffb6c1,
+                points: 10,
+                count: 20
+            },
 
-         common: {
-            color: 0xffb6c1,
-            points: 10,
-            count: 20
-         },
+            golden: {
+                color: 0xffd700,
+                points: 50,
+                count: 5
+            },
 
-         golden: {
-            color: 0xffd700,
-            points: 50,
-            count: 5
-         },
+            rainbow: {
+                color: 0xffffff,
+                points: 100,
+                count: 2
+            },
 
-         rainbow: {
-            color: 0xffffff,
-            points: 100,
-            count: 2
-         },
-
-         ghost: {
-            color: 0xaaddff,
-            points: 200,
-            count: 1
-         }
-      };
-   }
-   /* =====================================================
-     LoadModel
-   ===================================================== */
-   async loadModel() {
-
-      return new Promise(
-         (resolve, reject) => {
-
-            this.loader.load(
-
-               "./assets/models/piggy.glb",
-
-               (gltf) => {
-
-                  this.piggyTemplate =
-                     gltf.scene;
-
-                  console.log(
-                     "Piggy Model Loaded"
-                  );
-
-                  resolve();
-               },
-
-               undefined,
-
-               reject
-            );
-         }
-      );
-   }
-
-   /* =====================================================
-      AsyncINIT
-   ===================================================== */
-
-   async init() {
-      await this.loadModel();
-      this.spawnCommonPiggies();
-
-      this.spawnGoldenPiggies();
-
-      this.spawnRainbowPiggies();
-
-      this.spawnGhostPiggy();
-
-      this.scene.add(
-         this.group
-      );
-
-      console.log(
-         "Piggies Spawned:",
-         this.piggies.length
-      );
-   }
-
-   /* =====================================================
-      PIGGY CREATOR
-   ===================================================== */
-
-   createPiggy(typeName) {
-
-      const config =
-         this.types[typeName];
-
-      const piggy =
-         this.piggyTemplate.clone(true);
-
-      piggy.scale.set(
-         2,
-         2,
-         2
-      );
-
-      piggy.traverse(obj => {
-
-         if (!obj.isMesh)
-            return;
-
-         obj.castShadow = true;
-
-         obj.receiveShadow = true;
-
-         if (obj.material) {
-
-            obj.material =
-               obj.material.clone();
-
-            /* Base Color */
-
-            obj.material.color.set(
-               config.color
-            );
-
-            /* Golden */
-
-            if (
-               typeName === "golden"
-            ) {
-               obj.material.metalness =
-                  1.0;
-
-               obj.material.roughness =
-                  0.1;
-
-               obj.material.emissive.set(
-                  0x443300
-               );
-
-               obj.material.emissiveIntensity =
-                  0.5;
+            ghost: {
+                color: 0xaaddff,
+                points: 200,
+                count: 1
             }
+        };
+    }
+    /* =====================================================
+      LoadModel
+    ===================================================== */
+    async loadModel() {
 
-            /* Ghost */
+        return new Promise(
+            (resolve, reject) => {
 
-            if (
-               typeName === "ghost"
-            ) {
+                this.loader.load(
 
-               obj.material.transparent =
-                  true;
+                    "./assets/models/piggy.glb",
 
-               obj.material.opacity =
-                  0.25;
+                    (gltf) => {
 
-               obj.material.emissive.set(
-                  0x88ccff
-               );
+                        this.piggyTemplate =
+                            gltf.scene;
 
-               obj.material.emissiveIntensity =
-                  1;
+                        console.log(
+                            "Piggy Model Loaded"
+                        );
+
+                        resolve();
+                    },
+
+                    undefined,
+
+                    reject
+                );
             }
+        );
+    }
 
-            /* Rainbow */
+    /* =====================================================
+       AsyncINIT
+    ===================================================== */
 
-            if (
-               typeName === "rainbow"
-            ) {
+    async init() {
+        await this.loadModel();
+        this.spawnCommonPiggies();
 
-               obj.material.emissive.set(
-                  0x00ffff
-               );
+        this.spawnGoldenPiggies();
 
-               obj.material.emissiveIntensity =
-                  1.5;
+        this.spawnRainbowPiggies();
+
+        this.spawnGhostPiggy();
+
+        this.scene.add(
+            this.group
+        );
+
+        console.log(
+            "Piggies Spawned:",
+            this.piggies.length
+        );
+    }
+
+    /* =====================================================
+       PIGGY CREATOR
+    ===================================================== */
+
+    createPiggy(typeName) {
+
+        const config =
+            this.types[typeName];
+
+        const piggy =
+            this.piggyTemplate.clone(true);
+
+        piggy.scale.set(
+            2,
+            2,
+            2
+        );
+
+        piggy.traverse(obj => {
+
+            if (!obj.isMesh)
+                return;
+
+            obj.castShadow = true;
+
+            obj.receiveShadow = true;
+
+            if (obj.material) {
+
+                obj.material =
+                    obj.material.clone();
+
+                /* Base Color */
+
+                obj.material.color.set(
+                    config.color
+                );
+
+                /* Golden */
+
+                if (
+                    typeName === "golden"
+                ) {
+                    obj.material.metalness =
+                        1.0;
+
+                    obj.material.roughness =
+                        0.1;
+
+                    obj.material.emissive.set(
+                        0x443300
+                    );
+
+                    obj.material.emissiveIntensity =
+                        0.5;
+                }
+
+                /* Ghost */
+
+                if (
+                    typeName === "ghost"
+                ) {
+
+                    obj.material.transparent =
+                        true;
+
+                    obj.material.opacity =
+                        0.25;
+
+                    obj.material.emissive.set(
+                        0x88ccff
+                    );
+
+                    obj.material.emissiveIntensity =
+                        1;
+                }
+
+                /* Rainbow */
+
+                if (
+                    typeName === "rainbow"
+                ) {
+
+                    obj.material.emissive.set(
+                        0x00ffff
+                    );
+
+                    obj.material.emissiveIntensity =
+                        1.5;
+                }
             }
-         }
-      });
+        });
 
-      piggy.userData = {
+        piggy.userData = {
 
-         isPiggy: true,
+            isPiggy: true,
 
-         type: typeName,
+            type: typeName,
 
-         points: config.points,
+            points: config.points,
 
-         captured: false,
+            captured: false,
 
-         bobOffset: Math.random() * 100
-      };
-      if (
-         typeName !== "common"
-      ) {
+            bobOffset: Math.random() * 100
+        };
+        if (
+            typeName !== "common"
+        ) {
 
-         const ring =
-            new THREE.Mesh(
+            const ring =
+                new THREE.Mesh(
 
-               new THREE.TorusGeometry(
-                  1.5,
-                  0.05,
-                  8,
-                  32
-               ),
+                    new THREE.TorusGeometry(
+                        1.5,
+                        0.05,
+                        8,
+                        32
+                    ),
 
-               new THREE.MeshBasicMaterial({
+                    new THREE.MeshBasicMaterial({
 
-                  color: config.color
-               })
+                        color: config.color
+                    })
+                );
+
+            ring.rotation.x =
+                Math.PI / 2;
+
+            ring.position.y =
+                3;
+
+            piggy.add(
+                ring
             );
-
-         ring.rotation.x =
-            Math.PI / 2;
-
-         ring.position.y =
-            3;
-
-         piggy.add(
-            ring
-         );
-      }
-      /* ==================================
+        }
+        /* ==================================
    EYES
 ================================== */
 
-      if (
-         typeName !== "common"
-      ) {
+        if (
+            typeName !== "common"
+        ) {
 
-         const eyeColor =
-            typeName === "golden" ?
-            0xffdd44 :
-            typeName === "ghost" ?
-            0x88ccff :
-            0xff00ff;
+            const eyeColor =
+                typeName === "golden" ?
+                0xffdd44 :
+                typeName === "ghost" ?
+                0x88ccff :
+                0xff00ff;
 
-         const leftEye =
-            new THREE.PointLight(
-               eyeColor,
-               0.8,
-               4
+            const leftEye =
+                new THREE.PointLight(
+                    eyeColor,
+                    0.8,
+                    4
+                );
+
+            leftEye.position.set(
+                -0.25,
+                1.7,
+                1.1
             );
 
-         leftEye.position.set(
-            -0.25,
-            1.7,
-            1.1
-         );
-
-         piggy.add(
-            leftEye
-         );
-
-         const rightEye =
-            new THREE.PointLight(
-               eyeColor,
-               0.8,
-               4
+            piggy.add(
+                leftEye
             );
 
-         rightEye.position.set(
-            0.25,
-            1.7,
-            1.1
-         );
+            const rightEye =
+                new THREE.PointLight(
+                    eyeColor,
+                    0.8,
+                    4
+                );
 
-         piggy.add(
-            rightEye
-         );
-      }
+            rightEye.position.set(
+                0.25,
+                1.7,
+                1.1
+            );
 
-      return piggy;
-   }
-   /* =====================================================
-      SPAWNING
+            piggy.add(
+                rightEye
+            );
+        }
+
+        return piggy;
+    }
+    /* =====================================================
+       SPAWNING
+    ===================================================== */
+
+    spawnType(typeName) {
+
+        const config =
+            this.types[typeName];
+
+        for (
+            let i = 0; i < config.count; i++
+        ) {
+
+            const piggy =
+                this.createPiggy(
+                    typeName
+                );
+            const spawn = {
+
+                x: (Math.random() - 0.5) * 120,
+
+                z: (Math.random() - 0.5) * 120
+            };
+
+            piggy.position.set(
+
+                spawn.x,
+
+                1,
+
+                spawn.z
+            );
+
+            piggy.rotation.y =
+                Math.random() *
+                Math.PI * 2;
+
+            this.piggies.push(
+                piggy
+            );
+
+            this.group.add(
+                piggy
+            );
+        }
+    }
+
+    spawnCommonPiggies() {
+
+        this.spawnType(
+            "common"
+        );
+    }
+
+    spawnGoldenPiggies() {
+
+        this.spawnType(
+            "golden"
+        );
+    }
+
+    spawnRainbowPiggies() {
+
+        this.spawnType(
+            "rainbow"
+        );
+    }
+
+    spawnGhostPiggy() {
+
+        this.spawnType(
+            "ghost"
+        );
+
+        const ghost =
+            this.piggies[
+                this.piggies.length - 1
+            ];
+
+        ghost.traverse(obj => {
+
+            if (obj.material) {
+
+                obj.material.transparent =
+                    true;
+
+                obj.material.opacity =
+                    0.45;
+            }
+        });
+    }
+
+    /* =====================================================
+       UPDATE
+    ===================================================== */
+
+    update(time) {
+
+        this.animatePiggies(
+            time
+        );
+        this.maintainPopulation();
+
+    }
+
+    /* =====================================================
+       ANIMATION
+    ===================================================== */
+
+    animatePiggies(time) {
+
+        for (
+            const piggy of
+                this.piggies
+        ) {
+
+            if (
+                piggy.userData.captured
+            )
+                continue;
+
+            const amplitude =
+
+                piggy.userData.type ===
+                "ghost"
+
+                ?
+                0.5
+
+                :
+                0.2;
+
+            const speed =
+
+                piggy.userData.type ===
+                "ghost"
+
+                ?
+                4
+
+                :
+                2;
+
+            piggy.position.y =
+
+                1 +
+
+                Math.sin(
+
+                    time * speed +
+
+                    piggy.userData.bobOffset
+
+                ) * amplitude;
+
+            piggy.rotation.y +=
+                0.003;
+
+            if (
+                piggy.userData.type ===
+                "rainbow"
+            ) {
+
+                piggy.traverse(obj => {
+
+                    if (
+                        obj.material
+                    ) {
+
+                        obj.material.color
+                            .setHSL(
+
+                                (
+                                    time * 0.2
+                                ) % 1,
+
+                                1,
+
+                                0.5
+                            );
+                    }
+                });
+            }
+        }
+    }
+
+    /* =====================================================
+       CAPTURE
+    ===================================================== */
+
+    capturePiggy(piggy) {
+
+        if (
+            !piggy
+        ) {
+            return 0;
+        }
+
+        if (
+            piggy.userData.captured
+        ) {
+            return 0;
+        }
+
+        piggy.userData.captured =
+            true;
+
+        piggy.visible =
+            false;
+
+        piggy.traverse(
+            child => {
+
+                child.layers.disable(
+                    0
+                );
+            }
+        );
+
+        return (
+            piggy.userData.points || 0
+        );
+    }
+
+    /* =====================================================
+      spawnRandomPiggy
    ===================================================== */
 
-   spawnType(typeName) {
+    spawnRandomPiggy() {
 
-      const config =
-         this.types[typeName];
+        let type = "common";
 
-      for (
-         let i = 0; i < config.count; i++
-      ) {
+        const roll =
+            Math.random();
 
-         const piggy =
-            this.createPiggy(
-               typeName
-            );
-         const spawn = {
+        if (roll < 0.70) {
 
-            x: (Math.random() - 0.5) * 120,
+            type = "common";
 
-            z: (Math.random() - 0.5) * 120
-         };
+        } else if (roll < 0.90) {
 
-         piggy.position.set(
+            type = "golden";
 
-            spawn.x,
+        } else if (roll < 0.98) {
+
+            type = "rainbow";
+
+        } else {
+
+            type = "ghost";
+        }
+
+        const piggy =
+            this.createPiggy(type);
+
+        piggy.position.set(
+
+            (Math.random() - 0.5) * 150,
 
             1,
 
-            spawn.z
-         );
+            (Math.random() - 0.5) * 150
 
-         piggy.rotation.y =
-            Math.random() *
-            Math.PI * 2;
+        );
 
-         this.piggies.push(
+        this.piggies.push(
             piggy
-         );
+        );
 
-         this.group.add(
+        this.group.add(
             piggy
-         );
-      }
-   }
+        );
 
-   spawnCommonPiggies() {
+        console.log(
+            "Respawned:",
+            type
+        );
+    }
 
-      this.spawnType(
-         "common"
-      );
-   }
 
-   spawnGoldenPiggies() {
 
-      this.spawnType(
-         "golden"
-      );
-   }
+    /* =====================================================
+       maintain PIggy Population
+    ===================================================== */
 
-   spawnRainbowPiggies() {
+    maintainPopulation() {
 
-      this.spawnType(
-         "rainbow"
-      );
-   }
+        const alivePiggies =
 
-   spawnGhostPiggy() {
+            this.piggies.filter(
 
-      this.spawnType(
-         "ghost"
-      );
+                p =>
+                !p.userData.captured
 
-      const ghost =
-         this.piggies[
-            this.piggies.length - 1
-         ];
+            ).length;
 
-      ghost.traverse(obj => {
+        if (
 
-         if (obj.material) {
+            alivePiggies >=
+            this.maxPiggies
 
-            obj.material.transparent =
-               true;
+        ) {
 
-            obj.material.opacity =
-               0.45;
-         }
-      });
-   }
+            return;
+        }
 
-   /* =====================================================
-      UPDATE
-   ===================================================== */
+        this.spawnRandomPiggy();
+    }
 
-   update(time) {
+    /* =====================================================
+       DETECTION
+    ===================================================== */
 
-      this.animatePiggies(
-         time
-      );
-   }
+    getNearestPiggy(position) {
 
-   /* =====================================================
-      ANIMATION
-   ===================================================== */
+        let nearest =
+            null;
 
-   animatePiggies(time) {
+        let distance =
+            Infinity;
 
-      for (
-         const piggy of
-            this.piggies
-      ) {
+        for (
+            const piggy of
+                this.piggies
+        ) {
 
-         if (
-            piggy.userData.captured
-         )
-            continue;
+            if (
+                piggy.userData.captured
+            )
+                continue;
 
-         const amplitude =
+            const d =
+                piggy.position
+                .distanceTo(
+                    position
+                );
 
-            piggy.userData.type ===
-            "ghost"
+            if (
+                d < distance
+            ) {
 
-            ?
-            0.5
+                distance = d;
 
-            :
-            0.2;
+                nearest = piggy;
+            }
+        }
 
-         const speed =
+        return nearest;
+    }
 
-            piggy.userData.type ===
-            "ghost"
+    getPiggies() {
 
-            ?
-            4
+        return this.piggies;
+    }
 
-            :
-            2;
+    getRemainingCount() {
 
-         piggy.position.y =
+        return this.piggies
+            .filter(
 
-            1 +
+                p =>
+                !p.userData
+                .captured
 
-            Math.sin(
-
-               time * speed +
-
-               piggy.userData.bobOffset
-
-            ) * amplitude;
-
-         piggy.rotation.y +=
-            0.003;
-
-         if (
-            piggy.userData.type ===
-            "rainbow"
-         ) {
-
-            piggy.traverse(obj => {
-
-               if (
-                  obj.material
-               ) {
-
-                  obj.material.color
-                     .setHSL(
-
-                        (
-                           time * 0.2
-                        ) % 1,
-
-                        1,
-
-                        0.5
-                     );
-               }
-            });
-         }
-      }
-   }
-
-   /* =====================================================
-      CAPTURE
-   ===================================================== */
-
-   capturePiggy(piggy) {
-
-      if (
-         !piggy
-      ) {
-         return 0;
-      }
-
-      if (
-         piggy.userData.captured
-      ) {
-         return 0;
-      }
-
-      piggy.userData.captured =
-         true;
-
-      piggy.visible =
-         false;
-
-      piggy.traverse(
-         child => {
-
-            child.layers.disable(
-               0
-            );
-         }
-      );
-
-      return (
-         piggy.userData.points || 0
-      );
-   }
-
-   /* =====================================================
-      DETECTION
-   ===================================================== */
-
-   getNearestPiggy(position) {
-
-      let nearest =
-         null;
-
-      let distance =
-         Infinity;
-
-      for (
-         const piggy of
-            this.piggies
-      ) {
-
-         if (
-            piggy.userData.captured
-         )
-            continue;
-
-         const d =
-            piggy.position
-            .distanceTo(
-               position
-            );
-
-         if (
-            d < distance
-         ) {
-
-            distance = d;
-
-            nearest = piggy;
-         }
-      }
-
-      return nearest;
-   }
-
-   getPiggies() {
-
-      return this.piggies;
-   }
-
-   getRemainingCount() {
-
-      return this.piggies
-         .filter(
-
-            p =>
-            !p.userData
-            .captured
-
-         ).length;
-   }
+            ).length;
+    }
 }
