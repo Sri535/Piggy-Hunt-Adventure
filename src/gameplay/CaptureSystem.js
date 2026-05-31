@@ -107,427 +107,431 @@ export class CaptureSystem {
         if (
             this.captureButton
         ) {
-
             this.captureButton
                 .addEventListener(
                     "click",
                     () => {
 
-                        this.);
-                }
-        );
+                        this.capture();
+
+                    }
+                );
+        }
     }
-}
 
-/* =====================================================
-   UPDATE
-===================================================== */
+    /* =====================================================
+       UPDATE
+    ===================================================== */
 
-update() {
+    update() {
 
-    this.findTarget();
+        this.findTarget();
 
-    this.updateCrosshair();
-}
+        this.updateCrosshair();
+    }
 
-/* =====================================================
-   RAYCAST
-===================================================== */
+    /* =====================================================
+       RAYCAST
+    ===================================================== */
 
-findTarget() {
+    findTarget() {
 
-    this.targetPiggy = null;
+        this.targetPiggy = null;
 
-    const direction =
-        new THREE.Vector3();
+        const direction =
+            new THREE.Vector3();
 
-    this.camera
-        .getWorldDirection(
+        this.camera
+            .getWorldDirection(
+                direction
+            );
+
+        this.raycaster.set(
+            this.camera.position,
             direction
         );
 
-    this.raycaster.set(
-        this.camera.position,
-        direction
-    );
+        const intersects =
+            this.raycaster.intersectObjects(
+                this.piggyManager.getPiggies(),
+                true
+            );
 
-    const intersects =
-        this.raycaster.intersectObjects(
-            this.piggyManager.getPiggies(),
-            true
-        );
+        for (const hit of intersects) {
 
-    for (const hit of intersects) {
+            if (
+                hit.distance >
+                this.captureDistance
+            ) {
+                continue;
+            }
+
+            let root =
+                hit.object;
+
+            while (
+                root &&
+                !root.userData?.isPiggy
+            ) {
+
+                root =
+                    root.parent;
+            }
+
+            if (
+                !root
+            ) {
+                continue;
+            }
+
+            if (
+                root.userData.captured
+            ) {
+                continue;
+            }
+
+            this.targetPiggy =
+                root;
+
+            return;
+        }
+    }
+
+    /* =====================================================
+       CROSSHAIR
+    ===================================================== */
+
+    updateCrosshair() {
 
         if (
-            hit.distance >
+            !this.crosshair
+        ) {
+            return;
+        }
+
+        if (
+            this.targetPiggy
+        ) {
+
+            this.crosshair
+                .style.borderColor =
+                "#00ff00";
+
+            this.crosshair
+                .style.boxShadow =
+                "0 0 20px #00ff00";
+
+        } else {
+
+            this.crosshair
+                .style.borderColor =
+                "#ffffff";
+
+            this.crosshair
+                .style.boxShadow =
+                "none";
+        }
+    }
+
+    /* =====================================================
+       CAPTURE
+    ===================================================== */
+
+    capture() {
+
+        if (!this.targetPiggy) {
+
+            console.log("NO TARGET");
+
+            return;
+        }
+
+        if (
+            this.targetPiggy.userData.captured
+        ) {
+
+            console.log(
+                "Already Captured"
+            );
+
+            return;
+        }
+
+        const distance =
+            this.camera.position.distanceTo(
+                this.targetPiggy.position
+            );
+
+        if (
+            distance >
             this.captureDistance
         ) {
-            continue;
+
+            console.log(
+                "TOO FAR:",
+                distance
+            );
+
+            return;
         }
 
-        let root =
-            hit.object;
+        const effectPosition =
+            this.targetPiggy.position.clone();
 
-        while (
-            root &&
-            !root.userData?.isPiggy
-        ) {
+        const points =
+            this.piggyManager.capturePiggy(
+                this.targetPiggy
+            );
 
-            root =
-                root.parent;
-        }
+        const piggyType =
+            this.targetPiggy.userData.type;
 
         if (
-            !root
+            points <= 0
         ) {
-            continue;
+
+            console.log(
+                "Invalid Capture"
+            );
+
+            return;
         }
 
-        if (
-            root.userData.captured
-        ) {
-            continue;
-        }
+        /* Rewards */
+
+        this.rewardPlayer(
+            points
+        );
+
+        this.saveManager.addCollection(
+            piggyType
+        );
+        this.achievementSystem?.checkCapture(
+            this.targetPiggy.userData.type
+        );
+
+
+
+        /* FX */
+
+        this.spawnCaptureEffect(
+            effectPosition
+        );
+
+        /* Clear Target */
 
         this.targetPiggy =
-            root;
+            null;
 
-        return;
-    }
-}
+        /* HUD */
 
-/* =====================================================
-   CROSSHAIR
-===================================================== */
+        this.refreshHUD();
 
-updateCrosshair() {
+        /* Save */
 
-    if (
-        !this.crosshair
-    ) {
-        return;
-    }
-
-    if (
-        this.targetPiggy
-    ) {
-
-        this.crosshair
-            .style.borderColor =
-            "#00ff00";
-
-        this.crosshair
-            .style.boxShadow =
-            "0 0 20px #00ff00";
-
-    } else {
-
-        this.crosshair
-            .style.borderColor =
-            "#ffffff";
-
-        this.crosshair
-            .style.boxShadow =
-            "none";
-    }
-}
-
-/* =====================================================
-   CAPTURE
-===================================================== */
-
-capture() {
-
-    if (!this.targetPiggy) {
-
-        console.log("NO TARGET");
-
-        return;
-    }
-
-    if (
-        this.targetPiggy.userData.captured
-    ) {
+        this.saveManager.save();
 
         console.log(
-            "Already Captured"
+            "Captured",
+            points
         );
-
-        return;
     }
+    /* =====================================================
+       REWARDS
+    ===================================================== */
 
-    const distance =
-        this.camera.position.distanceTo(
-            this.targetPiggy.position
-        );
+    rewardPlayer(points) {
 
-    if (
-        distance >
-        this.captureDistance
-    ) {
+        let coins = 0;
+        let xp = 0;
+
+        switch (type) {
+
+            case "common":
+                coins = 5;
+                xp = 10;
+                break;
+
+            case "golden":
+                coins = 50;
+                xp = 50;
+                break;
+
+            case "rainbow":
+                coins = 100;
+                xp = 100;
+                break;
+
+            case "ghost":
+                coins = 250;
+                xp = 250;
+                break;
+        }
+
+        this.saveManager
+            .addCoins(
+                coins
+            );
+
+        this.saveManager
+            .addXP(
+                xp
+            );
+
+        this.saveManager
+            .incrementCaptures();
 
         console.log(
-            "TOO FAR:",
-            distance
-        );
-
-        return;
-    }
-
-    const effectPosition =
-        this.targetPiggy.position.clone();
-
-    const points =
-        this.piggyManager.capturePiggy(
-            this.targetPiggy
-        );
-
-    const piggyType =
-        this.targetPiggy.userData.type;
-
-    if (
-        points <= 0
-    ) {
-
-        console.log(
-            "Invalid Capture"
-        );
-
-        return;
-    }
-
-    /* Rewards */
-
-    this.rewardPlayer(
-        points
-    );
-
-    this.saveManager.addCollection(
-        piggyType
-    );
-    this.achievementSystem?.checkCapture(
-        this.targetPiggy.userData.type
-    );
-
-
-
-    /* FX */
-
-    this.spawnCaptureEffect(
-        effectPosition
-    );
-
-    /* Clear Target */
-
-    this.targetPiggy =
-        null;
-
-    /* HUD */
-
-    this.refreshHUD();
-
-    /* Save */
-
-    this.saveManager.save();
-
-    console.log(
-        "Captured",
-        points
-    );
-}
-/* =====================================================
-   REWARDS
-===================================================== */
-
-rewardPlayer(points) {
-
-    switch (type) {
-        case "common":
-            coins = 5;
-            xp = 10;
-            break;
-
-        case "golden":
-            coins = 50;
-            xp = 50;
-            break;
-
-        case "rainbow":
-            coins = 100;
-            xp = 100;
-            break;
-
-        case "ghost":
-            coins = 250;
-            xp = 250;
-            break;
-    }
-
-    this.saveManager
-        .addCoins(
+            "XP +",
+            xp,
+            "Coins +",
             coins
         );
-
-    this.saveManager
-        .addXP(
-            xp
-        );
-
-    this.saveManager
-        .incrementCaptures();
-
-    console.log(
-        "XP +",
-        xp,
-        "Coins +",
-        coins
-    );
-}
-
-/* =====================================================
-   HUD
-===================================================== */
-
-refreshHUD() {
-
-    const player =
-        this.saveManager
-        .getPlayer();
-
-    const xpRequired =
-        this.saveManager
-        .getXPRequired(
-            player.level
-        );
-
-
-    if (
-        this.xpText
-    ) {
-
-        this.xpText.textContent =
-
-            `${player.xp} / ${xpRequired} XP`;
     }
 
-    /* XP BAR */
+    /* =====================================================
+       HUD
+    ===================================================== */
 
-    if (
-        this.xpFill
-    ) {
+    refreshHUD() {
 
-        const percent =
+        const player =
+            this.saveManager
+            .getPlayer();
 
-            (
-                player.xp /
-                xpRequired
-            ) * 100;
+        const xpRequired =
+            this.saveManager
+            .getXPRequired(
+                player.level
+            );
 
-        this.xpFill.style.width =
 
-            `${Math.min(
+        if (
+            this.xpText
+        ) {
+
+            this.xpText.textContent =
+
+                `${player.xp} / ${xpRequired} XP`;
+        }
+
+        /* XP BAR */
+
+        if (
+            this.xpFill
+        ) {
+
+            const percent =
+
+                (
+                    player.xp /
+                    xpRequired
+                ) * 100;
+
+            this.xpFill.style.width =
+
+                `${Math.min(
             percent,
             100
          )}%`;
+        }
+
+        /* TOP BAR */
+
+        if (
+            this.coinValue
+        ) {
+
+            this.coinValue.innerText =
+                player.coins;
+        }
+
+        if (
+            this.gemValue
+        ) {
+
+            this.gemValue.innerText =
+                player.gems || 0;
+        }
+
+        if (
+            this.levelValue
+        ) {
+
+            this.levelValue.innerText =
+                player.level;
+        }
+
+        /* LEGACY HUD */
+
+        if (
+            this.coinLabel
+        ) {
+
+            this.coinLabel.innerText =
+                player.coins;
+        }
+
+        if (
+            this.xpLabel
+        ) {
+
+            this.xpLabel.innerText =
+                player.xp;
+        }
     }
 
-    /* TOP BAR */
+    /* =====================================================
+       FX
+    ===================================================== */
 
-    if (
-        this.coinValue
-    ) {
-
-        this.coinValue.innerText =
-            player.coins;
-    }
-
-    if (
-        this.gemValue
-    ) {
-
-        this.gemValue.innerText =
-            player.gems || 0;
-    }
-
-    if (
-        this.levelValue
-    ) {
-
-        this.levelValue.innerText =
-            player.level;
-    }
-
-    /* LEGACY HUD */
-
-    if (
-        this.coinLabel
-    ) {
-
-        this.coinLabel.innerText =
-            player.coins;
-    }
-
-    if (
-        this.xpLabel
-    ) {
-
-        this.xpLabel.innerText =
-            player.xp;
-    }
-}
-
-/* =====================================================
-   FX
-===================================================== */
-
-spawnCaptureEffect(
-    position
-) {
-
-    const geometry =
-        new THREE.SphereGeometry(
-            0.4,
-            8,
-            8
-        );
-
-    const material =
-        new THREE.MeshBasicMaterial({
-
-            color: 0xffff00
-        });
-
-    const flash =
-        new THREE.Mesh(
-
-            geometry,
-            material
-        );
-
-    flash.position.copy(
+    spawnCaptureEffect(
         position
-    );
+    ) {
 
-    this.scene.add(
-        flash
-    );
+        const geometry =
+            new THREE.SphereGeometry(
+                0.4,
+                8,
+                8
+            );
 
-    setTimeout(() => {
+        const material =
+            new THREE.MeshBasicMaterial({
 
-        this.scene.remove(
+                color: 0xffff00
+            });
+
+        const flash =
+            new THREE.Mesh(
+
+                geometry,
+                material
+            );
+
+        flash.position.copy(
+            position
+        );
+
+        this.scene.add(
             flash
         );
 
-    }, 300);
-}
+        setTimeout(() => {
 
-/* =====================================================
-   HELPERS
-===================================================== */
+            this.scene.remove(
+                flash
+            );
 
-getCurrentTarget() {
+        }, 300);
+    }
 
-    return this.targetPiggy;
-}
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    getCurrentTarget() {
+
+        return this.targetPiggy;
+    }
 }
