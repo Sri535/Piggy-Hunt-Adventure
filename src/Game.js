@@ -483,15 +483,24 @@ export class Game {
             exposure
         );
 
-        let timeText =
-            "☀ Morning";
+        let timeText = "🌙 Night";
 
-        if (dayPercent > 0.75) {
+        if (dayPercent > 0.90) {
 
             timeText =
-                "☀ Afternoon";
+                "☀ Noon";
 
-        } else if (dayPercent > 0.45) {
+        } else if (dayPercent > 0.70) {
+
+            timeText =
+                "☀ Morning";
+
+        } else if (dayPercent > 0.55) {
+
+            timeText =
+                "🌅 Sunrise";
+
+        } else if (dayPercent > 0.30) {
 
             timeText =
                 "🌇 Sunset";
@@ -501,7 +510,6 @@ export class Game {
             timeText =
                 "🌙 Night";
         }
-
         if (timeLabel) {
 
             timeLabel.textContent =
