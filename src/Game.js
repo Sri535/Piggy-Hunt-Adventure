@@ -39,6 +39,10 @@ import {
     PiggyDexUI
 }
 from "./ui/PiggyDexUI.js";
+import {
+    MissionSystem
+}
+from "./player/MissionSystem.js";
 
 export class Game {
 
@@ -121,6 +125,13 @@ export class Game {
             new AchievementSystem(
                 this.save
             ).init();
+
+        /*MissionSystem*/
+
+        this.missionSystem =
+            new MissionSystem(
+                this.save
+            );
         /* Capture System */
 
         this.captureSystem =
@@ -144,7 +155,7 @@ export class Game {
             );
 
         this.radarSystem.init();
-                /* PiggyDex UI */
+        /* PiggyDex UI */
 
         const dexContent =
             document.getElementById(
@@ -159,7 +170,26 @@ export class Game {
 
                 this.piggyDex.render();
         }
+
+        /*Mission Pannel UI*/
+        const mission =
+            this.missionSystem
+            .getMissions()[0];
+
+        document.getElementById(
+                "missionText"
+            ).textContent =
+            mission.name;
+
+        document.getElementById(
+                "missionProgress"
+            ).textContent =
+            "0 / " +
+            mission.target;
+
         this.bindEvents();
+
+
 
         console.log(
             "Game Initialized"
