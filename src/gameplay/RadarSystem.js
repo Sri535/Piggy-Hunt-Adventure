@@ -208,7 +208,52 @@ export class RadarSystem {
             this.nearestPiggy
             .userData?.type ||
             "Piggy";
+        if (
+   type === "ghost"
+) {
 
+   this.distanceLabel.style.color =
+      "#66ccff";
+
+}
+else {
+
+   this.distanceLabel.style.color =
+      "#00ff99";
+}
+
+
+if (
+   type === "ghost"
+) {
+
+   const radar =
+      document.getElementById(
+         "radarContainer"
+      );
+
+   if (radar) {
+
+      radar.style.boxShadow =
+
+         "0 0 20px #66ccff";
+   }
+
+}
+else {
+
+   const radar =
+      document.getElementById(
+         "radarContainer"
+      );
+
+   if (radar) {
+
+      radar.style.boxShadow =
+         "none";
+   }
+}
+        
         const icons = {
 
             common: "🐷",
