@@ -456,6 +456,10 @@ export class Game {
 
         const cycle =
             this.elapsedTime * 0.03;
+        const timeLabel =
+            document.getElementById(
+                "timeOfDay"
+            );
         const dayPercent =
             (Math.sin(cycle) + 1) / 2;
 
@@ -475,6 +479,32 @@ export class Game {
         this.renderer.setExposure(
             exposure
         );
+
+        let timeText =
+            "☀ Morning";
+
+        if (dayPercent > 0.75) {
+
+            timeText =
+                "☀ Afternoon";
+
+        } else if (dayPercent > 0.45) {
+
+            timeText =
+                "🌇 Sunset";
+
+        } else {
+
+            timeText =
+                "🌙 Night";
+        }
+
+        if (timeLabel) {
+
+            timeLabel.textContent =
+                timeText;
+        }
+
     }
 
     /* =====================================================
