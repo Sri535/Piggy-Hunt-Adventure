@@ -342,13 +342,27 @@ capture() {
 
 rewardPlayer(points) {
 
-    const coins =
-        Math.floor(
-            points / 2
-        );
+    switch (type) {
+        case "common":
+            coins = 5;
+            xp = 10;
+            break;
 
-    const xp =
-        points;
+        case "golden":
+            coins = 50;
+            xp = 50;
+            break;
+
+        case "rainbow":
+            coins = 100;
+            xp = 100;
+            break;
+
+        case "ghost":
+            coins = 250;
+            xp = 250;
+            break;
+    }
 
     this.saveManager
         .addCoins(
