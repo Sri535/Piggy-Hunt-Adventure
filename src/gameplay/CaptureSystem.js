@@ -322,6 +322,11 @@ export class CaptureSystem {
             document.getElementById(
                 "piggyDexContent"
             );
+        /* ==========================
+   MASTER HUNTER
+========================== */
+
+this.checkDexCompletion();
 
         if (
             dexContent &&
@@ -563,6 +568,100 @@ export class CaptureSystem {
         }, 300);
     }
 
+        /* =====================================================
+      DexCompletion
+    ===================================================== */
+
+    checkDexCompletion() {
+
+    const collection =
+        this.saveManager
+        .getCollection();
+
+    const complete =
+
+        (collection.common || 0) > 0 &&
+
+        (collection.golden || 0) > 0 &&
+
+        (collection.rainbow || 0) > 0 &&
+
+        (collection.ghost || 0) > 0;
+
+    if (!complete) {
+
+        return;
+    }
+
+    const achievements =
+
+        this.saveManager
+        .getAchievements();
+
+    if (
+        achievements.includes(
+            "masterHunter"
+        )
+    ) {
+
+        return;
+    }
+
+    this.saveManager
+        .unlockAchievement(
+            "masterHunter"
+        );
+
+    this.saveManager
+        .addCoins(
+            500
+        );
+
+    this.showMasterHunterPopup();
+
+    this.saveManager.save();
+}
+
+    showMasterHunterPopup() {
+
+    const popup =
+        document.createElement(
+            "div"
+        );
+
+    popup.className =
+        "achievementPopup";
+
+    popup.innerHTML = `
+
+        <div>
+            🏆 MASTER HUNTER
+        </div>
+
+        <div>
+            PiggyDex Complete
+        </div>
+
+        <div>
+            +500 Coins
+        </div>
+
+    `;
+
+    document.body.appendChild(
+        popup
+    );
+
+    setTimeout(
+        () => {
+
+            popup.remove();
+
+        },
+        4000
+    );
+}
+
     /* =====================================================
        HELPERS
     ===================================================== */
@@ -571,6 +670,8 @@ export class CaptureSystem {
 
         return this.targetPiggy;
     }
+
+    
 
     /* =====================================================
        DiscoveryPopup
