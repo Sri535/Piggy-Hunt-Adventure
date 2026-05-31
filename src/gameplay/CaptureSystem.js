@@ -303,9 +303,29 @@ export class CaptureSystem {
             piggyType
         );
 
-        this.saveManager.addCollection(
-            piggyType
-        );
+        const collection =
+            this.saveManager
+            .getCollection();
+
+        const firstDiscovery =
+
+            !collection[
+                piggyType
+            ];
+
+        this.saveManager
+            .addCollection(
+                piggyType
+            );
+
+        if (
+            firstDiscovery
+        ) {
+
+            this.showDiscoveryPopup(
+                piggyType
+            );
+        }
         this.achievementSystem?.checkCapture(
             this.targetPiggy.userData.type
         );
@@ -340,7 +360,7 @@ export class CaptureSystem {
        REWARDS
     ===================================================== */
 
-    rewardPlayer(type,points) {
+    rewardPlayer(type, points) {
 
         let coins = 0;
         let xp = 0;
@@ -534,4 +554,65 @@ export class CaptureSystem {
 
         return this.targetPiggy;
     }
+
+    /* =====================================================
+       DiscoveryPopup
+    ===================================================== */
+
+    showDiscoveryPopup(
+    type
+) {
+
+    const icons = {
+
+        common: "🐷",
+
+        golden: "👑",
+
+        rainbow: "🌈",
+
+        ghost: "👻"
+    };
+
+    const popup =
+        document.createElement(
+            "div"
+        );
+
+    popup.className =
+        "achievementPopup";
+
+    popup.innerHTML = `
+
+        <div>
+            🎉 NEW DISCOVERY
+        </div>
+
+        <div>
+            ${
+                icons[type]
+            }
+
+            ${type.toUpperCase()}
+        </div>
+
+        <div>
+            Added To PiggyDex
+        </div>
+
+    `;
+
+    document.body.appendChild(
+        popup
+    );
+
+    setTimeout(
+        () => {
+
+            popup.remove();
+
+        },
+        3500
+    );
+}
 }
