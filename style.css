@@ -10,17 +10,17 @@
     --accent: #00ff99;
 
     --bg-dark: #07111d;
-    --bg-light: rgba(255,255,255,0.08);
+    --bg-light: rgba(255, 255, 255, 0.08);
 
-    --border: rgba(255,255,255,0.12);
+    --border: rgba(255, 255, 255, 0.12);
 
     --text: #ffffff;
 
     --shadow:
-        0 10px 40px rgba(0,0,0,.45);
+        0 10px 40px rgba(0, 0, 0, .45);
 
     --glass:
-        rgba(255,255,255,.08);
+        rgba(255, 255, 255, .08);
 }
 
 * {
@@ -86,11 +86,9 @@ body {
     z-index: 1000;
 
     background:
-    linear-gradient(
-        135deg,
-        rgba(0,0,0,.75),
-        rgba(0,35,75,.85)
-    );
+        linear-gradient(135deg,
+            rgba(0, 0, 0, .75),
+            rgba(0, 35, 75, .85));
 
     backdrop-filter: blur(12px);
 }
@@ -123,7 +121,7 @@ body {
 .centerPanel h1 {
 
     font-size:
-        clamp(2rem,6vw,5rem);
+        clamp(2rem, 6vw, 5rem);
 
     margin-top: 15px;
 
@@ -146,7 +144,7 @@ body {
 .loadingPanel {
 
     width:
-        min(450px,90vw);
+        min(450px, 90vw);
 
     padding: 30px;
 
@@ -196,11 +194,9 @@ body {
     font-weight: 700;
 
     background:
-    linear-gradient(
-        135deg,
-        var(--primary),
-        var(--secondary)
-    );
+        linear-gradient(135deg,
+            var(--primary),
+            var(--secondary));
 
     transition:
         transform .25s,
@@ -264,7 +260,7 @@ body {
     border-radius: 50px;
 
     background:
-        rgba(255,255,255,.1);
+        rgba(255, 255, 255, .1);
 
     margin: 20px 0;
 }
@@ -276,12 +272,10 @@ body {
     height: 100%;
 
     background:
-    linear-gradient(
-        90deg,
-        #00d4ff,
-        #00ff99,
-        #ffffff
-    );
+        linear-gradient(90deg,
+            #00d4ff,
+            #00ff99,
+            #ffffff);
 
     transition:
         width .25s;
@@ -321,13 +315,13 @@ body {
 
 #timeOfDay {
 
-   margin-top: 8px;
+    margin-top: 8px;
 
-   font-size: 14px;
+    font-size: 14px;
 
-   font-weight: bold;
+    font-weight: bold;
 
-   color: #ffd700;
+    color: #ffd700;
 }
 
 /* =====================================================
@@ -360,7 +354,7 @@ body {
     border-radius: 14px;
 
     background:
-        rgba(0,0,0,.35);
+        rgba(0, 0, 0, .35);
 
     backdrop-filter: blur(12px);
 
@@ -371,26 +365,26 @@ body {
    CROSSHAIR
 ===================================================== */
 
-#crosshair{
+#crosshair {
 
-    position:fixed;
+    position: fixed;
 
-    left:50%;
-    top:50%;
+    left: 50%;
+    top: 50%;
 
-    width:24px;
-    height:24px;
+    width: 24px;
+    height: 24px;
 
     transform:
-    translate(-50%,-50%);
+        translate(-50%, -50%);
 
-    border:2px solid white;
+    border: 2px solid white;
 
-    border-radius:50%;
+    border-radius: 50%;
 
-    pointer-events:none;
+    pointer-events: none;
 
-    z-index:999;
+    z-index: 999;
 }
 
 #playerStats {
@@ -407,7 +401,7 @@ body {
     border-radius: 16px;
 
     background:
-        rgba(0,0,0,.45);
+        rgba(0, 0, 0, .45);
 
     backdrop-filter:
         blur(12px);
@@ -416,53 +410,7 @@ body {
 
     z-index: 9999;
 }
-/* =====================================================
-   RADAR commented once fixed will re-moved
-===================================================== 
-#radar {
 
-    position: absolute;
-
-    left: 25px;
-    bottom: 25px;
-}
-
-#radarRing {
-
-    width: 140px;
-    height: 140px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(0,0,0,.35);
-
-    border:
-        2px solid var(--primary);
-
-    position: relative;
-
-    backdrop-filter: blur(12px);
-}
-
-#radarArrow {
-
-    position: absolute;
-
-    left: 50%;
-    top: 20px;
-
-    width: 6px;
-    height: 45px;
-
-    background:
-        var(--primary);
-
-    transform-origin:
-        center bottom;
-
-    border-radius: 50px;
-}*/
 
 
 /* =====================================================
@@ -480,7 +428,7 @@ body {
         translateX(-50%);
 
     width:
-        min(450px,70vw);
+        min(450px, 70vw);
 
     height: 18px;
 
@@ -489,7 +437,7 @@ body {
     border-radius: 50px;
 
     background:
-        rgba(255,255,255,.12);
+        rgba(255, 255, 255, .12);
 }
 
 #xpFill {
@@ -502,12 +450,11 @@ body {
         width .4s ease;
 
     background:
-    linear-gradient(
-        90deg,
-        var(--accent),
-        var(--primary)
-    );
+        linear-gradient(90deg,
+            var(--accent),
+            var(--primary));
 }
+
 #xpText {
 
     position: absolute;
@@ -559,14 +506,12 @@ body {
     pointer-events: auto;
 
     background:
-    linear-gradient(
-        135deg,
-        #ff9800,
-        #ff5722
-    );
+        linear-gradient(135deg,
+            #ff9800,
+            #ff5722);
 
     box-shadow:
-        0 0 20px rgba(255,87,34,.5);
+        0 0 20px rgba(255, 87, 34, .5);
 }
 
 /* =====================================================
@@ -598,11 +543,9 @@ body {
     color: white;
 
     background:
-    linear-gradient(
-        135deg,
-        var(--primary),
-        var(--secondary)
-    );
+        linear-gradient(135deg,
+            var(--primary),
+            var(--secondary));
 }
 
 /* =====================================================
@@ -625,7 +568,7 @@ body {
     border-radius: 12px;
 
     background:
-        rgba(0,255,153,.25);
+        rgba(0, 255, 153, .25);
 
     backdrop-filter: blur(10px);
 
@@ -664,7 +607,7 @@ body {
     z-index: 2000;
 
     background:
-        rgba(0,0,0,.75);
+        rgba(0, 0, 0, .75);
 }
 
 /* =====================================================
@@ -786,6 +729,7 @@ body {
         width: 95vw;
     }
 }
+
 /* =====================================
    RADAR SYSTEM V2
 ===================================== */
@@ -807,24 +751,22 @@ body {
     border-radius: 16px;
 
     background:
-        rgba(255,255,255,.08);
+        rgba(255, 255, 255, .08);
 
     backdrop-filter:
         blur(10px);
 
     border:
-        1px solid rgba(
+        1px solid rgba(255,
             255,
             255,
-            255,
-            .10
-        );
+            .10);
 
     z-index: 9999;
 }
 
 #radarArrow {
-  display: inline-block;
+    display: inline-block;
 
     font-size: 28px;
 
@@ -834,7 +776,7 @@ body {
 
     transition:
         transform .15s linear;
-   
+
 }
 
 #piggyType {
@@ -854,6 +796,7 @@ body {
 
     font-size: 14px;
 }
+
 #radarArrowContainer {
 
     display: flex;
@@ -883,7 +826,7 @@ body {
         translateX(-50%);
 
     background:
-        rgba(0,0,0,.85);
+        rgba(0, 0, 0, .85);
 
     border:
         2px solid gold;
@@ -901,8 +844,7 @@ body {
     z-index: 99999;
 
     animation:
-        achievementPop
-        .4s ease;
+        achievementPop .4s ease;
 }
 
 @keyframes achievementPop {
@@ -912,8 +854,7 @@ body {
         opacity: 0;
 
         transform:
-            translateX(-50%)
-            scale(.8);
+            translateX(-50%) scale(.8);
     }
 
     to {
@@ -921,9 +862,72 @@ body {
         opacity: 1;
 
         transform:
-            translateX(-50%)
-            scale(1);
+            translateX(-50%) scale(1);
     }
 }
 
+/* =====================================
+   MOBILE HUD FIX
+===================================== */
 
+@media (max-width: 768px) {
+
+    /* PLAYER STATS */
+    #playerStats {
+
+        top: 20px;
+
+        right: 10px;
+
+        width: 180px;
+
+        min-width: 180px;
+
+        padding: 12px;
+
+        font-size: 14px;
+    }
+
+    /* RADAR */
+    #radarContainer {
+
+        right: 15px;
+
+        top: 220px;
+
+        left: auto;
+
+        bottom: auto;
+
+        width: 110px;
+    }
+
+    #piggyType {
+
+        font-size: 14px;
+    }
+
+    #piggyDistance {
+
+        font-size: 12px;
+    }
+
+    /* XP BAR */
+    #xpContainer {
+
+        width: 60vw;
+
+        bottom: 95px;
+    }
+
+    /* CAPTURE BUTTON */
+    #captureBtn {
+
+        right: 15px;
+
+        bottom: 90px;
+
+        padding: 16px 24px;
+    }
+
+}
