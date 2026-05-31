@@ -79,14 +79,20 @@ export class Game {
 
         this.createGround();
 
-        /* Forest World */
-
-        this.world =
-            new ForestWorld(
+        /*  World Manager */
+        this.worldManager =
+            new WorldManager(
                 this.scene
             );
 
-        this.world.init();
+        this.worldManager
+            .loadWorld(
+                "forest"
+            );
+
+        this.world =
+            this.worldManager
+            .currentWorld;
 
         /* Piggies */
 
