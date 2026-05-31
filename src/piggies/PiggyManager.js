@@ -475,9 +475,11 @@ export class PiggyManager {
                             );
                     }
                 });
+
+            }
                 /* ==========================
-   GHOST GLOW PULSE
-========================== */
+                   GHOST GLOW PULSE
+                ========================== */
 
                 if (
                     piggy.userData.type ===
@@ -501,7 +503,7 @@ export class PiggyManager {
                     });
                 }
 
-            }
+            
         }
     }
 
