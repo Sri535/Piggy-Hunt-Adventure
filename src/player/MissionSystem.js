@@ -4,6 +4,12 @@ export class MissionSystem {
 
         this.saveManager =
             saveManager;
+        this.progress = {
+
+            capture5: 0,
+
+            ghost1: 0
+        };
 
         this.missions = [
 
@@ -33,8 +39,64 @@ export class MissionSystem {
         ];
     }
 
+    /*==================================================
+    GET MISSIONS
+    ===================================================*/
+
     getMissions() {
 
         return this.missions;
     }
+
+    /*==================================================
+recordCapture
+===================================================*/
+
+    recordCapture(
+        piggyType
+    ) {
+
+        this.progress.capture5++;
+
+        if (
+            piggyType ===
+            "ghost"
+        ) {
+
+            this.progress.ghost1++;
+        }
+
+        this.updateUI();
+    }
+
+    /*==================================================
+updateUI
+===================================================*/
+    updateUI() {
+
+        const mission =
+            this.missions[0];
+
+        const progress =
+
+            this.progress
+            .capture5;
+
+        const progressLabel =
+
+            document.getElementById(
+                "missionProgress"
+            );
+
+        if (
+            progressLabel
+        ) {
+
+            progressLabel.textContent =
+
+                `${progress} / ${mission.target}`;
+        }
+    }
+
+
 }
