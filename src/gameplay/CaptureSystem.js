@@ -318,6 +318,23 @@ export class CaptureSystem {
                 piggyType
             );
 
+        const dexContent =
+            document.getElementById(
+                "piggyDexContent"
+            );
+
+        if (
+            dexContent &&
+            window.game?.piggyDex
+        ) {
+
+            dexContent.innerHTML =
+
+                window.game
+                .piggyDex
+                .render();
+        }
+
         if (
             firstDiscovery
         ) {
@@ -560,29 +577,29 @@ export class CaptureSystem {
     ===================================================== */
 
     showDiscoveryPopup(
-    type
-) {
+        type
+    ) {
 
-    const icons = {
+        const icons = {
 
-        common: "🐷",
+            common: "🐷",
 
-        golden: "👑",
+            golden: "👑",
 
-        rainbow: "🌈",
+            rainbow: "🌈",
 
-        ghost: "👻"
-    };
+            ghost: "👻"
+        };
 
-    const popup =
-        document.createElement(
-            "div"
-        );
+        const popup =
+            document.createElement(
+                "div"
+            );
 
-    popup.className =
-        "achievementPopup";
+        popup.className =
+            "achievementPopup";
 
-    popup.innerHTML = `
+        popup.innerHTML = `
 
         <div>
             🎉 NEW DISCOVERY
@@ -602,17 +619,17 @@ export class CaptureSystem {
 
     `;
 
-    document.body.appendChild(
-        popup
-    );
+        document.body.appendChild(
+            popup
+        );
 
-    setTimeout(
-        () => {
+        setTimeout(
+            () => {
 
-            popup.remove();
+                popup.remove();
 
-        },
-        3500
-    );
-}
+            },
+            3500
+        );
+    }
 }
