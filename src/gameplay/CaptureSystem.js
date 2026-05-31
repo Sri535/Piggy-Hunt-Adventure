@@ -326,7 +326,7 @@ export class CaptureSystem {
    MASTER HUNTER
 ========================== */
 
-this.checkDexCompletion();
+        this.checkDexCompletion();
 
         if (
             dexContent &&
@@ -568,39 +568,42 @@ this.checkDexCompletion();
         }, 300);
     }
 
-        /* =====================================================
+    /* =====================================================
       DexCompletion
     ===================================================== */
 
     checkDexCompletion() {
 
-    const collection =
-        this.saveManager
-        .getCollection();
+        const collection =
+            this.saveManager
+            .getCollection();
 
-    const complete =
+        const complete =
 
-        (collection.common || 0) > 0 &&
+            (collection.common || 0) > 0 &&
 
-        (collection.golden || 0) > 0 &&
+            (collection.golden || 0) > 0 &&
 
-        (collection.rainbow || 0) > 0 &&
+            (collection.rainbow || 0) > 0 &&
 
-        (collection.ghost || 0) > 0;
+            (collection.ghost || 0) > 0;
 
-    if (!complete) {
+        if (!complete) {
 
-        return;
-    }
+            return;
+        }
 
-    const achievements =
+        const achievements =
 
-        this.saveManager
-        .getAchievements();
+            this.saveManager
+            .getAchievements();
 
-    if (
-        achievements.includes(
-            "masterHunter"
+        if (
+            this.saveManager
+            .getAchievements()
+            .includes(
+                "masterHunter"
+            )
         )
     ) {
 
@@ -622,7 +625,7 @@ this.checkDexCompletion();
     this.saveManager.save();
 }
 
-    showMasterHunterPopup() {
+showMasterHunterPopup() {
 
     const popup =
         document.createElement(
@@ -662,45 +665,45 @@ this.checkDexCompletion();
     );
 }
 
-    /* =====================================================
-       HELPERS
-    ===================================================== */
+/* =====================================================
+   HELPERS
+===================================================== */
 
-    getCurrentTarget() {
+getCurrentTarget() {
 
-        return this.targetPiggy;
-    }
+    return this.targetPiggy;
+}
 
-    
 
-    /* =====================================================
-       DiscoveryPopup
-    ===================================================== */
 
-    showDiscoveryPopup(
-        type
-    ) {
+/* =====================================================
+   DiscoveryPopup
+===================================================== */
 
-        const icons = {
+showDiscoveryPopup(
+    type
+) {
 
-            common: "🐷",
+    const icons = {
 
-            golden: "👑",
+        common: "🐷",
 
-            rainbow: "🌈",
+        golden: "👑",
 
-            ghost: "👻"
-        };
+        rainbow: "🌈",
 
-        const popup =
-            document.createElement(
-                "div"
-            );
+        ghost: "👻"
+    };
 
-        popup.className =
-            "achievementPopup";
+    const popup =
+        document.createElement(
+            "div"
+        );
 
-        popup.innerHTML = `
+    popup.className =
+        "achievementPopup";
+
+    popup.innerHTML = `
 
         <div>
             🎉 NEW DISCOVERY
@@ -720,17 +723,17 @@ this.checkDexCompletion();
 
     `;
 
-        document.body.appendChild(
-            popup
-        );
+    document.body.appendChild(
+        popup
+    );
 
-        setTimeout(
-            () => {
+    setTimeout(
+        () => {
 
-                popup.remove();
+            popup.remove();
 
-            },
-            3500
-        );
-    }
+        },
+        3500
+    );
+}
 }
