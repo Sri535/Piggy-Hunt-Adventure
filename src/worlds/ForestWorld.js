@@ -1,7 +1,7 @@
 
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
-export class ForestWorld {
+export class ForestWorld extends BaseWorld {
 
     constructor(scene) {
 
