@@ -144,13 +144,7 @@ export class Game {
             );
 
         this.radarSystem.init();
-        this.bindEvents();
-
-        console.log(
-            "Game Initialized"
-        );
-
-        /* PiggyDex UI */
+                /* PiggyDex UI */
 
         const dexContent =
             document.getElementById(
@@ -165,6 +159,13 @@ export class Game {
 
                 this.piggyDex.render();
         }
+        this.bindEvents();
+
+        console.log(
+            "Game Initialized"
+        );
+
+
 
         return this;
     }
