@@ -1,44 +1,45 @@
-import { ForestWorld } from "./ForestWorld.js";
-import { IslandWorld } from "./IslandWorld.js";
+import { ForestWorld }
+from "./ForestWorld.js";
 
 export class WorldManager {
 
-    constructor(scene) {
+   constructor(scene) {
 
-        this.scene = scene;
+      this.scene =
+         scene;
 
-        this.currentWorld = null;
-    }
+      this.currentWorld =
+         null;
+   }
 
-    loadWorld(name) {
+   loadWorld(name) {
 
-        if(this.currentWorld){
+      if (
+         this.currentWorld
+      ) {
 
-            this.currentWorld.destroy();
-        }
+         this.currentWorld.dispose();
+      }
 
-        switch(name){
+      switch(name) {
 
-            case "forest":
-                this.currentWorld =
-                    new ForestWorld(
-                        this.scene
-                    );
-                break;
+         case "forest":
 
-            case "island":
-                this.currentWorld =
-                    new IslandWorld(
-                        this.scene
-                    );
-                break;
-        }
+            this.currentWorld =
+               new ForestWorld(
+                  this.scene
+               );
 
-        this.currentWorld.init();
-    }
+            break;
+      }
 
-    update(time){
+      this.currentWorld.init();
+   }
 
-        this.currentWorld?.update(time);
-    }
+   update(delta) {
+
+      this.currentWorld?.update(
+         delta
+      );
+   }
 }
