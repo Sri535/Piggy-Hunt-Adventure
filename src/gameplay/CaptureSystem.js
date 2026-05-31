@@ -605,7 +605,7 @@ export class CaptureSystem {
                 "masterHunter"
             )
         )
-    ) {
+    {
 
         return;
     }
