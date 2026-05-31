@@ -444,6 +444,8 @@ export class Game {
             );
         const dayPercent =
             (Math.sin(cycle) + 1) / 2;
+        this.piggyManager.isNight =
+            dayPercent < 0.30;
         const skyColor =
             new THREE.Color();
 
