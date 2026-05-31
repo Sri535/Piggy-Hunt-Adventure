@@ -113,12 +113,7 @@ export class RadarSystem {
  
 
         this.updateUI();
-        console.log(
-            "Radar Created",
-            this.radarArrow,
-            this.typeLabel,
-            this.distanceLabel
-        );
+
     }
 
     /* ==========================
