@@ -19,6 +19,7 @@ export class PiggyManager {
 
         this.piggies = [];
         this.maxPiggies = 28;
+        this.isNight = false;
         this.group =
             new THREE.Group();
 
@@ -522,20 +523,25 @@ export class PiggyManager {
 
     spawnRandomPiggy() {
 
-        let type = "common";
+        let ghostChance =
 
-        const roll =
-            Math.random();
+            this.isNight
 
-        if (roll < 0.70) {
+            ?
+            0.12
+
+            :
+            0.02;
+
+        if (roll < 0.65) {
 
             type = "common";
 
-        } else if (roll < 0.90) {
+        } else if (roll < 0.85) {
 
             type = "golden";
 
-        } else if (roll < 0.98) {
+        } else if (roll < (1 - ghostChance)) {
 
             type = "rainbow";
 
@@ -543,7 +549,6 @@ export class PiggyManager {
 
             type = "ghost";
         }
-
         const piggy =
             this.createPiggy(type);
 
