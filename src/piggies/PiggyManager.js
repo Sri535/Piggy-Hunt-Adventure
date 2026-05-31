@@ -475,6 +475,32 @@ export class PiggyManager {
                             );
                     }
                 });
+                /* ==========================
+   GHOST GLOW PULSE
+========================== */
+
+if (
+   piggy.userData.type ===
+   "ghost"
+) {
+
+   piggy.traverse(obj => {
+
+      if (
+         obj.material
+      ) {
+
+         obj.material.emissiveIntensity =
+
+            1.5 +
+
+            Math.sin(
+               time * 6
+            ) * 0.8;
+      }
+   });
+}
+                
             }
         }
     }
