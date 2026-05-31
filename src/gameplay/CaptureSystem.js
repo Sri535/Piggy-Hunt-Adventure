@@ -3,14 +3,13 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.m
 
 export class CaptureSystem {
 
- constructor(
-   camera,
-   scene,
-   piggyManager,
-   saveManager,
-   achievementSystem
-) 
-    {
+    constructor(
+        camera,
+        scene,
+        piggyManager,
+        saveManager,
+        achievementSystem
+    ) {
 
         this.camera = camera;
 
@@ -22,7 +21,7 @@ export class CaptureSystem {
         this.saveManager =
             saveManager;
         this.achievementSystem =
-   achievementSystem;
+            achievementSystem;
 
         this.raycaster =
             new THREE.Raycaster();
@@ -114,400 +113,407 @@ export class CaptureSystem {
                     "click",
                     () => {
 
-                        this.capture();
-                    }
-                );
-        }
+                        this.);
+                }
+        );
     }
+}
 
-    /* =====================================================
-       UPDATE
-    ===================================================== */
+/* =====================================================
+   UPDATE
+===================================================== */
 
-    update() {
+update() {
 
-        this.findTarget();
+    this.findTarget();
 
-        this.updateCrosshair();
-    }
+    this.updateCrosshair();
+}
 
-    /* =====================================================
-       RAYCAST
-    ===================================================== */
+/* =====================================================
+   RAYCAST
+===================================================== */
 
-    findTarget() {
+findTarget() {
 
-        this.targetPiggy = null;
+    this.targetPiggy = null;
 
-        const direction =
-            new THREE.Vector3();
+    const direction =
+        new THREE.Vector3();
 
-        this.camera
-            .getWorldDirection(
-                direction
-            );
-
-        this.raycaster.set(
-            this.camera.position,
+    this.camera
+        .getWorldDirection(
             direction
         );
 
-        const intersects =
-            this.raycaster.intersectObjects(
-                this.piggyManager.getPiggies(),
-                true
-            );
+    this.raycaster.set(
+        this.camera.position,
+        direction
+    );
 
-        for (const hit of intersects) {
+    const intersects =
+        this.raycaster.intersectObjects(
+            this.piggyManager.getPiggies(),
+            true
+        );
 
-            if (
-                hit.distance >
-                this.captureDistance
-            ) {
-                continue;
-            }
-
-            let root =
-                hit.object;
-
-            while (
-                root &&
-                !root.userData?.isPiggy
-            ) {
-
-                root =
-                    root.parent;
-            }
-
-            if (
-                !root
-            ) {
-                continue;
-            }
-
-            if (
-                root.userData.captured
-            ) {
-                continue;
-            }
-
-            this.targetPiggy =
-                root;
-
-            return;
-        }
-    }
-
-    /* =====================================================
-       CROSSHAIR
-    ===================================================== */
-
-    updateCrosshair() {
+    for (const hit of intersects) {
 
         if (
-            !this.crosshair
-        ) {
-            return;
-        }
-
-        if (
-            this.targetPiggy
-        ) {
-
-            this.crosshair
-                .style.borderColor =
-                "#00ff00";
-
-            this.crosshair
-                .style.boxShadow =
-                "0 0 20px #00ff00";
-
-        } else {
-
-            this.crosshair
-                .style.borderColor =
-                "#ffffff";
-
-            this.crosshair
-                .style.boxShadow =
-                "none";
-        }
-    }
-
-    /* =====================================================
-       CAPTURE
-    ===================================================== */
-
-    capture() {
-
-        if (!this.targetPiggy) {
-
-            console.log("NO TARGET");
-
-            return;
-        }
-
-        if (
-            this.targetPiggy.userData.captured
-        ) {
-
-            console.log(
-                "Already Captured"
-            );
-
-            return;
-        }
-
-        const distance =
-            this.camera.position.distanceTo(
-                this.targetPiggy.position
-            );
-
-        if (
-            distance >
+            hit.distance >
             this.captureDistance
         ) {
-
-            console.log(
-                "TOO FAR:",
-                distance
-            );
-
-            return;
+            continue;
         }
 
-        const effectPosition =
-            this.targetPiggy.position.clone();
+        let root =
+            hit.object;
 
-        const points =
-            this.piggyManager.capturePiggy(
-                this.targetPiggy
-            );
-
-        if (
-            points <= 0
+        while (
+            root &&
+            !root.userData?.isPiggy
         ) {
 
-            console.log(
-                "Invalid Capture"
-            );
-
-            return;
+            root =
+                root.parent;
         }
 
-        /* Rewards */
+        if (
+            !root
+        ) {
+            continue;
+        }
 
-        this.rewardPlayer(
-            points
-        );
-        this.achievementSystem?.checkCapture(
-   this.targetPiggy.userData.type
-);
-
-
-
-        /* FX */
-
-        this.spawnCaptureEffect(
-            effectPosition
-        );
-
-        /* Clear Target */
+        if (
+            root.userData.captured
+        ) {
+            continue;
+        }
 
         this.targetPiggy =
-            null;
+            root;
 
-        /* HUD */
-
-        this.refreshHUD();
-
-        /* Save */
-
-        this.saveManager.save();
-
-        console.log(
-            "Captured",
-            points
-        );
+        return;
     }
-    /* =====================================================
-       REWARDS
-    ===================================================== */
+}
 
-    rewardPlayer(points) {
+/* =====================================================
+   CROSSHAIR
+===================================================== */
 
-        const coins =
-            Math.floor(
-                points / 2
-            );
+updateCrosshair() {
 
-        const xp =
-            points;
+    if (
+        !this.crosshair
+    ) {
+        return;
+    }
 
-        this.saveManager
-            .addCoins(
-                coins
-            );
+    if (
+        this.targetPiggy
+    ) {
 
-        this.saveManager
-            .addXP(
-                xp
-            );
+        this.crosshair
+            .style.borderColor =
+            "#00ff00";
 
-        this.saveManager
-            .incrementCaptures();
+        this.crosshair
+            .style.boxShadow =
+            "0 0 20px #00ff00";
+
+    } else {
+
+        this.crosshair
+            .style.borderColor =
+            "#ffffff";
+
+        this.crosshair
+            .style.boxShadow =
+            "none";
+    }
+}
+
+/* =====================================================
+   CAPTURE
+===================================================== */
+
+capture() {
+
+    if (!this.targetPiggy) {
+
+        console.log("NO TARGET");
+
+        return;
+    }
+
+    if (
+        this.targetPiggy.userData.captured
+    ) {
 
         console.log(
-            "XP +",
-            xp,
-            "Coins +",
+            "Already Captured"
+        );
+
+        return;
+    }
+
+    const distance =
+        this.camera.position.distanceTo(
+            this.targetPiggy.position
+        );
+
+    if (
+        distance >
+        this.captureDistance
+    ) {
+
+        console.log(
+            "TOO FAR:",
+            distance
+        );
+
+        return;
+    }
+
+    const effectPosition =
+        this.targetPiggy.position.clone();
+
+    const points =
+        this.piggyManager.capturePiggy(
+            this.targetPiggy
+        );
+
+    const piggyType =
+        this.targetPiggy.userData.type;
+
+    if (
+        points <= 0
+    ) {
+
+        console.log(
+            "Invalid Capture"
+        );
+
+        return;
+    }
+
+    /* Rewards */
+
+    this.rewardPlayer(
+        points
+    );
+
+    this.saveManager.addCollection(
+        piggyType
+    );
+    this.achievementSystem?.checkCapture(
+        this.targetPiggy.userData.type
+    );
+
+
+
+    /* FX */
+
+    this.spawnCaptureEffect(
+        effectPosition
+    );
+
+    /* Clear Target */
+
+    this.targetPiggy =
+        null;
+
+    /* HUD */
+
+    this.refreshHUD();
+
+    /* Save */
+
+    this.saveManager.save();
+
+    console.log(
+        "Captured",
+        points
+    );
+}
+/* =====================================================
+   REWARDS
+===================================================== */
+
+rewardPlayer(points) {
+
+    const coins =
+        Math.floor(
+            points / 2
+        );
+
+    const xp =
+        points;
+
+    this.saveManager
+        .addCoins(
             coins
         );
+
+    this.saveManager
+        .addXP(
+            xp
+        );
+
+    this.saveManager
+        .incrementCaptures();
+
+    console.log(
+        "XP +",
+        xp,
+        "Coins +",
+        coins
+    );
+}
+
+/* =====================================================
+   HUD
+===================================================== */
+
+refreshHUD() {
+
+    const player =
+        this.saveManager
+        .getPlayer();
+
+    const xpRequired =
+        this.saveManager
+        .getXPRequired(
+            player.level
+        );
+
+
+    if (
+        this.xpText
+    ) {
+
+        this.xpText.textContent =
+
+            `${player.xp} / ${xpRequired} XP`;
     }
 
-    /* =====================================================
-       HUD
-    ===================================================== */
+    /* XP BAR */
 
-    refreshHUD() {
+    if (
+        this.xpFill
+    ) {
 
-        const player =
-            this.saveManager
-            .getPlayer();
+        const percent =
 
-        const xpRequired =
-            this.saveManager
-            .getXPRequired(
-                player.level
-            );
+            (
+                player.xp /
+                xpRequired
+            ) * 100;
 
+        this.xpFill.style.width =
 
-        if (
-            this.xpText
-        ) {
-
-            this.xpText.textContent =
-
-                `${player.xp} / ${xpRequired} XP`;
-        }
-
-        /* XP BAR */
-
-        if (
-            this.xpFill
-        ) {
-
-            const percent =
-
-                (
-                    player.xp /
-                    xpRequired
-                ) * 100;
-
-            this.xpFill.style.width =
-
-                `${Math.min(
+            `${Math.min(
             percent,
             100
          )}%`;
-        }
-
-        /* TOP BAR */
-
-        if (
-            this.coinValue
-        ) {
-
-            this.coinValue.innerText =
-                player.coins;
-        }
-
-        if (
-            this.gemValue
-        ) {
-
-            this.gemValue.innerText =
-                player.gems || 0;
-        }
-
-        if (
-            this.levelValue
-        ) {
-
-            this.levelValue.innerText =
-                player.level;
-        }
-
-        /* LEGACY HUD */
-
-        if (
-            this.coinLabel
-        ) {
-
-            this.coinLabel.innerText =
-                player.coins;
-        }
-
-        if (
-            this.xpLabel
-        ) {
-
-            this.xpLabel.innerText =
-                player.xp;
-        }
     }
 
-    /* =====================================================
-       FX
-    ===================================================== */
+    /* TOP BAR */
 
-    spawnCaptureEffect(
-        position
+    if (
+        this.coinValue
     ) {
 
-        const geometry =
-            new THREE.SphereGeometry(
-                0.4,
-                8,
-                8
-            );
+        this.coinValue.innerText =
+            player.coins;
+    }
 
-        const material =
-            new THREE.MeshBasicMaterial({
+    if (
+        this.gemValue
+    ) {
 
-                color: 0xffff00
-            });
+        this.gemValue.innerText =
+            player.gems || 0;
+    }
 
-        const flash =
-            new THREE.Mesh(
+    if (
+        this.levelValue
+    ) {
 
-                geometry,
-                material
-            );
+        this.levelValue.innerText =
+            player.level;
+    }
 
-        flash.position.copy(
-            position
+    /* LEGACY HUD */
+
+    if (
+        this.coinLabel
+    ) {
+
+        this.coinLabel.innerText =
+            player.coins;
+    }
+
+    if (
+        this.xpLabel
+    ) {
+
+        this.xpLabel.innerText =
+            player.xp;
+    }
+}
+
+/* =====================================================
+   FX
+===================================================== */
+
+spawnCaptureEffect(
+    position
+) {
+
+    const geometry =
+        new THREE.SphereGeometry(
+            0.4,
+            8,
+            8
         );
 
-        this.scene.add(
+    const material =
+        new THREE.MeshBasicMaterial({
+
+            color: 0xffff00
+        });
+
+    const flash =
+        new THREE.Mesh(
+
+            geometry,
+            material
+        );
+
+    flash.position.copy(
+        position
+    );
+
+    this.scene.add(
+        flash
+    );
+
+    setTimeout(() => {
+
+        this.scene.remove(
             flash
         );
 
-        setTimeout(() => {
+    }, 300);
+}
 
-            this.scene.remove(
-                flash
-            );
+/* =====================================================
+   HELPERS
+===================================================== */
 
-        }, 300);
-    }
+getCurrentTarget() {
 
-    /* =====================================================
-       HELPERS
-    ===================================================== */
-
-    getCurrentTarget() {
-
-        return this.targetPiggy;
-    }
+    return this.targetPiggy;
+}
 }
