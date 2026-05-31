@@ -39,7 +39,7 @@ export class SaveManager {
 
                 gems: 0,
 
-                total: 0
+               totalCaptures: 0
             },
 
             settings: {
@@ -71,6 +71,7 @@ export class SaveManager {
             collection: {},
 
             achievements: [],
+           
 
             stats: {
 
