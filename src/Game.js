@@ -188,9 +188,7 @@ export class Game {
             mission.target;
 
         this.bindEvents();
-
-
-
+        window.game = this;
         console.log(
             "Game Initialized"
         );
