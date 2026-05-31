@@ -340,7 +340,7 @@ export class CaptureSystem {
        REWARDS
     ===================================================== */
 
-    rewardPlayer(type) {
+    rewardPlayer(type,points) {
 
         let coins = 0;
         let xp = 0;
