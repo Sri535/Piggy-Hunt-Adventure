@@ -302,6 +302,11 @@ export class CaptureSystem {
         this.rewardPlayer(
             piggyType
         );
+        window.game
+            ?.missionSystem
+            ?.recordCapture(
+                piggyType
+            );
 
         const collection =
             this.saveManager
@@ -604,38 +609,37 @@ export class CaptureSystem {
             .includes(
                 "masterHunter"
             )
-        )
-    {
+        ) {
 
-        return;
+            return;
+        }
+
+        this.saveManager
+            .unlockAchievement(
+                "masterHunter"
+            );
+
+        this.saveManager
+            .addCoins(
+                500
+            );
+
+        this.showMasterHunterPopup();
+
+        this.saveManager.save();
     }
 
-    this.saveManager
-        .unlockAchievement(
-            "masterHunter"
-        );
+    showMasterHunterPopup() {
 
-    this.saveManager
-        .addCoins(
-            500
-        );
+        const popup =
+            document.createElement(
+                "div"
+            );
 
-    this.showMasterHunterPopup();
+        popup.className =
+            "achievementPopup";
 
-    this.saveManager.save();
-}
-
-showMasterHunterPopup() {
-
-    const popup =
-        document.createElement(
-            "div"
-        );
-
-    popup.className =
-        "achievementPopup";
-
-    popup.innerHTML = `
+        popup.innerHTML = `
 
         <div>
             🏆 MASTER HUNTER
@@ -651,59 +655,59 @@ showMasterHunterPopup() {
 
     `;
 
-    document.body.appendChild(
-        popup
-    );
-
-    setTimeout(
-        () => {
-
-            popup.remove();
-
-        },
-        4000
-    );
-}
-
-/* =====================================================
-   HELPERS
-===================================================== */
-
-getCurrentTarget() {
-
-    return this.targetPiggy;
-}
-
-
-
-/* =====================================================
-   DiscoveryPopup
-===================================================== */
-
-showDiscoveryPopup(
-    type
-) {
-
-    const icons = {
-
-        common: "🐷",
-
-        golden: "👑",
-
-        rainbow: "🌈",
-
-        ghost: "👻"
-    };
-
-    const popup =
-        document.createElement(
-            "div"
+        document.body.appendChild(
+            popup
         );
 
-    popup.className =
-        "achievementPopup";
+        setTimeout(
+            () => {
 
-    popup.innerHTML = `
+                popup.remove();
+
+            },
+            4000
+        );
+    }
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    getCurrentTarget() {
+
+        return this.targetPiggy;
+    }
+
+
+
+    /* =====================================================
+       DiscoveryPopup
+    ===================================================== */
+
+    showDiscoveryPopup(
+        type
+    ) {
+
+        const icons = {
+
+            common: "🐷",
+
+            golden: "👑",
+
+            rainbow: "🌈",
+
+            ghost: "👻"
+        };
+
+        const popup =
+            document.createElement(
+                "div"
+            );
+
+        popup.className =
+            "achievementPopup";
+
+        popup.innerHTML = `
 
         <div>
             🎉 NEW DISCOVERY
@@ -723,17 +727,17 @@ showDiscoveryPopup(
 
     `;
 
-    document.body.appendChild(
-        popup
-    );
+        document.body.appendChild(
+            popup
+        );
 
-    setTimeout(
-        () => {
+        setTimeout(
+            () => {
 
-            popup.remove();
+                popup.remove();
 
-        },
-        3500
-    );
-}
+            },
+            3500
+        );
+    }
 }
