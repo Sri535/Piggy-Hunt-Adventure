@@ -300,7 +300,7 @@ export class CaptureSystem {
         /* Rewards */
 
         this.rewardPlayer(
-            points
+            piggyType
         );
 
         this.saveManager.addCollection(
@@ -340,7 +340,7 @@ export class CaptureSystem {
        REWARDS
     ===================================================== */
 
-    rewardPlayer(points) {
+    rewardPlayer(type) {
 
         let coins = 0;
         let xp = 0;
