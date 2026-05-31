@@ -2,167 +2,189 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-	<title>Piggy Hunt Adventure</title>
-	<meta name="theme-color" content="#00d4ff" />
-	<meta name="mobile-web-app-capable" content="yes" />
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-	<meta name="apple-mobile-web-app-title" content="Piggy Hunt" />
-	<meta name="description" content="Explore magical worlds and hunt hidden piggies." />
-	<link rel="manifest" href="./manifest.json" />
-	<link rel="icon" href="./favicon.png" />
-	<link rel="apple-touch-icon" href="./assets/icons/icon-192.png" />
-	<link rel="stylesheet" href="./css/web.css">
-	<link rel="stylesheet" href="./css/mobile.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Piggy Hunt Adventure</title>
+    <meta name="theme-color" content="#00d4ff" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Piggy Hunt" />
+    <meta name="description" content="Explore magical worlds and hunt hidden piggies." />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" href="./favicon.png" />
+    <link rel="apple-touch-icon" href="./assets/icons/icon-192.png" />
+    <link rel="stylesheet" href="./css/web.css">
+    <link rel="stylesheet" href="./css/mobile.css">
 </head>
 
 <body>
-	<!-- =====================================================
+    <!-- =====================================================
      GAME CANVAS
 ===================================================== -->
-	<div id="gameContainer">
-		<canvas id="gameCanvas"></canvas>
-	</div>
-	<!-- =====================================================
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+    </div>
+    <!-- =====================================================
      SPLASH SCREEN
 ===================================================== -->
-	<div id="splashScreen" class="screen active">
-		<div class="centerPanel">
-			<div class="logoPig">🐷</div>
-			<h1>Piggy Hunt Adventure</h1>
-			<p>Explore • Hunt • Collect • Upgrade</p>
-		</div>
-	</div>
-	<!-- =====================================================
+    <div id="splashScreen" class="screen active">
+        <div class="centerPanel">
+            <div class="logoPig">🐷</div>
+            <h1>Piggy Hunt Adventure</h1>
+            <p>Explore • Hunt • Collect • Upgrade</p>
+        </div>
+    </div>
+    <!-- =====================================================
      LOADING SCREEN
 ===================================================== -->
-	<div id="loadingScreen" class="screen">
-		<div class="loadingPanel">
-			<h2>Loading Assets...</h2>
-			<div class="loadingBar">
-				<div id="loadingFill"></div>
-			</div>
-			<span id="loadingPercent"> 0% </span>
-			<div id="loadingStatus">Preparing World...</div>
-		</div>
-	</div>
-	<!-- =====================================================
+    <div id="loadingScreen" class="screen">
+        <div class="loadingPanel">
+            <h2>Loading Assets...</h2>
+            <div class="loadingBar">
+                <div id="loadingFill"></div>
+            </div>
+            <span id="loadingPercent"> 0% </span>
+            <div id="loadingStatus">Preparing World...</div>
+        </div>
+    </div>
+    <!-- =====================================================
+     piggyDexMenu SCREEN
+===================================================== -->
+    <div id="piggyDexMenu" class="screen">
+
+        <div class="menuPanel">
+
+            <h2>
+                📖 PiggyDex
+            </h2>
+
+            <div id="piggyDexContent">
+            </div>
+
+            <button id="piggyDexBackBtn" class="mainButton">
+                Back
+            </button>
+
+        </div>
+
+    </div>
+    <!-- =====================================================
      MAIN MENU
 ===================================================== -->
-	<div id="mainMenu" class="screen">
-		<div class="menuPanel">
-			<h1>Piggy Hunt Adventure</h1>
-			<button id="playBtn" class="mainButton">Play Adventure</button>
-			<button id="continueBtn" class="mainButton">Continue</button>
-			<button id="settingsBtn" class="mainButton">Settings</button>
-			<button id="fullscreenBtn" class="mainButton">Fullscreen</button>
-		</div>
-	</div>
-	<!-- =====================================================
+    <div id="mainMenu" class="screen">
+        <div class="menuPanel">
+            <h1>Piggy Hunt Adventure</h1>
+            <button id="playBtn" class="mainButton">Play Adventure</button>
+			<button id="piggyDexBtn" class="mainButton">📖 PiggyDex</button>
+            <button id="continueBtn" class="mainButton">Continue</button>
+            <button id="settingsBtn" class="mainButton">Settings</button>
+            <button id="fullscreenBtn" class="mainButton">Fullscreen</button>
+        </div>
+    </div>
+    <!-- =====================================================
      SETTINGS
 ===================================================== -->
-	<div id="settingsMenu" class="screen">
-		<div class="menuPanel">
-			<h2>Settings</h2>
-			<div class="settingRow">
-				<label> Graphics Quality </label>
-				<select id="qualitySelect">
-					<option value="low">Low</option>
-					<option value="medium">Medium</option>
-					<option value="high" selected>High</option>
-				</select>
-			</div>
-			<div class="settingRow">
-				<label> Bloom </label>
-				<input id="bloomToggle" type="checkbox" checked />
-			</div>
-			<div class="settingRow">
-				<label> Gyroscope </label>
-				<input id="gyroToggle" type="checkbox" checked />
-			</div>
-			<button id="settingsBackBtn" class="mainButton">Back</button>
-		</div>
-	</div>
-	<!-- =====================================================
+    <div id="settingsMenu" class="screen">
+        <div class="menuPanel">
+            <h2>Settings</h2>
+            <div class="settingRow">
+                <label> Graphics Quality </label>
+                <select id="qualitySelect">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high" selected>High</option>
+                </select>
+            </div>
+            <div class="settingRow">
+                <label> Bloom </label>
+                <input id="bloomToggle" type="checkbox" checked />
+            </div>
+            <div class="settingRow">
+                <label> Gyroscope </label>
+                <input id="gyroToggle" type="checkbox" checked />
+            </div>
+            <button id="settingsBackBtn" class="mainButton">Back</button>
+        </div>
+    </div>
+    <!-- =====================================================
      GAME HUD
 ===================================================== -->
-	<div id="hud">
-		<!-- TOP BAR -->
-		<div id="topBar">
-			<div class="hudBox"> 🪙 <span id="coinValue"> 0 </span>
-			</div>
-			<div class="hudBox"> 💎 <span id="gemValue"> 0 </span>
-			</div>
-			<div class="hudBox"> ⭐ <span id="levelValue"> 1 </span>
-			</div>
-		</div>
-		<!-- CROSSHAIR -->
-		<div id="crosshair"></div>
-		<div id="playerStats"> 🌲 Forest World <div id="timeOfDay"> ☀ Morning </div>
-			<br> 🏆 Piggy Hunter
-		</div>
-		<!-- RADAR -->
-		<div id="radar">
-			<div id="radarRing">
-				<div id="radarArrow"></div>
-			</div>
-		</div>
-		<!-- XP BAR -->
-		<div id="xpContainer">
-			<div id="xpFill"></div>
-			<div id="xpText"> XP </div>
-		</div>
-		<!-- CAPTURE -->
-		<button id="captureBtn">CAPTURE</button>
-	</div>
-	<!-- =====================================================
+    <div id="hud">
+        <!-- TOP BAR -->
+        <div id="topBar">
+            <div class="hudBox"> 🪙 <span id="coinValue"> 0 </span>
+            </div>
+            <div class="hudBox"> 💎 <span id="gemValue"> 0 </span>
+            </div>
+            <div class="hudBox"> ⭐ <span id="levelValue"> 1 </span>
+            </div>
+        </div>
+        <!-- CROSSHAIR -->
+        <div id="crosshair"></div>
+        <div id="playerStats"> 🌲 Forest World <div id="timeOfDay"> ☀ Morning </div>
+            <br> 🏆 Piggy Hunter
+        </div>
+        <!-- RADAR -->
+        <div id="radar">
+            <div id="radarRing">
+                <div id="radarArrow"></div>
+            </div>
+        </div>
+        <!-- XP BAR -->
+        <div id="xpContainer">
+            <div id="xpFill"></div>
+            <div id="xpText"> XP </div>
+        </div>
+        <!-- CAPTURE -->
+        <button id="captureBtn">CAPTURE</button>
+    </div>
+    <!-- =====================================================
      PAUSE MENU
 ===================================================== -->
-	<div id="pauseMenu" class="screen">
-		<div class="menuPanel">
-			<h2>Paused</h2>
-			<button id="resumeBtn" class="mainButton">Resume</button>
-			<button id="saveBtn" class="mainButton">Save Game</button>
-			<button id="quitBtn" class="mainButton">Quit</button>
-		</div>
-	</div>
-	<!-- =====================================================
+    <div id="pauseMenu" class="screen">
+        <div class="menuPanel">
+            <h2>Paused</h2>
+            <button id="resumeBtn" class="mainButton">Resume</button>
+            <button id="saveBtn" class="mainButton">Save Game</button>
+            <button id="quitBtn" class="mainButton">Quit</button>
+        </div>
+    </div>
+    <!-- =====================================================
      NOTIFICATION
 ===================================================== -->
-	<div id="notificationContainer"></div>
-	<!-- =====================================================
+    <div id="notificationContainer"></div>
+    <!-- =====================================================
      SAVE INDICATOR
 ===================================================== -->
-	<div id="saveIndicator">Progress Saved</div>
-	<!-- =====================================================
+    <div id="saveIndicator">Progress Saved</div>
+    <!-- =====================================================
      MOBILE GYRO REQUEST
 ===================================================== -->
-	<div id="gyroPrompt">
-		<div class="menuPanel">
-			<h2>Motion Permission</h2>
-			<p>Enable device motion to look around naturally.</p>
-			<button id="enableMotionBtn" class="mainButton">Enable Motion</button>
-		</div>
-	</div>
-	<!-- =====================================================
+    <div id="gyroPrompt">
+        <div class="menuPanel">
+            <h2>Motion Permission</h2>
+            <p>Enable device motion to look around naturally.</p>
+            <button id="enableMotionBtn" class="mainButton">Enable Motion</button>
+        </div>
+    </div>
+    <!-- =====================================================
      INSTALL APP BUTTON
 ===================================================== -->
-	<button id="installBtn">Install App</button>
-	<!-- =====================================================
+    <button id="installBtn">Install App</button>
+    <!-- =====================================================
      DEBUG PANEL
 ===================================================== -->
-	<div id="debugPanel"> FPS: <span id="fpsCounter"> 0 </span>
-	</div>
-	<!-- =====================================================
+    <div id="debugPanel"> FPS: <span id="fpsCounter"> 0 </span>
+    </div>
+    <!-- =====================================================
      MODULE ENTRY
 ===================================================== -->
-	<script type="module" src="./src/main.js"></script>
-	<script type="importmap"> { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" } }
+    <script type="module" src="./src/main.js"></script>
+    <script type="importmap"> { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js" } }
     </script>
-	<script>
-		console.log("INDEX LOADED");
-	</script>
+    <script>
+        console.log("INDEX LOADED");
+    </script>
 </body>
 
 </html>
