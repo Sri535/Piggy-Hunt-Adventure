@@ -479,28 +479,28 @@ export class PiggyManager {
    GHOST GLOW PULSE
 ========================== */
 
-if (
-   piggy.userData.type ===
-   "ghost"
-) {
+                if (
+                    piggy.userData.type ===
+                    "ghost"
+                ) {
 
-   piggy.traverse(obj => {
+                    piggy.traverse(obj => {
 
-      if (
-         obj.material
-      ) {
+                        if (
+                            obj.material
+                        ) {
 
-         obj.material.emissiveIntensity =
+                            obj.material.emissiveIntensity =
 
-            1.5 +
+                                1.5 +
 
-            Math.sin(
-               time * 6
-            ) * 0.8;
-      }
-   });
-}
-                
+                                Math.sin(
+                                    time * 6
+                                ) * 0.8;
+                        }
+                    });
+                }
+
             }
         }
     }
@@ -549,7 +549,13 @@ if (
 
     spawnRandomPiggy() {
 
-        let ghostChance =
+        const roll =
+            Math.random();
+
+        let type =
+            "common";
+
+        const ghostChance =
 
             this.isNight
 
@@ -567,7 +573,10 @@ if (
 
             type = "golden";
 
-        } else if (roll < (1 - ghostChance)) {
+        } else if (
+            roll <
+            (1 - ghostChance)
+        ) {
 
             type = "rainbow";
 
@@ -575,8 +584,11 @@ if (
 
             type = "ghost";
         }
+
         const piggy =
-            this.createPiggy(type);
+            this.createPiggy(
+                type
+            );
 
         piggy.position.set(
 
@@ -585,7 +597,6 @@ if (
             1,
 
             (Math.random() - 0.5) * 150
-
         );
 
         this.piggies.push(
@@ -601,7 +612,6 @@ if (
             type
         );
     }
-
 
 
     /* =====================================================
