@@ -124,3 +124,79 @@
         padding: 16px 24px;
     }
 }
+/* =====================================
+   MOBILE JOYSTICK
+===================================== */
+
+@media (max-width:768px){
+
+    #virtualJoystick{
+
+        position:fixed;
+
+        left:20px;
+
+        bottom:120px;
+
+        width:160px;
+
+        height:160px;
+
+        border-radius:50%;
+
+        background:
+        rgba(255,255,255,.12);
+
+        border:
+        2px solid rgba(
+            255,
+            255,
+            255,
+            .15
+        );
+
+        backdrop-filter:
+        blur(8px);
+
+        z-index:9999;
+
+        touch-action:none;
+    }
+
+    #virtualKnob{
+
+        position:absolute;
+
+        left:45px;
+
+        top:45px;
+
+        width:70px;
+
+        height:70px;
+
+        border-radius:50%;
+
+        background:
+        rgba(
+            255,
+            255,
+            255,
+            .35
+        );
+
+        border:
+        2px solid rgba(
+            255,
+            255,
+            255,
+            .25
+        );
+
+        backdrop-filter:
+        blur(6px);
+
+        transition:
+        transform .05s linear;
+    }
+}
