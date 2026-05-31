@@ -139,33 +139,15 @@ export class Game {
     /* =====================================================
        SCENE
     ===================================================== */
-
     createScene() {
 
         this.scene =
             new THREE.Scene();
 
-        const skyColor =
-            new THREE.Color();
-
-        skyColor.lerpColors(
-
-            new THREE.Color(
-                0x061539
-            ), // Night
-
+        this.scene.background =
             new THREE.Color(
                 0x87ceeb
-            ), // Day
-
-            dayPercent
-        );
-
-        this.scene.background =
-            skyColor;
-
-        this.scene.fog.color =
-            skyColor;
+            );
 
         this.scene.fog =
             new THREE.Fog(
@@ -462,6 +444,27 @@ export class Game {
             );
         const dayPercent =
             (Math.sin(cycle) + 1) / 2;
+        const skyColor =
+            new THREE.Color();
+
+        skyColor.lerpColors(
+
+            new THREE.Color(
+                0x061539
+            ),
+
+            new THREE.Color(
+                0x87ceeb
+            ),
+
+            dayPercent
+        );
+
+        this.scene.background =
+            skyColor;
+
+        this.scene.fog.color =
+            skyColor;
 
         const sunHeight =
             Math.sin(cycle);
