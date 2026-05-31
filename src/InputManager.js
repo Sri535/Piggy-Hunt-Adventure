@@ -345,25 +345,7 @@ export class InputManager {
         base.id =
             "virtualJoystick";
 
-        base.style.cssText =
-
-        `
-        position:fixed;
-        left:20px;
-        bottom:100px;
-
-        width:120px;
-        height:120px;
-
-        border-radius:50%;
-
-        background:
-        rgba(255,255,255,.12);
-
-        z-index:9999;
-
-        touch-action:none;
-        `;
+     
 
         const knob =
             document.createElement(
@@ -373,22 +355,7 @@ export class InputManager {
         knob.id =
             "virtualKnob";
 
-        knob.style.cssText =
-
-        `
-        position:absolute;
-
-        left:35px;
-        top:35px;
-
-        width:50px;
-        height:50px;
-
-        border-radius:50%;
-
-        background:
-        rgba(255,255,255,.35);
-        `;
+    
 
         base.appendChild(
             knob
@@ -409,12 +376,12 @@ export class InputManager {
         knob
     ) {
 
-        const radius = 40;
+        const radius = 55;
 
         const reset = () => {
 
-            knob.style.left = "35px";
-            knob.style.top = "35px";
+            knob.style.left = "45px";
+            knob.style.top = "45px";
 
             this.joystick.dx = 0;
             this.joystick.dy = 0;
@@ -447,12 +414,12 @@ export class InputManager {
                 let x =
                     touch.clientX -
                     rect.left -
-                    60;
+                    80;
 
                 let y =
                     touch.clientY -
                     rect.top -
-                    60;
+                    80;
 
                 const distance =
                     Math.hypot(x,y);
@@ -473,10 +440,10 @@ export class InputManager {
                 }
 
                 knob.style.left =
-                    `${35 + x}px`;
+                    `${45 + x}px`;
 
                 knob.style.top =
-                    `${35 + y}px`;
+                    `${45 + y}px`;
 
                 this.joystick.dx =
                     x / radius;
