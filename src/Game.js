@@ -1,585 +1,607 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
 import {
-   Renderer
+    Renderer
 } from "./Renderer.js";
 import {
-   CameraController
+    CameraController
 } from "./CameraController.js";
 import {
-   InputManager
+    InputManager
 } from "./InputManager.js";
 import {
-   SaveManager
+    SaveManager
 } from "./SaveManager.js";
 import {
-   AssetManager
+    AssetManager
 } from "./AssetManager.js";
 import {
-   ForestWorld
+    ForestWorld
 } from "./worlds/ForestWorld.js";
 import {
-   PiggyManager
+    PiggyManager
 } from "./piggies/PiggyManager.js";
 import {
-   CaptureSystem
+    CaptureSystem
 } from "./gameplay/CaptureSystem.js";
 import {
-   RadarSystem
+    RadarSystem
 }
 from "./gameplay/RadarSystem.js";
-import { AchievementSystem }
+import {
+    AchievementSystem
+}
 from "./player/AchievementSystem.js";
 
 export class Game {
 
-   constructor() {
+    constructor() {
 
-      this.scene = null;
-      this.camera = null;
+        this.scene = null;
+        this.camera = null;
 
-      this.renderer = null;
+        this.renderer = null;
 
-      this.cameraController = null;
+        this.cameraController = null;
 
-      this.input = null;
+        this.input = null;
 
-      this.save = null;
+        this.save = null;
 
-      this.assets = null;
+        this.assets = null;
 
-      this.clock =
-         new THREE.Clock();
+        this.clock =
+            new THREE.Clock();
 
-      this.running = false;
+        this.running = false;
 
-      this.delta = 0;
+        this.delta = 0;
 
-      this.elapsedTime = 0;
-   }
+        this.elapsedTime = 0;
+    }
 
-   /* =====================================================
-      INITIALIZE
-   ===================================================== */
+    /* =====================================================
+       INITIALIZE
+    ===================================================== */
 
-   async init() {
+    async init() {
 
-      this.createScene();
+        this.createScene();
 
-      this.createCamera();
+        this.createCamera();
 
-      this.createManagers();
-      // SAVE TEST
-      this.save.addCoins(100);
-      this.save.save();
+        this.createManagers();
+        // SAVE TEST
+        this.save.addCoins(100);
+        this.save.save();
 
-      this.createLights();
+        this.createLights();
 
-      this.createGround();
+        this.createGround();
 
-      /* Forest World */
+        /* Forest World */
 
-      this.world =
-         new ForestWorld(
-            this.scene
-         );
+        this.world =
+            new ForestWorld(
+                this.scene
+            );
 
-      this.world.init();
+        this.world.init();
 
-      /* Piggies */
+        /* Piggies */
 
-      this.piggyManager =
-         new PiggyManager(
-            this.scene,
-            this.world
-         );
+        this.piggyManager =
+            new PiggyManager(
+                this.scene,
+                this.world
+            );
 
-      await this.piggyManager.init();
-            /*AchievementSystem*/
-      this.achievementSystem =
-    new AchievementSystem(
-        this.save
-    ).init();
-      /* Capture System */
+        await this.piggyManager.init();
+        /*AchievementSystem*/
+        this.achievementSystem =
+            new AchievementSystem(
+                this.save
+            ).init();
+        /* Capture System */
 
-this.captureSystem =
-   new CaptureSystem(
-      this.camera,
-      this.scene,
-      this.piggyManager,
-      this.save,
-      this.achievementSystem
-   );
+        this.captureSystem =
+            new CaptureSystem(
+                this.camera,
+                this.scene,
+                this.piggyManager,
+                this.save,
+                this.achievementSystem
+            );
 
-      this.captureSystem.init();
+        this.captureSystem.init();
 
-      /* Radar System */
-      this.radarSystem =
-         new RadarSystem(
+        /* Radar System */
+        this.radarSystem =
+            new RadarSystem(
 
-            this.camera,
+                this.camera,
 
-            this.piggyManager
-         );
+                this.piggyManager
+            );
 
-      this.radarSystem.init();
-      this.bindEvents();
+        this.radarSystem.init();
+        this.bindEvents();
 
-      console.log(
-         "Game Initialized"
-      );
+        console.log(
+            "Game Initialized"
+        );
 
 
 
-      return this;
-   }
+        return this;
+    }
 
-   /* =====================================================
-      SCENE
-   ===================================================== */
+    /* =====================================================
+       SCENE
+    ===================================================== */
 
-   createScene() {
+    createScene() {
 
-      this.scene =
-         new THREE.Scene();
+        this.scene =
+            new THREE.Scene();
 
-      this.scene.background =
-         new THREE.Color(
-            0x87ceeb
-         );
+        const skyColor =
+            new THREE.Color();
 
-      this.scene.fog =
-         new THREE.Fog(
-            0x87ceeb,
-            50,
-            500
-         );
-   }
+        skyColor.lerpColors(
 
-   /* =====================================================
-      CAMERA
-   ===================================================== */
+            new THREE.Color(
+                0x061539
+            ), // Night
 
-   createCamera() {
+            new THREE.Color(
+                0x87ceeb
+            ), // Day
 
-      this.camera =
-         new THREE.PerspectiveCamera(
+            dayPercent
+        );
 
-            75,
+        this.scene.background =
+            skyColor;
 
-            window.innerWidth /
-            window.innerHeight,
+        this.scene.fog.color =
+            skyColor;
 
-            0.1,
+        this.scene.fog =
+            new THREE.Fog(
+                0x87ceeb,
+                50,
+                500
+            );
+    }
 
-            2000
-         );
+    /* =====================================================
+       CAMERA
+    ===================================================== */
 
-      this.camera.position.set(
-         0,
-         2,
-         10
-      );
-   }
+    createCamera() {
 
-   /* =====================================================
-      MANAGERS
-   ===================================================== */
+        this.camera =
+            new THREE.PerspectiveCamera(
 
-   createManagers() {
+                75,
 
-      const canvas =
-         document.getElementById(
-            "gameCanvas"
-         );
+                window.innerWidth /
+                window.innerHeight,
 
-      this.renderer =
-         new Renderer(canvas)
-         .init(
-            this.scene,
-            this.camera
-         );
+                0.1,
 
-      this.cameraController =
-         new CameraController(
-            this.camera,
-            canvas
-         ).init();
+                2000
+            );
 
-      this.input =
-         new InputManager()
-         .init();
-      /* =========================
+        this.camera.position.set(
+            0,
+            2,
+            10
+        );
+    }
+
+    /* =====================================================
+       MANAGERS
+    ===================================================== */
+
+    createManagers() {
+
+        const canvas =
+            document.getElementById(
+                "gameCanvas"
+            );
+
+        this.renderer =
+            new Renderer(canvas)
+            .init(
+                this.scene,
+                this.camera
+            );
+
+        this.cameraController =
+            new CameraController(
+                this.camera,
+                canvas
+            ).init();
+
+        this.input =
+            new InputManager()
+            .init();
+        /* =========================
    MOBILE JOYSTICK
 ========================= */
 
-this.input.on(
-   "joystickMove",
-   data => {
+        this.input.on(
+            "joystickMove",
+            data => {
 
-      this.cameraController.joystickX =
-         data.x;
+                this.cameraController.joystickX =
+                    data.x;
 
-      this.cameraController.joystickY =
-         data.y;
+                this.cameraController.joystickY =
+                    data.y;
 
-      console.log(
-         "JOYSTICK:",
-         data.x,
-         data.y
-      );
-   }
-);
-
-this.input.on(
-   "touchend",
-   () => {
-
-      this.cameraController.joystickX = 0;
-
-      this.cameraController.joystickY = 0;
-   }
-);
-
-      this.save =
-         new SaveManager()
-         .init();
-
-      this.save.bindUnload();
-
-      this.assets =
-         new AssetManager()
-         .init();
-   }
-
-   /* =====================================================
-      LIGHTING
-   ===================================================== */
-
-   createLights() {
-
-      const ambient =
-         new THREE.AmbientLight(
-            0xffffff,
-            1.2
-         );
-
-      this.scene.add(
-         ambient
-      );
-
-      this.sun =
-         new THREE.DirectionalLight(
-            0xffffff,
-            2
-         );
-
-      this.sun.position.set(
-         50,
-         100,
-         50
-      );
-
-      this.sun.castShadow =
-         true;
-
-      this.sun.shadow.mapSize.width =
-         2048;
-
-      this.sun.shadow.mapSize.height =
-         2048;
-
-      this.scene.add(
-         this.sun
-      );
-   }
-
-   /* =====================================================
-      GROUND
-   ===================================================== */
-
-   createGround() {
-
-      const geometry =
-         new THREE.PlaneGeometry(
-            1000,
-            1000,
-            50,
-            50
-         );
-
-      const material =
-         new THREE.MeshStandardMaterial({
-
-            color: 0x3fa34d,
-
-            roughness: 1
-         });
-
-      const ground =
-         new THREE.Mesh(
-
-            geometry,
-            material
-         );
-
-      ground.rotation.x = -Math.PI / 2;
-
-      ground.receiveShadow =
-         true;
-
-      this.scene.add(
-         ground
-      );
-   }
-
-   /* =====================================================
-      EVENTS
-   ===================================================== */
-
-   bindEvents() {
-
-      /* Pause */
-
-      this.input.on(
-         "pause",
-         () => {
-
-            const menu =
-               document.getElementById(
-                  "pauseMenu"
-               );
-
-            if (menu) {
-
-               menu.classList.toggle(
-                  "active"
-               );
+                console.log(
+                    "JOYSTICK:",
+                    data.x,
+                    data.y
+                );
             }
-         }
-      );
+        );
 
-      /* Capture */
+        this.input.on(
+            "touchend",
+            () => {
 
-      this.input.on(
-         "capture",
-         () => {
+                this.cameraController.joystickX = 0;
 
-            console.log(
-               "Capture Triggered"
+                this.cameraController.joystickY = 0;
+            }
+        );
+
+        this.save =
+            new SaveManager()
+            .init();
+
+        this.save.bindUnload();
+
+        this.assets =
+            new AssetManager()
+            .init();
+    }
+
+    /* =====================================================
+       LIGHTING
+    ===================================================== */
+
+    createLights() {
+
+        const ambient =
+            new THREE.AmbientLight(
+                0xffffff,
+                1.2
             );
-         }
-      );
-   }
 
-   /* =====================================================
-      START
-   ===================================================== */
+        this.scene.add(
+            ambient
+        );
 
-   start() {
+        this.sun =
+            new THREE.DirectionalLight(
+                0xffffff,
+                2
+            );
 
-      if (this.running)
-         return;
+        this.sun.position.set(
+            50,
+            100,
+            50
+        );
 
-      this.running = true;
+        this.sun.castShadow =
+            true;
 
-      this.clock.start();
+        this.sun.shadow.mapSize.width =
+            2048;
 
-      this.animate();
-   }
+        this.sun.shadow.mapSize.height =
+            2048;
 
-   /* =====================================================
-      STOP
-   ===================================================== */
+        this.scene.add(
+            this.sun
+        );
+    }
 
-   stop() {
+    /* =====================================================
+       GROUND
+    ===================================================== */
 
-      this.running = false;
-   }
+    createGround() {
 
-   /* =====================================================
-      UPDATE
-   ===================================================== */
+        const geometry =
+            new THREE.PlaneGeometry(
+                1000,
+                1000,
+                50,
+                50
+            );
 
-   update() {
+        const material =
+            new THREE.MeshStandardMaterial({
 
-      this.delta =
-         this.clock.getDelta();
+                color: 0x3fa34d,
 
-      this.elapsedTime +=
-         this.delta;
+                roughness: 1
+            });
 
-      this.input.update();
+        const ground =
+            new THREE.Mesh(
 
-      this.cameraController.update(
-         this.delta
-      );
-      this.world?.update(
-         this.elapsedTime
-      );
-      this.piggyManager?.update(
-         this.elapsedTime
-      );
-      this.captureSystem?.update();
-      this.radarSystem?.update();
-      this.updateEnvironment();
+                geometry,
+                material
+            );
 
-      this.updateSaveData();
+        ground.rotation.x = -Math.PI / 2;
 
-   }
+        ground.receiveShadow =
+            true;
 
-   /* =====================================================
-      ENVIRONMENT
-   ===================================================== */
+        this.scene.add(
+            ground
+        );
+    }
 
-   updateEnvironment() {
+    /* =====================================================
+       EVENTS
+    ===================================================== */
 
-      const cycle =
-         this.elapsedTime * 0.03;
+    bindEvents() {
 
-      const sunHeight =
-         Math.sin(cycle);
+        /* Pause */
 
-      this.sun.position.y =
-         100 + sunHeight * 60;
+        this.input.on(
+            "pause",
+            () => {
 
-      const exposure =
-         THREE.MathUtils.lerp(
-            0.5,
-            1.6,
-            (sunHeight + 1) / 2
-         );
+                const menu =
+                    document.getElementById(
+                        "pauseMenu"
+                    );
 
-      this.renderer.setExposure(
-         exposure
-      );
-   }
+                if (menu) {
 
-   /* =====================================================
-      SAVE DATA
-   ===================================================== */
+                    menu.classList.toggle(
+                        "active"
+                    );
+                }
+            }
+        );
 
-   updateSaveData() {
+        /* Capture */
 
-      this.save.addPlayTime(
-         this.delta
-      );
-   }
+        this.input.on(
+            "capture",
+            () => {
 
-   /* =====================================================
-      RENDER
-   ===================================================== */
+                console.log(
+                    "Capture Triggered"
+                );
+            }
+        );
+    }
 
-   render() {
+    /* =====================================================
+       START
+    ===================================================== */
 
-      this.renderer.render();
-   }
+    start() {
 
-   /* =====================================================
-      LOOP
-   ===================================================== */
+        if (this.running)
+            return;
 
-   animate() {
+        this.running = true;
 
-      if (!this.running)
-         return;
+        this.clock.start();
 
-      requestAnimationFrame(
-         () => {
+        this.animate();
+    }
 
-            this.animate();
-         }
-      );
+    /* =====================================================
+       STOP
+    ===================================================== */
 
-      this.update();
+    stop() {
 
-      this.render();
-   }
+        this.running = false;
+    }
 
-   /* =====================================================
-      LOADING SCREEN
-   ===================================================== */
+    /* =====================================================
+       UPDATE
+    ===================================================== */
 
-   showLoading() {
+    update() {
 
-      const screen =
-         document.getElementById(
-            "loadingScreen"
-         );
+        this.delta =
+            this.clock.getDelta();
 
-      if (screen) {
+        this.elapsedTime +=
+            this.delta;
 
-         screen.classList.add(
-            "active"
-         );
-      }
-   }
+        this.input.update();
 
-   hideLoading() {
+        this.cameraController.update(
+            this.delta
+        );
+        this.world?.update(
+            this.elapsedTime
+        );
+        this.piggyManager?.update(
+            this.elapsedTime
+        );
+        this.captureSystem?.update();
+        this.radarSystem?.update();
+        this.updateEnvironment();
 
-      const screen =
-         document.getElementById(
-            "loadingScreen"
-         );
+        this.updateSaveData();
 
-      if (screen) {
+    }
 
-         screen.classList.remove(
-            "active"
-         );
-      }
-   }
+    /* =====================================================
+       ENVIRONMENT
+    ===================================================== */
 
-   /* =====================================================
-      SPLASH
-   ===================================================== */
+    updateEnvironment() {
 
-   hideSplash() {
 
-      const splash =
-         document.getElementById(
-            "splashScreen"
-         );
+        const cycle =
+            this.elapsedTime * 0.03;
+        const dayPercent =
+            (Math.sin(cycle) + 1) / 2;
 
-      if (splash) {
+        const sunHeight =
+            Math.sin(cycle);
 
-         splash.classList.remove(
-            "active"
-         );
-      }
-   }
+        this.sun.position.y =
+            100 + sunHeight * 60;
 
-   /* =====================================================
-      MENU
-   ===================================================== */
+        const exposure =
+            THREE.MathUtils.lerp(
+                0.5,
+                1.6,
+                (sunHeight + 1) / 2
+            );
 
-   showMainMenu() {
+        this.renderer.setExposure(
+            exposure
+        );
+    }
 
-      const menu =
-         document.getElementById(
-            "mainMenu"
-         );
+    /* =====================================================
+       SAVE DATA
+    ===================================================== */
 
-      if (menu) {
+    updateSaveData() {
 
-         menu.classList.add(
-            "active"
-         );
-      }
-   }
+        this.save.addPlayTime(
+            this.delta
+        );
+    }
 
-   hideMainMenu() {
+    /* =====================================================
+       RENDER
+    ===================================================== */
 
-      const menu =
-         document.getElementById(
-            "mainMenu"
-         );
+    render() {
 
-      if (menu) {
+        this.renderer.render();
+    }
 
-         menu.classList.remove(
-            "active"
-         );
-      }
-   }
+    /* =====================================================
+       LOOP
+    ===================================================== */
+
+    animate() {
+
+        if (!this.running)
+            return;
+
+        requestAnimationFrame(
+            () => {
+
+                this.animate();
+            }
+        );
+
+        this.update();
+
+        this.render();
+    }
+
+    /* =====================================================
+       LOADING SCREEN
+    ===================================================== */
+
+    showLoading() {
+
+        const screen =
+            document.getElementById(
+                "loadingScreen"
+            );
+
+        if (screen) {
+
+            screen.classList.add(
+                "active"
+            );
+        }
+    }
+
+    hideLoading() {
+
+        const screen =
+            document.getElementById(
+                "loadingScreen"
+            );
+
+        if (screen) {
+
+            screen.classList.remove(
+                "active"
+            );
+        }
+    }
+
+    /* =====================================================
+       SPLASH
+    ===================================================== */
+
+    hideSplash() {
+
+        const splash =
+            document.getElementById(
+                "splashScreen"
+            );
+
+        if (splash) {
+
+            splash.classList.remove(
+                "active"
+            );
+        }
+    }
+
+    /* =====================================================
+       MENU
+    ===================================================== */
+
+    showMainMenu() {
+
+        const menu =
+            document.getElementById(
+                "mainMenu"
+            );
+
+        if (menu) {
+
+            menu.classList.add(
+                "active"
+            );
+        }
+    }
+
+    hideMainMenu() {
+
+        const menu =
+            document.getElementById(
+                "mainMenu"
+            );
+
+        if (menu) {
+
+            menu.classList.remove(
+                "active"
+            );
+        }
+    }
 }
