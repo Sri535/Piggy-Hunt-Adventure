@@ -7,13 +7,31 @@ export class PiggyDexUI {
     render() {
 
         const collection =
-            this.saveManager.getCollection();
+            this.saveManager
+            .getCollection();
 
         return `
-            Common: ${collection.common || 0}
-            Golden: ${collection.golden || 0}
-            Rainbow: ${collection.rainbow || 0}
-            Ghost: ${collection.ghost || 0}
-        `;
+
+      <div>
+         🐷 Common:
+         ${collection.common || 0}
+      </div>
+
+      <div>
+         👑 Golden:
+         ${collection.golden || 0}
+      </div>
+
+      <div>
+         🌈 Rainbow:
+         ${collection.rainbow || 0}
+      </div>
+
+      <div>
+         👻 Ghost:
+         ${collection.ghost || 0}
+      </div>
+
+   `;
     }
 }
