@@ -15,9 +15,9 @@ import {
 import {
     AssetManager
 } from "./AssetManager.js";
-import {
-    ForestWorld
-} from "./worlds/ForestWorld.js";
+import { WorldManager }
+from "./worlds/WorldManager.js";
+
 import {
     PiggyManager
 } from "./piggies/PiggyManager.js";
