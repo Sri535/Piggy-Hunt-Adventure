@@ -863,3 +863,44 @@ body {
 
     color:#ffd700;
 }
+/* =====================================
+   MissionPanel
+===================================== */
+
+
+#missionPanel {
+
+    position: fixed;
+
+    top: 140px;
+
+    left: 20px;
+
+    width: 220px;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(0,0,0,.55);
+
+    backdrop-filter:
+        blur(10px);
+
+    z-index: 50;
+}
+
+#missionTitle {
+
+    font-weight: bold;
+
+    margin-bottom: 8px;
+}
+
+#missionProgress {
+
+    color: gold;
+
+    margin-top: 5px;
+}
