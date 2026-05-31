@@ -1,5 +1,6 @@
-
-import { Game } from "./Game.js";
+import {
+    Game
+} from "./Game.js";
 
 let game = null;
 
@@ -50,6 +51,45 @@ async function init() {
 ===================================================== */
 
 function wireUI() {
+
+    const piggyDexBtn =
+        document.getElementById(
+            "piggyDexBtn"
+        );
+
+    const piggyDexMenu =
+        document.getElementById(
+            "piggyDexMenu"
+        );
+
+    const piggyDexBackBtn =
+        document.getElementById(
+            "piggyDexBackBtn"
+        );
+
+    piggyDexBtn?.addEventListener(
+        "click",
+        () => {
+
+            hideMainMenu();
+
+            piggyDexMenu?.classList.add(
+                "active"
+            );
+        }
+    );
+
+    piggyDexBackBtn?.addEventListener(
+        "click",
+        () => {
+
+            piggyDexMenu?.classList.remove(
+                "active"
+            );
+
+            showMainMenu();
+        }
+    );
 
     const playBtn =
         document.getElementById("playBtn");
@@ -295,8 +335,8 @@ async function requestGyroscopePermission() {
             typeof DeviceOrientationEvent !==
             "undefined" &&
             typeof DeviceOrientationEvent
-                .requestPermission ===
-                "function"
+            .requestPermission ===
+            "function"
         ) {
 
             const prompt =
@@ -317,7 +357,7 @@ async function requestGyroscopePermission() {
 
                     const result =
                         await DeviceOrientationEvent
-                            .requestPermission();
+                        .requestPermission();
 
                     if (
                         result ===
@@ -343,4 +383,3 @@ async function requestGyroscopePermission() {
 window.showMenu = showMainMenu;
 window.hideMenu = hideMainMenu;
 window.getGame = () => game;
-
