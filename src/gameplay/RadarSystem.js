@@ -110,7 +110,7 @@ export class RadarSystem {
 
         this.findNearestPiggy();
 
- 
+
 
         this.updateUI();
 
@@ -220,8 +220,20 @@ export class RadarSystem {
             ghost: "👻"
         };
 
-        this.typeLabel.textContent =
-            `${icons[type] || "🐷"} ${type.toUpperCase()}`;
+        if (
+            type === "ghost"
+        ) {
+
+            this.typeLabel.textContent =
+
+                "👻 GHOST ALERT";
+
+        } else {
+
+            this.typeLabel.textContent =
+
+                `${icons[type] || "🐷"} ${type.toUpperCase()}`;
+        }
 
         this.distanceLabel.textContent =
             `📏 ${Math.floor(this.distance)}m`;
