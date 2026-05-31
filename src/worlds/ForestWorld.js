@@ -5,20 +5,19 @@ from "./BaseWorld.js";
 
 export class ForestWorld extends BaseWorld {
 
-    constructor(scene) {
+constructor(scene) {
 
-        this.scene = scene;
+    super(scene);
 
-        this.trees = [];
+    this.trees = [];
 
-        this.fireflies = [];
+    this.fireflies = [];
 
-        this.spawnPoints = [];
+    this.spawnPoints = [];
 
-        this.group =
-            new THREE.Group();
-    }
-
+    this.group =
+        new THREE.Group();
+}
     /* =====================================================
        INIT
     ===================================================== */
