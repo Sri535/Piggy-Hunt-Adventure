@@ -2,33 +2,15 @@
 
 export class BaseWorld {
 
-    constructor(scene) {
-        this.scene = scene;
+   constructor(scene) {
 
-        this.group =
-            new THREE.Group();
+      this.scene =
+         scene;
+   }
 
-        this.spawnPoints = [];
-    }
+   init() {}
 
-    init() {}
+   update(delta) {}
 
-    update() {}
-
-    destroy() {
-
-        this.scene.remove(
-            this.group
-        );
-    }
-
-    getRandomSpawnPoint() {
-
-        return this.spawnPoints[
-            Math.floor(
-                Math.random() *
-                this.spawnPoints.length
-            )
-        ];
-    }
+   dispose() {}
 }
