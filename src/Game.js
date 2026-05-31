@@ -15,7 +15,9 @@ import {
 import {
     AssetManager
 } from "./AssetManager.js";
-import { WorldManager }
+import {
+    WorldManager
+}
 from "./worlds/WorldManager.js";
 
 import {
@@ -32,6 +34,11 @@ import {
     AchievementSystem
 }
 from "./player/AchievementSystem.js";
+
+import {
+    PiggyDexUI
+}
+from "./ui/PiggyDexUI.js";
 
 export class Game {
 
@@ -94,6 +101,12 @@ export class Game {
             this.worldManager
             .currentWorld;
 
+        /*PiggyDex*/
+        this.piggyDex =
+            new PiggyDexUI(
+                this.save
+            );
+
         /* Piggies */
 
         this.piggyManager =
@@ -137,7 +150,21 @@ export class Game {
             "Game Initialized"
         );
 
+        /* PiggyDex UI */
 
+        const dexContent =
+            document.getElementById(
+                "piggyDexContent"
+            );
+
+        if (
+            dexContent
+        ) {
+
+            dexContent.innerHTML =
+
+                this.piggyDex.render();
+        }
 
         return this;
     }
