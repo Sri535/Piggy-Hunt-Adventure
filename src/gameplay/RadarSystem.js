@@ -110,15 +110,7 @@ export class RadarSystem {
 
         this.findNearestPiggy();
 
-        console.log(
-            "Nearest Piggy:",
-            this.nearestPiggy
-        );
-
-        console.log(
-            "Distance:",
-            this.distance
-        );
+ 
 
         this.updateUI();
         console.log(
