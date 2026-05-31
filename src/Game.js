@@ -230,11 +230,6 @@ export class Game {
                 this.cameraController.joystickY =
                     data.y;
 
-                console.log(
-                    "JOYSTICK:",
-                    data.x,
-                    data.y
-                );
             }
         );
 
