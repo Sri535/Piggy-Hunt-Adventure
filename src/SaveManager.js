@@ -71,7 +71,7 @@ export class SaveManager {
             collection: {},
 
             achievements: [],
-           
+           missions: {},
 
             stats: {
 
