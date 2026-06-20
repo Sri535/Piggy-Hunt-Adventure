@@ -96,54 +96,58 @@
         /*==================================================
         updateUI
         ===================================================*/
-        updateUI() {
+updateUI() {
 
-            const mission =
-                this.getCurrentMission();
+    const mission =
+        this.getCurrentMission();
 
-            const missionText =
-                document.getElementById(
-                    "missionText"
-                );
+    let progress = 0;
 
-            if (
-                missionText
-            ) {
+    switch (mission.id) {
 
-                missionText.textContent =
-                    mission.name;
-            }
+        case "capture5":
 
-            let progress = 0;
+            progress =
+                this.progress.capture5;
+            break;
 
-            switch (
-                mission.id
-            ) {
+        case "ghost1":
 
-                case "capture5":
+            progress =
+                this.progress.ghost1;
+            break;
 
-                    progress =
-                        this.progress.capture5;
+        case "level5":
 
-                    break;
+            progress =
+                this.saveManager
+                    .getPlayer()
+                    .level;
+            break;
+    }
 
-                case "ghost1":
+    const missionText =
+        document.getElementById(
+            "missionText"
+        );
 
-                    progress =
-                        this.progress.ghost1;
+    const progressLabel =
+        document.getElementById(
+            "missionProgress"
+        );
 
-                    break;
+    if (missionText) {
 
-                case "level5":
+        missionText.textContent =
+            mission.name;
+    }
 
-                    progress =
-                        this.saveManager
-                        .getPlayer()
-                        .level;
+    if (progressLabel) {
 
-                    break;
-            }
-        }
+        progressLabel.textContent =
+            `${progress} / ${mission.target}`;
+    }
+}
         /*==================================================
         checkMissionCompletion
         ===================================================*/
