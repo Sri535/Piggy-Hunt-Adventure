@@ -132,6 +132,7 @@ export class Game {
             new MissionSystem(
                 this.save
             );
+
         /* Capture System */
 
         this.captureSystem =
@@ -172,20 +173,7 @@ export class Game {
         }
 
         /*Mission Pannel UI*/
-        const mission =
-            this.missionSystem
-            .getMissions()[0];
-
-        document.getElementById(
-                "missionText"
-            ).textContent =
-            mission.name;
-
-        document.getElementById(
-                "missionProgress"
-            ).textContent =
-            "0 / " +
-            mission.target;
+        this.missionSystem.updateUI();
 
         this.bindEvents();
         window.game = this;

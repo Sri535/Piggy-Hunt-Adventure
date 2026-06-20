@@ -425,6 +425,8 @@ export class CaptureSystem {
                 xp
             );
 
+        window.game?.missionSystem?.checkMissionCompletion();
+
         this.saveManager
             .incrementCaptures();
 

@@ -62,36 +62,30 @@
         recordCapture
         ===================================================*/
 
-        recordCapture(
-            piggyType
-        ) {
+        recordCapture(piggyType) {
 
             const mission =
                 this.getCurrentMission();
 
-            if (
-                this.completed[
-                    mission.id
-                ]
-            ) {
-
+            if (this.completed[mission.id]) {
                 return;
             }
 
             this.progress.capture5++;
 
-            if (
-                piggyType ===
-                "ghost"
-            ) {
-
+            if (piggyType === "ghost") {
                 this.progress.ghost1++;
             }
 
             this.updateUI();
 
             this.checkMissionCompletion();
-            this.currentMissionIndex++;
+
+            console.log(
+                "Mission:",
+                mission.id,
+                this.progress
+            );
         }
 
         /*==================================================
