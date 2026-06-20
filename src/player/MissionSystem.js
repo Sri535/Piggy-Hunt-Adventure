@@ -209,16 +209,41 @@
                 () => {
 
                     this.currentMissionIndex++;
-
                     if (
                         this.currentMissionIndex >=
                         this.missions.length
                     ) {
 
-                        this.currentMissionIndex = 0;
+                        this.currentMissionIndex =
+                            this.missions.length - 1;
+
+                        const missionText =
+                            document.getElementById(
+                                "missionText"
+                            );
+
+                        const progressLabel =
+                            document.getElementById(
+                                "missionProgress"
+                            );
+
+                        if (missionText) {
+
+                            missionText.textContent =
+                                "🏆 All Missions Complete";
+                        }
+
+                        if (progressLabel) {
+
+                            progressLabel.textContent =
+                                "100%";
+                        }
+
+                        return;
                     }
 
                     this.updateUI();
+                    this.checkMissionCompletion();
 
                 },
                 2500
