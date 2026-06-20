@@ -9,7 +9,7 @@
                 capture5: 0,
                 ghost1: 0
             };
-
+            this.allMissionsComplete = false;
             this.missions = [
 
                 {
@@ -63,6 +63,12 @@
         ===================================================*/
 
         recordCapture(piggyType) {
+        if (
+    this.allMissionsComplete
+) {
+
+    return;
+}
 
             const mission =
                 this.getCurrentMission();
@@ -92,7 +98,12 @@
         updateUI
         ===================================================*/
         updateUI() {
+            if (
+    this.allMissionsComplete
+) {
 
+    return;
+}
             const mission =
                 this.getCurrentMission();
 
@@ -209,38 +220,37 @@
                 () => {
 
                     this.currentMissionIndex++;
-                    if (
-                        this.currentMissionIndex >=
-                        this.missions.length
-                    ) {
+if (
+    this.currentMissionIndex >=
+    this.missions.length
+) {
 
-                        this.currentMissionIndex =
-                            this.missions.length - 1;
+    this.allMissionsComplete = true;
 
-                        const missionText =
-                            document.getElementById(
-                                "missionText"
-                            );
+    const missionText =
+        document.getElementById(
+            "missionText"
+        );
 
-                        const progressLabel =
-                            document.getElementById(
-                                "missionProgress"
-                            );
+    const progressLabel =
+        document.getElementById(
+            "missionProgress"
+        );
 
-                        if (missionText) {
+    if (missionText) {
 
-                            missionText.textContent =
-                                "🏆 All Missions Complete";
-                        }
+        missionText.textContent =
+            "🏆 All Missions Complete";
+    }
 
-                        if (progressLabel) {
+    if (progressLabel) {
 
-                            progressLabel.textContent =
-                                "100%";
-                        }
+        progressLabel.textContent =
+             "Coming Soon 🚀/ Chapter 9 Unlocked 🌴";
+    }
 
-                        return;
-                    }
+    return;
+}
 
                     this.updateUI();
                     this.checkMissionCompletion();
