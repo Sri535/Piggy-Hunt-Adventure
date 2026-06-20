@@ -38,6 +38,7 @@
                 }
             ];
             this.completed = {};
+            this.currentMissionIndex = 0;
         }
 
         /*==================================================
@@ -48,10 +49,19 @@
 
             return this.missions;
         }
+        /*==================================================
+        getCurrentMission
+        ===================================================*/
+        getCurrentMission() {
+
+            return this.missions[
+                this.currentMissionIndex
+            ];
+        }
 
         /*==================================================
-recordCapture
-===================================================*/
+        recordCapture
+        ===================================================*/
 
         recordCapture(
             piggyType
@@ -85,40 +95,63 @@ recordCapture
         }
 
         /*==================================================
-updateUI
-===================================================*/
+        updateUI
+        ===================================================*/
         updateUI() {
 
             const mission =
-                this.missions[0];
+                this.getCurrentMission();
 
-            const progress =
-
-                this.progress
-                .capture5;
-
-            const progressLabel =
-
+            const missionText =
                 document.getElementById(
-                    "missionProgress"
+                    "missionText"
                 );
 
             if (
-                progressLabel
+                missionText
             ) {
 
-                progressLabel.textContent =
+                missionText.textContent =
+                    mission.name;
+            }
 
-                    `${progress} / ${mission.target}`;
+            let progress = 0;
+
+            switch (
+                mission.id
+            ) {
+
+                case "capture5":
+
+                    progress =
+                        this.progress.capture5;
+
+                    break;
+
+                case "ghost1":
+
+                    progress =
+                        this.progress.ghost1;
+
+                    break;
+
+                case "level5":
+
+                    progress =
+                        this.saveManager
+                        .getPlayer()
+                        .level;
+
+                    break;
             }
         }
         /*==================================================
-checkMissionCompletion
-===================================================*/
+        checkMissionCompletion
+        ===================================================*/
         checkMissionCompletion() {
 
             const mission =
-                this.missions[0];
+                this.getCurrentMission();
 
             if (
                 this.completed[
@@ -149,12 +182,30 @@ checkMissionCompletion
             this.showMissionComplete(
                 mission
             );
+            setTimeout(
+                () => {
+
+                    this.currentMissionIndex++;
+
+                    if (
+                        this.currentMissionIndex >=
+                        this.missions.length
+                    ) {
+
+                        this.currentMissionIndex = 0;
+                    }
+
+                    this.updateUI();
+
+                },
+                2500
+            );
 
             this.saveManager.save();
         }
         /*==================================================
-showMissionComplete
-===================================================*/
+        showMissionComplete
+        ===================================================*/
         showMissionComplete(
             mission
         ) {
