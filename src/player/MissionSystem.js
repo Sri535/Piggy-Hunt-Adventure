@@ -7,7 +7,6 @@
             this.progress = {
 
                 capture5: 0,
-
                 ghost1: 0
             };
 
