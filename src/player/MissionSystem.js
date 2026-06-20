@@ -67,7 +67,7 @@
         ) {
 
             const mission =
-                this.missions[0];
+                this.getCurrentMission();
 
             if (
                 this.completed[
@@ -91,63 +91,64 @@
             this.updateUI();
 
             this.checkMissionCompletion();
+            this.currentMissionIndex++;
         }
 
         /*==================================================
         updateUI
         ===================================================*/
-updateUI() {
+        updateUI() {
 
-    const mission =
-        this.getCurrentMission();
+            const mission =
+                this.getCurrentMission();
 
-    let progress = 0;
+            let progress = 0;
 
-    switch (mission.id) {
+            switch (mission.id) {
 
-        case "capture5":
+                case "capture5":
 
-            progress =
-                this.progress.capture5;
-            break;
+                    progress =
+                        this.progress.capture5;
+                    break;
 
-        case "ghost1":
+                case "ghost1":
 
-            progress =
-                this.progress.ghost1;
-            break;
+                    progress =
+                        this.progress.ghost1;
+                    break;
 
-        case "level5":
+                case "level5":
 
-            progress =
-                this.saveManager
-                    .getPlayer()
-                    .level;
-            break;
-    }
+                    progress =
+                        this.saveManager
+                        .getPlayer()
+                        .level;
+                    break;
+            }
 
-    const missionText =
-        document.getElementById(
-            "missionText"
-        );
+            const missionText =
+                document.getElementById(
+                    "missionText"
+                );
 
-    const progressLabel =
-        document.getElementById(
-            "missionProgress"
-        );
+            const progressLabel =
+                document.getElementById(
+                    "missionProgress"
+                );
 
-    if (missionText) {
+            if (missionText) {
 
-        missionText.textContent =
-            mission.name;
-    }
+                missionText.textContent =
+                    mission.name;
+            }
 
-    if (progressLabel) {
+            if (progressLabel) {
 
-        progressLabel.textContent =
-            `${progress} / ${mission.target}`;
-    }
-}
+                progressLabel.textContent =
+                    `${progress} / ${mission.target}`;
+            }
+        }
         /*==================================================
         checkMissionCompletion
         ===================================================*/
@@ -165,8 +166,33 @@ updateUI() {
                 return;
             }
 
+            let progress = 0;
+
+            switch (mission.id) {
+
+                case "capture5":
+
+                    progress =
+                        this.progress.capture5;
+                    break;
+
+                case "ghost1":
+
+                    progress =
+                        this.progress.ghost1;
+                    break;
+
+                case "level5":
+
+                    progress =
+                        this.saveManager
+                        .getPlayer()
+                        .level;
+                    break;
+            }
+
             if (
-                this.progress.capture5 <
+                progress <
                 mission.target
             ) {
 
