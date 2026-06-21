@@ -1,23 +1,24 @@
-
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
-import { BaseWorld }
-from "./BaseWorld.js";
+import {
+    BaseWorld
+}
+    from "./BaseWorld.js";
 
 export class ForestWorld extends BaseWorld {
 
-constructor(scene) {
+    constructor(scene) {
 
-    super(scene);
+        super(scene);
 
-    this.trees = [];
+        this.trees = [];
 
-    this.fireflies = [];
+        this.fireflies = [];
 
-    this.spawnPoints = [];
+        this.spawnPoints = [];
 
-    this.group =
-        new THREE.Group();
-}
+        this.group =
+            new THREE.Group();
+    }
     /* =====================================================
        INIT
     ===================================================== */
@@ -66,7 +67,7 @@ constructor(scene) {
 
     createTrees() {
 
-        for(let i=0;i<100;i++){
+        for (let i = 0; i < 100; i++) {
 
             const tree =
                 new THREE.Group();
@@ -83,8 +84,7 @@ constructor(scene) {
 
                     new THREE.MeshStandardMaterial({
 
-                        color:
-                            0x5b3a29
+                        color: 0x5b3a29
                     })
                 );
 
@@ -103,8 +103,7 @@ constructor(scene) {
 
                     new THREE.MeshStandardMaterial({
 
-                        color:
-                            0x2f8f2f
+                        color: 0x2f8f2f
                     })
                 );
 
@@ -114,15 +113,15 @@ constructor(scene) {
 
             tree.position.set(
 
-                (Math.random()-0.5)*800,
+                (Math.random() - 0.5) * 800,
 
                 0,
 
-                (Math.random()-0.5)*800
+                (Math.random() - 0.5) * 800
             );
 
             tree.rotation.y =
-                Math.random()*
+                Math.random() *
                 Math.PI;
 
             this.trees.push(tree);
@@ -140,11 +139,10 @@ constructor(scene) {
         const material =
             new THREE.MeshStandardMaterial({
 
-                color:
-                    0x3ea23e
+                color: 0x3ea23e
             });
 
-        for(let i=0;i<50;i++){
+        for (let i = 0; i < 50; i++) {
 
             const bush =
                 new THREE.Mesh(
@@ -160,16 +158,16 @@ constructor(scene) {
 
             bush.position.set(
 
-                (Math.random()-0.5)*700,
+                (Math.random() - 0.5) * 700,
 
                 0.8,
 
-                (Math.random()-0.5)*700
+                (Math.random() - 0.5) * 700
             );
 
             bush.scale.setScalar(
                 0.5 +
-                Math.random()*2
+                Math.random() * 2
             );
 
             this.group.add(bush);
@@ -185,11 +183,10 @@ constructor(scene) {
         const material =
             new THREE.MeshStandardMaterial({
 
-                color:
-                    0x777777
+                color: 0x777777
             });
 
-        for(let i=0;i<25;i++){
+        for (let i = 0; i < 25; i++) {
 
             const rock =
                 new THREE.Mesh(
@@ -203,20 +200,20 @@ constructor(scene) {
 
             rock.position.set(
 
-                (Math.random()-0.5)*700,
+                (Math.random() - 0.5) * 700,
 
                 0.8,
 
-                (Math.random()-0.5)*700
+                (Math.random() - 0.5) * 700
             );
 
             rock.rotation.set(
 
-                Math.random()*3,
+                Math.random() * 3,
 
-                Math.random()*3,
+                Math.random() * 3,
 
-                Math.random()*3
+                Math.random() * 3
             );
 
             this.group.add(rock);
@@ -232,14 +229,12 @@ constructor(scene) {
         const material =
             new THREE.MeshStandardMaterial({
 
-                color:
-                    0x33aa33,
+                color: 0x33aa33,
 
-                side:
-                    THREE.DoubleSide
+                side: THREE.DoubleSide
             });
 
-        for(let i=0;i<200;i++){
+        for (let i = 0; i < 200; i++) {
 
             const grass =
                 new THREE.Mesh(
@@ -254,15 +249,15 @@ constructor(scene) {
 
             grass.position.set(
 
-                (Math.random()-0.5)*750,
+                (Math.random() - 0.5) * 750,
 
                 0.6,
 
-                (Math.random()-0.5)*750
+                (Math.random() - 0.5) * 750
             );
 
             grass.rotation.y =
-                Math.random()*
+                Math.random() *
                 Math.PI;
 
             this.group.add(grass);
@@ -285,11 +280,10 @@ constructor(scene) {
         const material =
             new THREE.MeshBasicMaterial({
 
-                color:
-                    0xffff88
+                color: 0xffff88
             });
 
-        for(let i=0;i<100;i++){
+        for (let i = 0; i < 100; i++) {
 
             const fly =
                 new THREE.Mesh(
@@ -300,16 +294,16 @@ constructor(scene) {
 
             fly.position.set(
 
-                (Math.random()-0.5)*300,
+                (Math.random() - 0.5) * 300,
 
                 2 +
-                Math.random()*10,
+                Math.random() * 10,
 
-                (Math.random()-0.5)*300
+                (Math.random() - 0.5) * 300
             );
 
             fly.userData.offset =
-                Math.random()*100;
+                Math.random() * 100;
 
             this.fireflies.push(
                 fly
@@ -327,15 +321,13 @@ constructor(scene) {
 
     createSpawnPoints() {
 
-        for(let i=0;i<50;i++){
+        for (let i = 0; i < 50; i++) {
 
             this.spawnPoints.push({
 
-                x:
-                (Math.random()-0.5)*600,
+                x: (Math.random() - 0.5) * 600,
 
-                z:
-                (Math.random()-0.5)*600
+                z: (Math.random() - 0.5) * 600
             });
         }
 
@@ -364,7 +356,7 @@ constructor(scene) {
 
     animateFireflies(time) {
 
-        for(const fly of this.fireflies){
+        for (const fly of this.fireflies) {
 
             fly.position.y +=
 
@@ -396,9 +388,30 @@ constructor(scene) {
 
         return this.spawnPoints[
             Math.floor(
-                Math.random()*
+                Math.random() *
                 this.spawnPoints.length
             )
-        ];
+            ];
+    }
+    /* =====================================================
+       DISPOSE
+    ===================================================== */
+    dispose() {
+
+        this.scene.remove(
+            this.group
+        );
+
+        this.group.clear();
+
+        this.trees = [];
+
+        this.fireflies = [];
+
+        this.spawnPoints = [];
+
+        console.log(
+            "Forest World Disposed"
+        );
     }
 }

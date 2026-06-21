@@ -18,7 +18,7 @@ import {
 import {
     WorldManager
 }
-from "./worlds/WorldManager.js";
+    from "./worlds/WorldManager.js";
 
 import {
     PiggyManager
@@ -29,20 +29,20 @@ import {
 import {
     RadarSystem
 }
-from "./gameplay/RadarSystem.js";
+    from "./gameplay/RadarSystem.js";
 import {
     AchievementSystem
 }
-from "./player/AchievementSystem.js";
+    from "./player/AchievementSystem.js";
 
 import {
     PiggyDexUI
 }
-from "./ui/PiggyDexUI.js";
+    from "./ui/PiggyDexUI.js";
 import {
     MissionSystem
 }
-from "./player/MissionSystem.js";
+    from "./player/MissionSystem.js";
 
 export class Game {
 
@@ -101,7 +101,7 @@ export class Game {
 
         this.world =
             this.worldManager
-            .currentWorld;
+                .currentWorld;
 
         /*PiggyDex*/
         this.piggyDex =
@@ -244,10 +244,10 @@ export class Game {
 
         this.renderer =
             new Renderer(canvas)
-            .init(
-                this.scene,
-                this.camera
-            );
+                .init(
+                    this.scene,
+                    this.camera
+                );
 
         this.cameraController =
             new CameraController(
@@ -257,7 +257,7 @@ export class Game {
 
         this.input =
             new InputManager()
-            .init();
+                .init();
         /* =========================
    MOBILE JOYSTICK
 ========================= */
@@ -287,13 +287,13 @@ export class Game {
 
         this.save =
             new SaveManager()
-            .init();
+                .init();
 
         this.save.bindUnload();
 
         this.assets =
             new AssetManager()
-            .init();
+                .init();
     }
 
     /* =====================================================
@@ -469,6 +469,7 @@ export class Game {
         this.updateEnvironment();
 
         this.updateSaveData();
+        this.checkWorldUnlocks();
 
     }
 
@@ -572,6 +573,44 @@ export class Game {
         this.save.addPlayTime(
             this.delta
         );
+    }
+    /* =====================================================
+       WORLD UNLOCK CHECK
+    ===================================================== */
+    checkWorldUnlocks() {
+
+        const level =
+            this.save
+                .getPlayer()
+                .level;
+
+        if (level >= 5) {
+
+            this.save.unlockWorld(
+                "island"
+            );
+        }
+
+        if (level >= 10) {
+
+            this.save.unlockWorld(
+                "snow"
+            );
+        }
+
+        if (level >= 15) {
+
+            this.save.unlockWorld(
+                "volcano"
+            );
+        }
+
+        if (level >= 20) {
+
+            this.save.unlockWorld(
+                "space"
+            );
+        }
     }
 
     /* =====================================================
