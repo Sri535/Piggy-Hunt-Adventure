@@ -163,6 +163,11 @@ export class MissionSystem {
         const mission =
             this.getCurrentMission();
 
+        if (!mission) {
+
+            return;
+        }
+
         let progress = 0;
 
         switch (mission.id) {
@@ -214,9 +219,18 @@ export class MissionSystem {
     checkMissionCompletion
     ===================================================*/
     checkMissionCompletion() {
+        if (
+            this.allMissionsComplete
+        ) {
 
+            return;
+        }
         const mission =
             this.getCurrentMission();
+        if (!mission) {
+
+            return;
+        }
 
         if (
             this.completed[
@@ -282,7 +296,11 @@ export class MissionSystem {
                     this.missions.length
                 ) {
 
-                    this.allMissionsComplete = true;
+                    this.currentMissionIndex =
+                        this.missions.length;
+
+                    this.allMissionsComplete =
+                        true;
 
                     const missionText =
                         document.getElementById(
@@ -303,12 +321,11 @@ export class MissionSystem {
                     if (progressLabel) {
 
                         progressLabel.textContent =
-                            "Coming Soon 🚀/ Chapter 9 Unlocked 🌴";
+                            "🌴 Chapter 9 Ready";
                     }
-                    this.allMissionsComplete =
-                        true;
 
                     this.saveMissionData();
+
                     return;
                 }
 
@@ -337,20 +354,20 @@ export class MissionSystem {
             "achievementPopup";
 
         popup.innerHTML = `
-
-        <div>
-            🎯 MISSION COMPLETE
-        </div>
-
-        <div>
-            ${mission.name}
-        </div>
-
-        <div>
-            +${mission.reward} Coins
-        </div>
-
-    `;
+    
+            <div>
+                🎯 MISSION COMPLETE
+            </div>
+    
+            <div>
+                ${mission.name}
+            </div>
+    
+            <div>
+                +${mission.reward} Coins
+            </div>
+    
+        `;
 
         document.body.appendChild(
             popup
