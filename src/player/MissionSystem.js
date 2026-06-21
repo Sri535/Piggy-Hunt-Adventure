@@ -113,6 +113,45 @@ export class MissionSystem {
 
             false;
     }
+
+    /*==================================================
+    RESTORE MISSION UI
+    ===================================================*/
+
+    restoreMissionUI() {
+
+        if (
+            !this.allMissionsComplete
+        ) {
+
+            this.updateUI();
+
+            return;
+        }
+
+        const missionText =
+            document.getElementById(
+                "missionText"
+            );
+
+        const progressLabel =
+            document.getElementById(
+                "missionProgress"
+            );
+
+        if (missionText) {
+
+            missionText.textContent =
+                "🏆 All Missions Complete";
+        }
+
+        if (progressLabel) {
+
+            progressLabel.textContent =
+                "🌴 Chapter 9 Ready";
+        }
+    }
+
     /*==================================================
     recordCapture
     ===================================================*/

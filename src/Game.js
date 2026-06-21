@@ -171,7 +171,7 @@ export class Game {
         }
 
         /*Mission Pannel UI*/
-        this.missionSystem.updateUI();
+        this.missionSystem.restoreMissionUI();
 
         this.bindEvents();
         window.game = this;
