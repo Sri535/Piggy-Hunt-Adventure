@@ -1,46 +1,56 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
-import { ForestWorld }
-from "./ForestWorld.js";
+import {
+   ForestWorld
+}
+   from "./ForestWorld.js";
 
 export class WorldManager {
 
    constructor(scene) {
 
       this.scene =
-         scene;
+          scene;
 
       this.currentWorld =
-         null;
+          null;
    }
 
    loadWorld(name) {
 
       if (
-         this.currentWorld
+          this.currentWorld
       ) {
 
          this.currentWorld.dispose();
       }
 
-      switch(name) {
+      switch (name) {
 
          case "forest":
 
             this.currentWorld =
-               new ForestWorld(
-                  this.scene
-               );
+                new ForestWorld(
+                    this.scene
+                );
+
+            break;
+
+         case "island":
+
+            this.currentWorld =
+                new IslandWorld(
+                    this.scene
+                );
 
             break;
       }
-
       this.currentWorld.init();
    }
 
    update(delta) {
 
       this.currentWorld?.update(
-         delta
+          delta
       );
    }
 }
