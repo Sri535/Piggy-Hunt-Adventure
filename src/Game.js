@@ -96,7 +96,7 @@ export class Game {
 
         this.worldManager
             .loadWorld(
-                "forest"
+                "island"
             );
 
         this.world =
