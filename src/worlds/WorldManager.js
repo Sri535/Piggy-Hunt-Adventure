@@ -3,6 +3,10 @@ import {
    ForestWorld
 }
    from "./ForestWorld.js";
+import {
+   IslandWorld
+}
+   from "./IslandWorld.js";
 
 export class WorldManager {
 
