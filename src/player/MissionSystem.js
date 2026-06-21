@@ -1,282 +1,342 @@
-    export class MissionSystem {
+export class MissionSystem {
 
-        constructor(saveManager) {
+    constructor(saveManager) {
 
-            this.saveManager =
-                saveManager;
-            this.progress = {
+        this.saveManager =
+            saveManager;
+        this.progress = {
 
-                capture5: 0,
-                ghost1: 0
-            };
-            this.allMissionsComplete = false;
-            this.missions = [
+            capture5: 0,
+            ghost1: 0
+        };
 
-                {
-                    id: "capture5",
-                    name: "Capture 5 Piggies",
-                    target: 5,
-                    reward: 100,
-                    type: "captures"
-                },
+        this.missions = [
 
-                {
-                    id: "ghost1",
-                    name: "Capture 1 Ghost",
-                    target: 1,
-                    reward: 250,
-                    type: "ghost"
-                },
+            {
+                id: "capture5",
+                name: "Capture 5 Piggies",
+                target: 5,
+                reward: 100,
+                type: "captures"
+            },
 
-                {
-                    id: "level5",
-                    name: "Reach Level 5",
-                    target: 5,
-                    reward: 500,
-                    type: "level"
-                }
+            {
+                id: "ghost1",
+                name: "Capture 1 Ghost",
+                target: 1,
+                reward: 250,
+                type: "ghost"
+            },
+
+            {
+                id: "level5",
+                name: "Reach Level 5",
+                target: 5,
+                reward: 500,
+                type: "level"
+            }
+        ];
+        this.completed = {};
+        this.currentMissionIndex = 0;
+        this.allMissionsComplete = false;
+
+        this.loadMissionData();
+    }
+
+
+    /*==================================================
+    GET CURRENT MISSION
+    ===================================================*/
+    getCurrentMission() {
+
+        return this.missions[
+            this.currentMissionIndex
             ];
-            this.completed = {};
-            this.currentMissionIndex = 0;
-        }
+    }
+    /*==================================================
+    SAVE MISSION DATA
+    ===================================================*/
+    saveMissionData() {
 
-        /*==================================================
-        GET MISSIONS
-        ===================================================*/
+        this.saveManager.data.missions = {
 
-        getMissions() {
+            progress: this.progress,
 
-            return this.missions;
-        }
-        /*==================================================
-        getCurrentMission
-        ===================================================*/
-        getCurrentMission() {
+            completed: this.completed,
 
-            return this.missions[
-                this.currentMissionIndex
-            ];
-        }
+            currentMissionIndex: this.currentMissionIndex,
 
-        /*==================================================
-        recordCapture
-        ===================================================*/
+            allMissionsComplete: this.allMissionsComplete
+        };
 
-        recordCapture(piggyType) {
-        if (
-    this.allMissionsComplete
-) {
+        this.saveManager.save();
+    }
+    /*==================================================
+    LOAD MISSION DATA
+    ===================================================*/
+    loadMissionData() {
 
-    return;
-}
-
-            const mission =
-                this.getCurrentMission();
-
-            if (this.completed[mission.id]) {
-                return;
-            }
-
-            this.progress.capture5++;
-
-            if (piggyType === "ghost") {
-                this.progress.ghost1++;
-            }
-
-            this.updateUI();
-
-            this.checkMissionCompletion();
-
-            console.log(
-                "Mission:",
-                mission.id,
-                this.progress
-            );
-        }
-
-        /*==================================================
-        updateUI
-        ===================================================*/
-        updateUI() {
-            if (
-    this.allMissionsComplete
-) {
-
-    return;
-}
-            const mission =
-                this.getCurrentMission();
-
-            let progress = 0;
-
-            switch (mission.id) {
-
-                case "capture5":
-
-                    progress =
-                        this.progress.capture5;
-                    break;
-
-                case "ghost1":
-
-                    progress =
-                        this.progress.ghost1;
-                    break;
-
-                case "level5":
-
-                    progress =
-                        this.saveManager
-                        .getPlayer()
-                        .level;
-                    break;
-            }
-
-            const missionText =
-                document.getElementById(
-                    "missionText"
-                );
-
-            const progressLabel =
-                document.getElementById(
-                    "missionProgress"
-                );
-
-            if (missionText) {
-
-                missionText.textContent =
-                    mission.name;
-            }
-
-            if (progressLabel) {
-
-                progressLabel.textContent =
-                    `${progress} / ${mission.target}`;
-            }
-        }
-        /*==================================================
-        checkMissionCompletion
-        ===================================================*/
-        checkMissionCompletion() {
-
-            const mission =
-                this.getCurrentMission();
-
-            if (
-                this.completed[
-                    mission.id
-                ]
-            ) {
-
-                return;
-            }
-
-            let progress = 0;
-
-            switch (mission.id) {
-
-                case "capture5":
-
-                    progress =
-                        this.progress.capture5;
-                    break;
-
-                case "ghost1":
-
-                    progress =
-                        this.progress.ghost1;
-                    break;
-
-                case "level5":
-
-                    progress =
-                        this.saveManager
-                        .getPlayer()
-                        .level;
-                    break;
-            }
-
-            if (
-                progress <
-                mission.target
-            ) {
-
-                return;
-            }
-
-            this.completed[
-                mission.id
-            ] = true;
+        const missionData =
 
             this.saveManager
-                .addCoins(
-                    mission.reward
-                );
+                .data
+                .missions;
 
-            this.showMissionComplete(
-                mission
-            );
-            setTimeout(
-                () => {
-
-                    this.currentMissionIndex++;
-if (
-    this.currentMissionIndex >=
-    this.missions.length
-) {
-
-    this.allMissionsComplete = true;
-
-    const missionText =
-        document.getElementById(
-            "missionText"
-        );
-
-    const progressLabel =
-        document.getElementById(
-            "missionProgress"
-        );
-
-    if (missionText) {
-
-        missionText.textContent =
-            "🏆 All Missions Complete";
-    }
-
-    if (progressLabel) {
-
-        progressLabel.textContent =
-             "Coming Soon 🚀/ Chapter 9 Unlocked 🌴";
-    }
-
-    return;
-}
-
-                    this.updateUI();
-                    this.checkMissionCompletion();
-
-                },
-                2500
-            );
-
-            this.saveManager.save();
-        }
-        /*==================================================
-        showMissionComplete
-        ===================================================*/
-        showMissionComplete(
-            mission
+        if (
+            !missionData
         ) {
 
-            const popup =
-                document.createElement(
-                    "div"
-                );
+            return;
+        }
 
-            popup.className =
-                "achievementPopup";
+        this.progress =
 
-            popup.innerHTML = `
+            missionData.progress ||
+
+            this.progress;
+
+        this.completed =
+
+            missionData.completed ||
+
+            {};
+
+        this.currentMissionIndex =
+
+            missionData.currentMissionIndex ||
+
+            0;
+
+        this.allMissionsComplete =
+
+            missionData.allMissionsComplete ||
+
+            false;
+    }
+    /*==================================================
+    recordCapture
+    ===================================================*/
+
+    recordCapture(piggyType) {
+        if (
+            this.allMissionsComplete
+        ) {
+
+            return;
+        }
+
+        const mission =
+            this.getCurrentMission();
+
+        if (this.completed[mission.id]) {
+            return;
+        }
+
+        this.progress.capture5++;
+
+        if (piggyType === "ghost") {
+            this.progress.ghost1++;
+        }
+
+        this.updateUI();
+
+        this.checkMissionCompletion();
+        this.saveMissionData();
+
+        console.log(
+            "Mission:",
+            mission.id,
+            this.progress
+        );
+    }
+
+    /*==================================================
+    updateUI
+    ===================================================*/
+    updateUI() {
+        if (
+            this.allMissionsComplete
+        ) {
+
+            return;
+        }
+        const mission =
+            this.getCurrentMission();
+
+        let progress = 0;
+
+        switch (mission.id) {
+
+            case "capture5":
+
+                progress =
+                    this.progress.capture5;
+                break;
+
+            case "ghost1":
+
+                progress =
+                    this.progress.ghost1;
+                break;
+
+            case "level5":
+
+                progress =
+                    this.saveManager
+                        .getPlayer()
+                        .level;
+                break;
+        }
+
+        const missionText =
+            document.getElementById(
+                "missionText"
+            );
+
+        const progressLabel =
+            document.getElementById(
+                "missionProgress"
+            );
+
+        if (missionText) {
+
+            missionText.textContent =
+                mission.name;
+        }
+
+        if (progressLabel) {
+
+            progressLabel.textContent =
+                `${progress} / ${mission.target}`;
+        }
+    }
+    /*==================================================
+    checkMissionCompletion
+    ===================================================*/
+    checkMissionCompletion() {
+
+        const mission =
+            this.getCurrentMission();
+
+        if (
+            this.completed[
+                mission.id
+                ]
+        ) {
+
+            return;
+        }
+
+        let progress = 0;
+
+        switch (mission.id) {
+
+            case "capture5":
+
+                progress =
+                    this.progress.capture5;
+                break;
+
+            case "ghost1":
+
+                progress =
+                    this.progress.ghost1;
+                break;
+
+            case "level5":
+
+                progress =
+                    this.saveManager
+                        .getPlayer()
+                        .level;
+                break;
+        }
+
+        if (
+            progress <
+            mission.target
+        ) {
+
+            return;
+        }
+
+        this.completed[
+            mission.id
+            ] = true;
+        this.saveMissionData();
+        this.saveManager
+            .addCoins(
+                mission.reward
+            );
+
+        this.showMissionComplete(
+            mission
+        );
+        setTimeout(
+            () => {
+
+                this.currentMissionIndex++;
+                this.saveMissionData();
+                if (
+                    this.currentMissionIndex >=
+                    this.missions.length
+                ) {
+
+                    this.allMissionsComplete = true;
+
+                    const missionText =
+                        document.getElementById(
+                            "missionText"
+                        );
+
+                    const progressLabel =
+                        document.getElementById(
+                            "missionProgress"
+                        );
+
+                    if (missionText) {
+
+                        missionText.textContent =
+                            "🏆 All Missions Complete";
+                    }
+
+                    if (progressLabel) {
+
+                        progressLabel.textContent =
+                            "Coming Soon 🚀/ Chapter 9 Unlocked 🌴";
+                    }
+                    this.allMissionsComplete =
+                        true;
+
+                    this.saveMissionData();
+                    return;
+                }
+
+                this.updateUI();
+                this.checkMissionCompletion();
+
+            },
+            2500
+        );
+
+        this.saveManager.save();
+    }
+    /*==================================================
+    showMissionComplete
+    ===================================================*/
+    showMissionComplete(
+        mission
+    ) {
+
+        const popup =
+            document.createElement(
+                "div"
+            );
+
+        popup.className =
+            "achievementPopup";
+
+        popup.innerHTML = `
 
         <div>
             🎯 MISSION COMPLETE
@@ -292,18 +352,18 @@ if (
 
     `;
 
-            document.body.appendChild(
-                popup
-            );
+        document.body.appendChild(
+            popup
+        );
 
-            setTimeout(
-                () => {
+        setTimeout(
+            () => {
 
-                    popup.remove();
+                popup.remove();
 
-                },
-                4000
-            );
-        }
-
+            },
+            4000
+        );
     }
+
+}
