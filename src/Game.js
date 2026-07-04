@@ -86,7 +86,7 @@ export class Game {
 
         this.createLights();
 
-        this.createGround();
+        //this.createGround();
 
         /*  World Manager */
         this.worldManager =

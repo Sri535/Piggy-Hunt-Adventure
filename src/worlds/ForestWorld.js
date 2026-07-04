@@ -25,6 +25,8 @@ export class ForestWorld extends BaseWorld {
 
     init() {
 
+        this.createGround();
+
         this.createFog();
 
         this.createTrees();
@@ -378,6 +380,35 @@ export class ForestWorld extends BaseWorld {
 
                 ) * 0.005;
         }
+    }
+    /* =====================================================
+       createGround
+    ===================================================== */
+
+    createGround() {
+
+        const ground =
+            new THREE.Mesh(
+
+                new THREE.CircleGeometry(
+                    900,
+                    80
+                ),
+
+                new THREE.MeshStandardMaterial({
+
+                    color: 0x3d9b45
+                })
+            );
+
+        ground.rotation.x =
+            -Math.PI / 2;
+
+        ground.receiveShadow = true;
+
+        this.group.add(
+            ground
+        );
     }
 
     /* =====================================================

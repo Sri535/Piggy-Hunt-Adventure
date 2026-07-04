@@ -49,10 +49,10 @@ CREATE ISLAND GROUND
             new THREE.Mesh(
 
                 new THREE.CylinderGeometry(
-                    250,
-                    300,
-                    10,
-                    32
+                    420,
+                    520,
+                    18,
+                    64
                 ),
 
                 new THREE.MeshStandardMaterial({
