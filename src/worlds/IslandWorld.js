@@ -2,6 +2,10 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.m
 import {
     BaseWorld
 } from "./BaseWorld.js";
+import {
+    TerrainSystem
+}
+from "./island/TerrainSystem.js";
 
 export class IslandWorld extends BaseWorld {
 
@@ -23,7 +27,12 @@ export class IslandWorld extends BaseWorld {
 
     init() {
 
-        this.createIslandGround();
+        this.terrain =
+            new TerrainSystem();
+
+        this.group.add(
+            this.terrain.create()
+        );
 
         this.createWater();
 
@@ -105,11 +114,9 @@ CREATE ISLAND OCEAN
                 material
             );
 
-        this.water.rotation.x =
-            -Math.PI / 2;
+        this.water.rotation.x = -Math.PI / 2;
 
-        this.water.position.y =
-            -4.8;
+        this.water.position.y = -4.8;
 
         this.water.receiveShadow = true;
 
@@ -370,7 +377,7 @@ CREATE ISLAND RANDOM SPAWN POINTS
                 Math.random() *
                 this.spawnPoints.length
             )
-            ];
+        ];
     }
 
     /*
