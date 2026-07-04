@@ -59,47 +59,25 @@ export class TerrainSystem {
             -Math.PI / 2
         );
 
-        vertices =
+        const vertices =
             this.geometry.attributes.position;
 
         for (
             let i = 0; i < vertices.count; i++
         ) {
 
-            const x =
-                vertices.getX(i);
-
-            const z =
-                vertices.getZ(i);
-
-            const distance =
-                Math.sqrt(
-                    x * x +
-                    z * z
-                );
+            const x = vertices.getX(i);
+            const z = vertices.getZ(i);
 
             const height =
+                this.getHeight(x, z);
 
-                this.getHeight(
-
-                    x,
-
-                    z
-
-                );
-
-            vertices.setY(
-
-                i,
-
-                height
-
-            );
+            vertices.setY(i, height);
         }
 
         this.geometry.computeVertexNormals();
 
-        const material =
+        this.material =
             new THREE.MeshStandardMaterial({
 
                 color: 0xf2d48b,
