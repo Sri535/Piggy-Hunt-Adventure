@@ -5,7 +5,7 @@ import {
 import {
     TerrainSystem
 }
-from "./island/TerrainSystem.js";
+from "./environment/terrain/TerrainSystem.js";
 
 export class IslandWorld extends BaseWorld {
 
