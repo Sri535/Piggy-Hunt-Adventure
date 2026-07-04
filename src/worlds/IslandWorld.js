@@ -77,30 +77,42 @@ CREATE ISLAND OCEAN
 */
     createWater() {
 
-        const water =
-            new THREE.Mesh(
-
-                new THREE.CylinderGeometry(
-                    1200,
-                    1200,
-                    2,
-                    64
-                ),
-
-                new THREE.MeshStandardMaterial({
-
-                    color: 0x2196f3,
-
-                    transparent: true,
-
-                    opacity: 0.7
-                })
+        const geometry =
+            new THREE.CircleGeometry(
+                1400,
+                128
             );
 
-        water.position.y = -8;
+        const material =
+            new THREE.MeshStandardMaterial({
+
+                color: 0x1ea5ff,
+
+                transparent: true,
+
+                opacity: 0.82,
+
+                roughness: 0.15,
+
+                metalness: 0.25
+            });
+
+        this.water =
+            new THREE.Mesh(
+                geometry,
+                material
+            );
+
+        this.water.rotation.x =
+            -Math.PI / 2;
+
+        this.water.position.y =
+            -4.8;
+
+        this.water.receiveShadow = true;
 
         this.group.add(
-            water
+            this.water
         );
     }
     /*
@@ -211,6 +223,32 @@ CREATE ISLAND RANDOM SPAWN POINTS
             ];
     }
 
+    /*
+=======================================================
+animateWater
+=======================================================
+*/
+    animateWater(time) {
+
+        if (!this.water) return;
+
+        this.water.rotation.z =
+            Math.sin(time * 0.08) * 0.01;
+
+        this.water.material.opacity =
+            0.78 +
+            Math.sin(time * 1.8) * 0.04;
+    }
+    /*
+=======================================================
+update
+=======================================================
+*/
+
+    update(time) {
+
+        this.animateWater(time);
+    }
     /*
 =======================================================
 DISPOSE
