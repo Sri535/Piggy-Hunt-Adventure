@@ -27,7 +27,8 @@ export class IslandWorld extends BaseWorld {
         this.createWater();
 
         this.createPalmTrees();
-
+        this.createBeachGrass();
+        this.createVolcanicRocks();
         this.createSpawnPoints();
 
         this.scene.add(
@@ -190,6 +191,154 @@ CREATE ISLAND PALM TREES
             );
         }
     }
+
+    /*
+ =======================================================
+ CREATE BEACH GRASS
+ =======================================================
+ */
+
+    createBeachGrass() {
+
+        const material =
+            new THREE.MeshStandardMaterial({
+
+                color: 0x4CAF50,
+
+                side: THREE.DoubleSide
+            });
+
+        for (let i = 0; i < 250; i++) {
+
+            const blade =
+                new THREE.Mesh(
+
+                    new THREE.PlaneGeometry(
+                        0.25,
+                        0.9
+                    ),
+
+                    material
+                );
+
+            blade.position.set(
+
+                (Math.random() - 0.5) * 380,
+
+                0.45,
+
+                (Math.random() - 0.5) * 380
+            );
+
+            blade.rotation.y =
+                Math.random() * Math.PI;
+
+            blade.rotation.z =
+                (Math.random() - 0.5) * 0.15;
+
+            blade.scale.setScalar(
+
+                0.7 + Math.random() * 0.8
+
+            );
+
+            blade.userData.windOffset =
+                Math.random() * Math.PI * 2;
+
+            this.group.add(blade);
+        }
+    }
+
+    /*
+=======================================================
+CREATE VOLCANIC ROCKS
+=======================================================
+*/
+
+    createVolcanicRocks() {
+
+        const material =
+            new THREE.MeshStandardMaterial({
+
+                color: 0x555555,
+
+                roughness: 1,
+
+                metalness: 0.05
+            });
+
+        for (let i = 0; i < 70; i++) {
+
+            const geometry =
+                new THREE.DodecahedronGeometry(
+
+                    1,
+
+                    0
+
+                );
+
+            const rock =
+                new THREE.Mesh(
+
+                    geometry,
+
+                    material
+                );
+
+            const scale =
+                0.5 + Math.random() * 3;
+
+            rock.scale.set(
+
+                scale,
+
+                scale * (0.8 + Math.random() * 0.5),
+
+                scale
+            );
+
+            const clusterX =
+                (Math.random() - 0.5) * 320;
+
+            const clusterZ =
+                (Math.random() - 0.5) * 320;
+
+            rock.position.set(
+
+                clusterX + (Math.random() - 0.5) * 15,
+
+                scale * 0.45,
+
+                clusterZ + (Math.random() - 0.5) * 15
+
+            );
+            const shade =
+                0.7 + Math.random() * 0.3;
+
+            rock.material =
+                rock.material.clone();
+
+            rock.material.color.multiplyScalar(
+                shade
+            );
+
+            rock.rotation.set(
+
+                Math.random() * Math.PI,
+
+                Math.random() * Math.PI,
+
+                Math.random() * Math.PI
+            );
+
+            rock.castShadow = true;
+
+            rock.receiveShadow = true;
+
+            this.group.add(rock);
+        }
+    }
     /*
 =======================================================
 CREATE ISLAND SPAWN POINTS
@@ -241,6 +390,33 @@ animateWater
     }
     /*
 =======================================================
+ANIMATE GRASS
+=======================================================
+*/
+
+    animateGrass(time) {
+
+        for (const child of this.group.children) {
+
+            if (
+                child.geometry &&
+                child.geometry.type === "PlaneGeometry"
+            ) {
+
+                child.rotation.z =
+
+                    Math.sin(
+
+                        time * 2 +
+
+                        child.userData.windOffset
+
+                    ) * 0.08;
+            }
+        }
+    }
+    /*
+=======================================================
 update
 =======================================================
 */
@@ -248,6 +424,7 @@ update
     update(time) {
 
         this.animateWater(time);
+        this.animateGrass(time);
     }
     /*
 =======================================================
