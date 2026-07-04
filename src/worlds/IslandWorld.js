@@ -13,6 +13,7 @@ export class IslandWorld extends BaseWorld {
             new THREE.Group();
 
         this.spawnPoints = [];
+        this.groundHeight = 4;
     }
     /*
     =======================================================
@@ -181,7 +182,7 @@ CREATE ISLAND PALM TREES
 
                 (Math.random() - 0.5) * 400,
 
-                0,
+                this.groundHeight,
 
                 (Math.random() - 0.5) * 400
             );
@@ -225,7 +226,7 @@ CREATE ISLAND PALM TREES
 
                 (Math.random() - 0.5) * 380,
 
-                0.45,
+                this.groundHeight + 0.45,
 
                 (Math.random() - 0.5) * 380
             );
@@ -308,7 +309,7 @@ CREATE VOLCANIC ROCKS
 
                 clusterX + (Math.random() - 0.5) * 15,
 
-                scale * 0.45,
+                this.groundHeight + scale * 0.35,
 
                 clusterZ + (Math.random() - 0.5) * 15
 
