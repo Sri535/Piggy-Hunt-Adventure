@@ -2,7 +2,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.m
 
 export class TerrainSystem {
 
-       /*
+    /*
     =======================================================
     Constructor
     =======================================================
@@ -13,6 +13,10 @@ export class TerrainSystem {
         this.group = new THREE.Group();
 
         this.mesh = null;
+
+        this.geometry = null;
+
+        this.material = null;
 
         this.type =
             config.type || "generic";
@@ -30,7 +34,7 @@ export class TerrainSystem {
             config.maxHeight || 18;
 
     }
-           /*
+    /*
     =======================================================
     create
     =======================================================
@@ -38,7 +42,7 @@ export class TerrainSystem {
 
     create() {
 
-        const geometry =
+        this.geometry =
             new THREE.PlaneGeometry(
 
                 this.size,
@@ -51,12 +55,12 @@ export class TerrainSystem {
 
             );
 
-        geometry.rotateX(
+        this.geometry.rotateX(
             -Math.PI / 2
         );
 
-        const vertices =
-            geometry.attributes.position;
+        vertices =
+            this.geometry.attributes.position;
 
         for (
             let i = 0; i < vertices.count; i++
@@ -74,36 +78,26 @@ export class TerrainSystem {
                     z * z
                 );
 
-            let height = 0;
+            const height =
 
-            if (
-                distance <
-                this.radius
-            ) {
+                this.getHeight(
 
-                const normalized =
-                    distance /
-                    this.radius;
+                    x,
 
-                height =
-                    (1 - normalized) *
-                    this.maxHeight;
+                    z
 
-                height =
-                    Math.pow(
-                        height,
-                        0.85
-                    );
-
-            }
+                );
 
             vertices.setY(
+
                 i,
+
                 height
+
             );
         }
 
-        geometry.computeVertexNormals();
+        this.geometry.computeVertexNormals();
 
         const material =
             new THREE.MeshStandardMaterial({
@@ -115,8 +109,8 @@ export class TerrainSystem {
 
         this.mesh =
             new THREE.Mesh(
-                geometry,
-                material
+                this.geometry,
+                this.material
             );
 
         this.mesh.receiveShadow =
@@ -127,6 +121,82 @@ export class TerrainSystem {
         );
 
         return this.group;
+    }
+
+    /*
+==========================================
+UPDATE
+==========================================
+*/
+
+    update(delta) {
+
+        // Reserved for future:
+        // wind
+        // terrain animation
+        // lava
+        // snow deformation
+
+    }
+    /*
+==========================================
+GET HEIGHT
+==========================================
+*/
+
+    getHeight(x, z) {
+
+        const distance = Math.sqrt(
+
+            x * x +
+
+            z * z
+
+        );
+
+        if (distance >= this.radius) {
+
+            return 0;
+
+        }
+
+        const normalized =
+
+            distance /
+
+            this.radius;
+
+        let height =
+
+            (1 - normalized) *
+
+            this.maxHeight;
+
+        height = Math.pow(
+
+            height,
+
+            0.85
+
+        );
+
+        return height;
+
+    }
+    /*
+==========================================
+DISPOSE
+==========================================
+*/
+
+    dispose() {
+
+        this.geometry?.dispose();
+
+        this.material?.dispose();
+
+        this.group.clear();
+
     }
 
 }
