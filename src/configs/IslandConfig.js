@@ -5,7 +5,9 @@
      */
 
 export const IslandConfig = {
-
+/* =========================================
+   terrain
+========================================= */
     terrain: {
 
         type: "island",
@@ -17,6 +19,21 @@ export const IslandConfig = {
         radius: 360,
 
         maxHeight: 18
+
+    },
+
+/* =========================================
+   water
+========================================= */
+    water: {
+
+        radius: 1400,
+
+        level: -4.8,
+
+        color: 0x1ea5ff,
+
+        opacity: 0.82
 
     }
 

@@ -2,16 +2,23 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.m
 import {
     BaseWorld
 } from "./BaseWorld.js";
+
 import {
     TerrainSystem
 }
 from "../environment/terrain/TerrainSystem.js";
 
 import {
+    WaterSystem
+}
+from "../environment/water/WaterSystem.js";
+
+import {
 
     IslandConfig
 
 } from "../configs/IslandConfig.js";
+
 
 export class IslandWorld extends BaseWorld {
 
@@ -44,7 +51,18 @@ export class IslandWorld extends BaseWorld {
             this.terrain.create()
         );
 
-        this.createWater();
+        this.water =
+            new WaterSystem(
+
+                IslandConfig.water
+
+            );
+
+        this.group.add(
+
+            this.water.create()
+
+        );
 
         this.createPalmTrees();
         this.createBeachGrass();
@@ -59,81 +77,9 @@ export class IslandWorld extends BaseWorld {
             "Island World Loaded"
         );
     }
-    /*
-=======================================================
-CREATE ISLAND GROUND
-=======================================================
- */
-    createIslandGround() {
 
-        const island =
-            new THREE.Mesh(
 
-                new THREE.CylinderGeometry(
-                    420,
-                    520,
-                    18,
-                    64
-                ),
 
-                new THREE.MeshStandardMaterial({
-
-                    color: 0xf4d28c
-                })
-            );
-
-        island.position.y = -5;
-
-        island.receiveShadow = true;
-
-        this.group.add(
-            island
-        );
-    }
-
-    /*
-=======================================================
-CREATE ISLAND OCEAN
-=======================================================
-*/
-    createWater() {
-
-        const geometry =
-            new THREE.CircleGeometry(
-                1400,
-                128
-            );
-
-        const material =
-            new THREE.MeshStandardMaterial({
-
-                color: 0x1ea5ff,
-
-                transparent: true,
-
-                opacity: 0.82,
-
-                roughness: 0.15,
-
-                metalness: 0.25
-            });
-
-        this.water =
-            new THREE.Mesh(
-                geometry,
-                material
-            );
-
-        this.water.rotation.x = -Math.PI / 2;
-
-        this.water.position.y = -4.8;
-
-        this.water.receiveShadow = true;
-
-        this.group.add(
-            this.water
-        );
-    }
     /*
 =======================================================
 CREATE ISLAND PALM TREES
@@ -441,7 +387,7 @@ update
 
     update(time) {
 
-        this.animateWater(time);
+        this.water?.update(time);
         this.animateGrass(time);
     }
     /*
@@ -455,6 +401,10 @@ DISPOSE
         this.scene.remove(
             this.group
         );
+        this.water?.dispose();
+
+        this.terrain?.dispose();
+
 
         this.group.clear();
 
