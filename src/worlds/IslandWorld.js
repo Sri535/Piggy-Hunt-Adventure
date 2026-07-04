@@ -27,7 +27,6 @@ export class IslandWorld extends BaseWorld {
         this.createWater();
 
         this.createPalmTrees();
-        this.createBeachGrass();
 
         this.createSpawnPoints();
 
@@ -191,63 +190,6 @@ CREATE ISLAND PALM TREES
             );
         }
     }
-
-    /*
-=======================================================
-CREATE BEACH GRASS
-=======================================================
-*/
-
-    createBeachGrass() {
-
-        const material =
-            new THREE.MeshStandardMaterial({
-
-                color: 0x4CAF50,
-
-                side: THREE.DoubleSide
-            });
-
-        for (let i = 0; i < 250; i++) {
-
-            const blade =
-                new THREE.Mesh(
-
-                    new THREE.PlaneGeometry(
-                        0.25,
-                        0.9
-                    ),
-
-                    material
-                );
-
-            blade.position.set(
-
-                (Math.random() - 0.5) * 380,
-
-                0.45,
-
-                (Math.random() - 0.5) * 380
-            );ath.PI;
-
-            blade.rotation.z =
-                (Math.random() - 0.5) * 0.15;
-
-            blade.scale.setScalar(
-
-                blade.rotation.y =
-                    Math.random() * M
-
-                0.7 + Math.random() * 0.8
-
-            );
-
-            blade.userData.windOffset =
-                Math.random() * Math.PI * 2;
-
-            this.group.add(blade);
-        }
-    }
     /*
 =======================================================
 CREATE ISLAND SPAWN POINTS
@@ -299,33 +241,6 @@ animateWater
     }
     /*
 =======================================================
-ANIMATE GRASS
-=======================================================
-*/
-
-    animateGrass(time) {
-
-        for (const child of this.group.children) {
-
-            if (
-                child.geometry &&
-                child.geometry.type === "PlaneGeometry"
-            ) {
-
-                child.rotation.z =
-
-                    Math.sin(
-
-                        time * 2 +
-
-                        child.userData.windOffset
-
-                    ) * 0.08;
-            }
-        }
-    }
-    /*
-=======================================================
 update
 =======================================================
 */
@@ -333,7 +248,6 @@ update
     update(time) {
 
         this.animateWater(time);
-        this.animateGrass(time);
     }
     /*
 =======================================================
