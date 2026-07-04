@@ -7,6 +7,12 @@ import {
 }
 from "../environment/terrain/TerrainSystem.js";
 
+import {
+
+    IslandConfig
+
+} from "../configs/IslandConfig.js";
+
 export class IslandWorld extends BaseWorld {
 
     constructor(scene) {
@@ -28,7 +34,11 @@ export class IslandWorld extends BaseWorld {
     init() {
 
         this.terrain =
-            new TerrainSystem();
+            new TerrainSystem(
+
+                IslandConfig.terrain
+
+            );
 
         this.group.add(
             this.terrain.create()

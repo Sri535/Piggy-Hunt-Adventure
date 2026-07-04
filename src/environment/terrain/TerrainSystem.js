@@ -1,22 +1,40 @@
-import * as THREE from
-        "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
 export class TerrainSystem {
 
-    constructor() {
+       /*
+    =======================================================
+    Constructor
+    =======================================================
+     */
+
+    constructor(config = {}) {
 
         this.group = new THREE.Group();
 
         this.mesh = null;
 
-        this.size = 900;
+        this.type =
+            config.type || "generic";
 
-        this.segments = 180;
+        this.size =
+            config.size || 900;
 
-        this.maxHeight = 18;
+        this.segments =
+            config.segments || 180;
 
-        this.radius = 360;
+        this.radius =
+            config.radius || 360;
+
+        this.maxHeight =
+            config.maxHeight || 18;
+
     }
+           /*
+    =======================================================
+    create
+    =======================================================
+     */
 
     create() {
 
@@ -41,9 +59,7 @@ export class TerrainSystem {
             geometry.attributes.position;
 
         for (
-            let i = 0;
-            i < vertices.count;
-            i++
+            let i = 0; i < vertices.count; i++
         ) {
 
             const x =
