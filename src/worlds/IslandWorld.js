@@ -12,6 +12,9 @@ import {
     WaterSystem
 }
 from "../environment/water/WaterSystem.js";
+import {
+    EnvironmentManager
+} from "../environment/EnvironmentManager.js";
 
 import {
 
@@ -29,6 +32,8 @@ export class IslandWorld extends BaseWorld {
         this.group =
             new THREE.Group();
 
+        this.environment = null;
+
         this.spawnPoints = [];
         this.groundHeight = 4;
     }
@@ -40,16 +45,16 @@ export class IslandWorld extends BaseWorld {
 
     init() {
 
-        this.terrain =
-            new TerrainSystem(
 
-                IslandConfig.terrain
 
-            );
+        this.environment =
+            new EnvironmentManager();
 
-        this.group.add(
-            this.terrain.create()
-        );
+        this.environment.setTerrain(new EnvironmentManager());
+
+        this.environment.terrain(new TerrainSystem(IslandConfig.terrain));
+
+        this.group.add(this.environment.terrain.create());
 
         this.water =
             new WaterSystem(
@@ -60,7 +65,7 @@ export class IslandWorld extends BaseWorld {
 
         this.group.add(
 
-            this.water.create()
+            this.environment.build()
 
         );
 
@@ -387,6 +392,7 @@ update
 
     update(time) {
 
+        this.environment?.update(time);
         this.water?.update(time);
         this.animateGrass(time);
     }
@@ -403,7 +409,7 @@ DISPOSE
         );
         this.water?.dispose();
 
-        this.terrain?.dispose();
+        this.environment?.dispose();
 
 
         this.group.clear();
