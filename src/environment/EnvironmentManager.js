@@ -45,6 +45,16 @@ export class EnvironmentManager {
     }
 
     /* =====================================
+   SET VEGETATION
+===================================== */
+
+setVegetation(vegetationSystem) {
+
+    this.vegetation = vegetationSystem;
+
+}
+
+    /* =====================================
        UPDATE
     ===================================== */
 

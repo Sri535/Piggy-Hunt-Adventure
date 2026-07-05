@@ -36,5 +36,32 @@ export const IslandConfig = {
         opacity: 0.82
 
     }
+/* =========================================
+   vegetation
+========================================= */
+
+    vegetation: {
+
+    palms: {
+
+        count: 60,
+
+        spawnRadius: 400,
+
+        trunkColor: 0x8b5a2b,
+
+        leafColor: 0x00aa44
+
+    },
+
+    grass: {
+
+        count: 250,
+
+        spawnRadius: 380
+
+    }
+
+},
 
 };

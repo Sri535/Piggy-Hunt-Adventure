@@ -17,10 +17,17 @@ import {
 } from "../environment/EnvironmentManager.js";
 
 import {
+    VegetationSystem
+}
+from "../environment/vegetation/VegetationSystem.js";
+
+import {
 
     IslandConfig
 
 } from "../configs/IslandConfig.js";
+
+
 
 
 export class IslandWorld extends BaseWorld {
@@ -55,10 +62,12 @@ export class IslandWorld extends BaseWorld {
         this.environment.setTerrain(new TerrainSystem(IslandConfig.terrain));
 
         this.environment.setWater(new WaterSystem(IslandConfig.water));
+        this.environment.setVegetation(new VegetationSystem(IslandConfig.vegetation,this.environment.terrain));
 
 
         this.group.add(this.environment.terrain.create());
         this.group.add(this.environment.water.create());
+        this.group.add(this.environment.vegetation.create());
 
         this.createPalmTrees();
         this.createBeachGrass();
@@ -333,21 +342,7 @@ CREATE ISLAND RANDOM SPAWN POINTS
     }
 
     /*
-=======================================================
-animateWater
-=======================================================
-*/
-    animateWater(time) {
 
-        if (!this.water) return;
-
-        this.water.rotation.z =
-            Math.sin(time * 0.08) * 0.01;
-
-        this.water.material.opacity =
-            0.78 +
-            Math.sin(time * 1.8) * 0.04;
-    }
     /*
 =======================================================
 ANIMATE GRASS
