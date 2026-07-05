@@ -35,7 +35,7 @@ export const IslandConfig = {
 
         opacity: 0.82
 
-    }
+    },
 /* =========================================
    vegetation
 ========================================= */
@@ -62,6 +62,6 @@ export const IslandConfig = {
 
     }
 
-},
+}
 
 };
