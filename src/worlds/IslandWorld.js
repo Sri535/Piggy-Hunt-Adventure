@@ -50,7 +50,7 @@ export class IslandWorld extends BaseWorld {
         this.environment =
             new EnvironmentManager();
 
-        
+
 
         this.environment.setTerrain(new TerrainSystem(IslandConfig.terrain));
 
@@ -384,7 +384,7 @@ update
     update(time) {
 
         this.environment?.update(time);
-       
+
         this.animateGrass(time);
     }
     /*
@@ -398,7 +398,7 @@ DISPOSE
         this.scene.remove(
             this.group
         );
-       
+
 
         this.environment?.dispose();
 

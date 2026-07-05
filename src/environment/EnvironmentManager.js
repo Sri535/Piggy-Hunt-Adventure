@@ -1,6 +1,4 @@
-import * as THREE from
-"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
-
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
 /* =========================================
    Environment Manager
@@ -25,52 +23,26 @@ export class EnvironmentManager {
         this.ambientLife = null;
 
     }
+
     /* =====================================
-   	SET TERRAIN
-	===================================== */
+       SET TERRAIN
+    ===================================== */
 
     setTerrain(terrainSystem) {
 
         this.terrain = terrainSystem;
 
     }
+
     /* =====================================
-   	SET WATER
-	===================================== */
+       SET WATER
+    ===================================== */
 
     setWater(waterSystem) {
 
-    this.water = waterSystem;
-
-}
-
-    /* =====================================
-   CREATE
-===================================== */
-
-create() {
-
-    const group = new THREE.Group();
-
-    if (this.terrain) {
-
-        group.add(
-            this.terrain.create()
-        );
+        this.water = waterSystem;
 
     }
-
-    if (this.water) {
-
-        group.add(
-            this.water.create()
-        );
-
-    }
-
-    return group;
-
-}
 
     /* =====================================
        UPDATE

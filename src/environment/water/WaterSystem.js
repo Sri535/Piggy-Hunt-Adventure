@@ -1,5 +1,4 @@
-import * as THREE from
-"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
 /* =========================================
    WaterSystem
@@ -72,8 +71,7 @@ export class WaterSystem {
 
             );
 
-        this.mesh.rotation.x =
-            -Math.PI / 2;
+        this.mesh.rotation.x = -Math.PI / 2;
 
         this.mesh.position.y =
             this.level;
@@ -99,13 +97,14 @@ export class WaterSystem {
 
         this.mesh.rotation.z =
             Math.sin(time * 0.08) * 0.01;
-const waveOpacity =
+        const waveOpacity =
 
-    this.opacity +
+            this.opacity +
 
-    Math.sin(time * 1.8) * 0.04;
+            Math.sin(time * 1.8) * 0.04;
 
-this.material.opacity = waveOpacity;
+        this.material.opacity = waveOpacity;
+    }
 
     /* =====================================
        GET WATER LEVEL
