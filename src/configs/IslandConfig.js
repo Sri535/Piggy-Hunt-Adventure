@@ -1,13 +1,5 @@
-      /*
-    =======================================================
-    IslandConfig
-    =======================================================
-     */
-
 export const IslandConfig = {
-/* =========================================
-   terrain
-========================================= */
+
     terrain: {
 
         type: "island",
@@ -22,9 +14,6 @@ export const IslandConfig = {
 
     },
 
-/* =========================================
-   water
-========================================= */
     water: {
 
         radius: 1400,
@@ -36,32 +25,29 @@ export const IslandConfig = {
         opacity: 0.82
 
     },
-/* =========================================
-   vegetation
-========================================= */
 
     vegetation: {
 
-    palms: {
+        palms: {
 
-        count: 60,
+            count: 60,
 
-        spawnRadius: 400,
+            spawnRadius: 400,
 
-        trunkColor: 0x8b5a2b,
+            trunkColor: 0x8b5a2b,
 
-        leafColor: 0x00aa44
+            leafColor: 0x00aa44
 
-    },
+        },
 
-    grass: {
+        grass: {
 
-        count: 250,
+            count: 250,
 
-        spawnRadius: 380
+            spawnRadius: 380
+
+        }
 
     }
-
-}
 
 };
