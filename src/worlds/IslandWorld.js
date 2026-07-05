@@ -54,16 +54,10 @@ export class IslandWorld extends BaseWorld {
 
         this.environment.setTerrain(new TerrainSystem(IslandConfig.terrain));
 
+        this.environment.setWater(new WaterSystem(IslandConfig.water));
 
 
         this.group.add(this.environment.terrain.create());
-
-        this.water =
-            new WaterSystem(
-
-                IslandConfig.water
-
-            );
 
 
         this.createPalmTrees();
