@@ -50,9 +50,11 @@ export class IslandWorld extends BaseWorld {
         this.environment =
             new EnvironmentManager();
 
-        this.environment.setTerrain(new EnvironmentManager());
+        
 
-        this.environment.terrain(new TerrainSystem(IslandConfig.terrain));
+        this.environment.setTerrain(new TerrainSystem(IslandConfig.terrain));
+
+
 
         this.group.add(this.environment.terrain.create());
 
@@ -63,11 +65,6 @@ export class IslandWorld extends BaseWorld {
 
             );
 
-        this.group.add(
-
-            this.environment.build()
-
-        );
 
         this.createPalmTrees();
         this.createBeachGrass();
