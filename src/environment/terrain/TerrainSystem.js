@@ -9,6 +9,7 @@ export class TerrainSystem {
      */
 
     constructor(config = {}) {
+        this.systemType = "terrain";
 
         this.group = new THREE.Group();
 

@@ -8,6 +8,7 @@ import * as THREE from
 export class WaterSystem {
 
     constructor(config = {}) {
+        this.systemType = "water";
 
         this.group =
             new THREE.Group();
@@ -98,14 +99,13 @@ export class WaterSystem {
 
         this.mesh.rotation.z =
             Math.sin(time * 0.08) * 0.01;
+const waveOpacity =
 
-        this.material.opacity =
+    this.opacity +
 
-            this.opacity +
+    Math.sin(time * 1.8) * 0.04;
 
-            Math.sin(time * 1.8) * 0.04;
-
-    }
+this.material.opacity = waveOpacity;
 
     /* =====================================
        GET WATER LEVEL

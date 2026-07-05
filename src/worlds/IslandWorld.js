@@ -58,7 +58,7 @@ export class IslandWorld extends BaseWorld {
 
 
         this.group.add(this.environment.terrain.create());
-
+        this.group.add(this.environment.water.create());
 
         this.createPalmTrees();
         this.createBeachGrass();
@@ -384,7 +384,7 @@ update
     update(time) {
 
         this.environment?.update(time);
-        this.water?.update(time);
+       
         this.animateGrass(time);
     }
     /*
@@ -398,7 +398,7 @@ DISPOSE
         this.scene.remove(
             this.group
         );
-        this.water?.dispose();
+       
 
         this.environment?.dispose();
 
