@@ -7,29 +7,15 @@ from "./generators/PalmTreeGenerator.js";
    Palm Tree Generator
 ========================================= */
 
-export class PalmTreeGenerator {
+constructor(config = {}, terrain = null) {
 
-    constructor(config = {}, terrain = null) {
+    this.group = new THREE.Group();
 
-        this.addGenerator(
+    this.config = config;
 
-    new PalmTreeGenerator(
+    this.terrain = terrain;
 
-        config.palms,
-
-        terrain
-
-    )
-
-);
-
-        this.group = new THREE.Group();
-
-        this.config = config;
-
-        this.terrain = terrain;
-
-    }
+}
     /* =========================================
  create
 ========================================= */

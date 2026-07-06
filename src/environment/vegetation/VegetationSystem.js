@@ -1,4 +1,9 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
+import { PalmTreeGenerator }
+    from "./generators/PalmTreeGenerator.js";
+
+import { GrassGenerator }
+    from "./generators/GrassGenerator.js";
 
 /* =========================================
    Vegetation System
@@ -6,17 +11,41 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.m
 
 export class VegetationSystem {
 
-    constructor(config = {}, terrain = null) {
+ constructor(config = {}, terrain = null) {
 
-        this.group = new THREE.Group();
+    this.group = new THREE.Group();
 
-        this.config = config;
+    this.config = config;
 
-        this.terrain = terrain;
+    this.terrain = terrain;
 
-        this.generators = [];
+    this.generators = [];
 
-    }
+    this.addGenerator(
+
+        new PalmTreeGenerator(
+
+            config.palms,
+
+            terrain
+
+        )
+
+    );
+
+    this.addGenerator(
+
+        new GrassGenerator(
+
+            config.grass,
+
+            terrain
+
+        )
+
+    );
+
+}
 
     /* =====================================
        REGISTER GENERATOR
