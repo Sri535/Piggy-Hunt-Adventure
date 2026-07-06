@@ -7,41 +7,15 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.m
 ========================================= */
 export class PalmTreeGenerator {
 
-constructor(config = {}, terrain = null) {
+    constructor(config = {}, terrain = null) {
 
-    this.group = new THREE.Group();
+        this.group = new THREE.Group();
 
-    this.config = config;
+        this.config = config;
 
-    this.terrain = terrain;
+        this.terrain = terrain;
 
-    this.generators = [];
-
-    this.addGenerator(
-
-        new PalmTreeGenerator(
-
-            config.palms,
-
-            terrain
-
-        )
-
-    );
-
-    this.addGenerator(
-
-        new GrassGenerator(
-
-            config.grass,
-
-            terrain
-
-        )
-
-    );
-
-}
+    }
 
 /* =========================================
  create
