@@ -1,11 +1,11 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js";
 
-import { PalmTreeGenerator }
-from "./generators/PalmTreeGenerator.js";
+
 
 /* =========================================
    Palm Tree Generator
 ========================================= */
+export class PalmTreeGenerator {
 
 constructor(config = {}, terrain = null) {
 
@@ -15,8 +15,35 @@ constructor(config = {}, terrain = null) {
 
     this.terrain = terrain;
 
+    this.generators = [];
+
+    this.addGenerator(
+
+        new PalmTreeGenerator(
+
+            config.palms,
+
+            terrain
+
+        )
+
+    );
+
+    this.addGenerator(
+
+        new GrassGenerator(
+
+            config.grass,
+
+            terrain
+
+        )
+
+    );
+
 }
-    /* =========================================
+
+/* =========================================
  create
 ========================================= */
 
