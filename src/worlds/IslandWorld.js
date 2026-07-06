@@ -69,7 +69,7 @@ export class IslandWorld extends BaseWorld {
         this.group.add(this.environment.water.create());
         this.group.add(this.environment.vegetation.create());
 
-        this.createPalmTrees();
+        //this.createPalmTrees();
         this.createBeachGrass();
         this.createVolcanicRocks();
         this.createSpawnPoints();

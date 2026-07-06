@@ -24,11 +24,8 @@ export class VegetationSystem {
     this.addGenerator(
 
         new PalmTreeGenerator(
-
             config.palms,
-
             terrain
-
         )
 
     );
@@ -36,11 +33,8 @@ export class VegetationSystem {
     this.addGenerator(
 
         new GrassGenerator(
-
             config.grass,
-
             terrain
-
         )
 
     );
